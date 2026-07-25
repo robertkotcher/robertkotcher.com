@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+  <title id="title">Robert Kotcher geometric mark</title>
+  <rect x="14" y="14" width="44" height="44" rx="7" fill="#d74696"/>
+  <rect x="70" y="14" width="44" height="44" rx="7" fill="#ffa21a"/>
+  <rect x="14" y="70" width="44" height="44" rx="7" fill="#6f90bf"/>
+  <rect x="70" y="70" width="44" height="44" rx="7" fill="#10bfa7"/>
+</svg>
