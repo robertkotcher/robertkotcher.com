@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 const resendEndpoint = "https://api.resend.com/emails";
 const contactEmail = "rkotcher@gmail.com";
-const maxAttachmentBytes = 40 * 1024 * 1024;
+const maxAttachmentBytes = 3 * 1024 * 1024;
 
 type ResendAttachment = {
   content: string;
@@ -56,7 +56,7 @@ export async function POST(request: Request) {
 
   if (totalAttachmentBytes > maxAttachmentBytes) {
     return NextResponse.json(
-      { error: "Attachments must be under 40MB total." },
+      { error: "Attachments must be under 3MB total." },
       { status: 400 },
     );
   }

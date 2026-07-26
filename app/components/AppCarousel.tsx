@@ -60,14 +60,15 @@ export function AppCarousel({ slides }: AppCarouselProps) {
                 <img src={slide.image} alt={slide.imageAlt} />
               </div>
               <div className="landing-carousel-detail">
-                <p>{slide.eyebrow}</p>
-                <div className="landing-carousel-title">
-                  {slide.icon ? (
-                    <img src={slide.icon} alt={slide.iconAlt ?? ""} />
-                  ) : null}
-                  <h3>{slide.title}</h3>
+                <div className="landing-carousel-product">
+                  <div className="landing-carousel-title">
+                    {slide.icon ? (
+                      <img src={slide.icon} alt={slide.iconAlt ?? ""} />
+                    ) : null}
+                    <h3>{slide.title}</h3>
+                  </div>
+                  <span>{slide.description}</span>
                 </div>
-                <span>{slide.description}</span>
                 {slide.link ? (
                   <a href={slide.link} target="_blank" rel="noreferrer">
                     Visit site

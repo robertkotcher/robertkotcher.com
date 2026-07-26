@@ -4,7 +4,28 @@ import { FormEvent, useState } from "react";
 import { SiteFooter } from "../components/SiteFooter";
 import { SiteHeader } from "../components/SiteHeader";
 
+const maxAttachmentBytes = 3 * 1024 * 1024;
+
+function formatBytes(bytes: number) {
+  if (bytes < 1024 * 1024) {
+    return `${Math.ceil(bytes / 1024)}KB`;
+  }
+
+  return `${(bytes / (1024 * 1024)).toFixed(1)}MB`;
+}
+
+function validateFiles(files: File[]) {
+  const totalBytes = files.reduce((total, file) => total + file.size, 0);
+
+  if (totalBytes > maxAttachmentBytes) {
+    return `Attachments are ${formatBytes(totalBytes)} total. Please keep them under ${formatBytes(maxAttachmentBytes)}.`;
+  }
+
+  return "";
+}
+
 export default function ContactPage() {
+  const [attachmentError, setAttachmentError] = useState("");
   const [files, setFiles] = useState<string[]>([]);
   const [status, setStatus] = useState<"error" | "idle" | "sending" | "sent">(
     "idle",
@@ -18,6 +39,17 @@ export default function ContactPage() {
 
     const form = event.currentTarget;
     const formData = new FormData(form);
+    const selectedFiles = formData
+      .getAll("files")
+      .filter((file): file is File => file instanceof File && file.size > 0);
+    const fileError = validateFiles(selectedFiles);
+
+    if (fileError) {
+      setAttachmentError(fileError);
+      setStatus("error");
+      setStatusMessage(fileError);
+      return;
+    }
 
     try {
       const response = await fetch("/api/contact", {
@@ -34,6 +66,7 @@ export default function ContactPage() {
       }
 
       form.reset();
+      setAttachmentError("");
       setFiles([]);
       setStatus("sent");
       setStatusMessage("Thanks. Robert will get back to you within 24 hours.");
@@ -89,7 +122,9 @@ export default function ContactPage() {
           />
         </label>
         <label>
-          <span>Phone optional</span>
+          <span>
+            Phone <em>(optional)</em>
+          </span>
           <input
             autoComplete="tel"
             name="phone"
@@ -120,27 +155,56 @@ export default function ContactPage() {
           <input
             multiple
             name="files"
-            onChange={(event) =>
-              setFiles(
-                Array.from(event.target.files ?? []).map((file) => file.name),
-              )
-            }
+            onChange={(event) => {
+              const selectedFiles = Array.from(event.target.files ?? []);
+              const fileError = validateFiles(selectedFiles);
+
+              setAttachmentError(fileError);
+
+              if (fileError) {
+                event.target.value = "";
+                setFiles([]);
+                return;
+              }
+
+              setFiles(selectedFiles.map((file) => file.name));
+            }}
             type="file"
           />
           <strong>Attach Files</strong>
           <small>
             {files.length > 0
               ? files.join(", ")
-              : "Screenshots, briefs, mockups, or notes are welcome."}
+              : "Screenshots, briefs, mockups, or notes are welcome. Max 3MB total."}
           </small>
+          {attachmentError ? (
+            <small className="field-error">{attachmentError}</small>
+          ) : null}
         </label>
-        <button disabled={status === "sending"} type="submit">
+        <button disabled={status === "sending" || Boolean(attachmentError)} type="submit">
           {status === "sending" ? "Sending..." : "Send Message"}
         </button>
         <p className={`form-status form-status-${status}`} aria-live="polite">
           {statusMessage}
         </p>
       </form>
+      {status === "sent" ? (
+        <div className="success-popup" role="status" aria-live="polite">
+          <button
+            aria-label="Close success message"
+            onClick={() => {
+              setStatus("idle");
+              setStatusMessage("");
+            }}
+            type="button"
+          >
+            ×
+          </button>
+          <p>Message sent</p>
+          <h2>Thanks for reaching out.</h2>
+          <span>Robert will get back to you within 24 hours.</span>
+        </div>
+      ) : null}
       <SiteFooter />
     </main>
   );

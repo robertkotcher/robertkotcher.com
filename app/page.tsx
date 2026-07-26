@@ -1,4 +1,5 @@
 import { AppCarousel } from "./components/AppCarousel";
+import { CostContextModal } from "./components/CostContextModal";
 import { PromoBanner } from "./components/PromoBanner";
 import { SiteFooter } from "./components/SiteFooter";
 import { SiteHeader } from "./components/SiteHeader";
@@ -62,6 +63,8 @@ export default function Home() {
       title: "Moment",
       description:
         "An iOS and Android app that helped people monitor screen time, understand phone habits, and build healthier routines.",
+      icon: "/moment-icon.png",
+      iconAlt: "Moment icon",
       image: "/moment-overview.png",
       imageAlt: "Moment app screens showing phone use and screen time tracking",
     },
@@ -149,10 +152,10 @@ export default function Home() {
         <div>
           <h2 id="offer-title">Your technical partner for $1,200/month.</h2>
           <p>
-            Professional development gets expensive quickly. My model is simple:
-            one senior technical partner who can meet weekly, answer questions
-            directly, and handle the practical work of designing, building,
-            launching, and maintaining your app.
+            <CostContextModal />. My model is simple: one senior technical
+            partner who can meet weekly, answer questions directly, and handle
+            the practical work of designing, building, launching, and
+            maintaining your app.
           </p>
         </div>
         <div className="offer-card">
@@ -189,11 +192,12 @@ export default function Home() {
           <h2 id="note-title">I care about doing things right.</h2>
         </div>
         <p>
-          Good software starts with listening. I&apos;ll ask careful questions,
-          help you make practical decisions, and build toward something people
-          can actually use. You do not need to speak in technical language or
-          arrive with a perfect plan. Bring the vision, the rough edges, and the
-          constraints. We&apos;ll turn them into a working product together.
+          Good software starts with listening and asking the right questions.
+          I&apos;ll help you sort through the idea, make practical decisions,
+          and build toward something people can actually use. You do not need
+          to speak in technical language or arrive with a perfect plan. Bring
+          the vision, the rough edges, and the constraints. We&apos;ll turn them
+          into a working product together.
         </p>
       </section>
 
