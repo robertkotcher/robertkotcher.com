@@ -5,22 +5,46 @@ import { SiteFooter } from "../components/SiteFooter";
 import { SiteHeader } from "../components/SiteHeader";
 
 export default function ContactPage() {
-  const [subject, setSubject] = useState("");
-  const [body, setBody] = useState("");
   const [files, setFiles] = useState<string[]>([]);
+  const [status, setStatus] = useState<"error" | "idle" | "sending" | "sent">(
+    "idle",
+  );
+  const [statusMessage, setStatusMessage] = useState("");
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const fileNote =
-      files.length > 0
-        ? `\n\nFiles selected for follow-up: ${files.join(", ")}`
-        : "";
-    const params = new URLSearchParams({
-      subject,
-      body: `${body}${fileNote}`,
-    });
+    setStatus("sending");
+    setStatusMessage("");
 
-    window.location.href = `mailto:rkotcher@gmail.com?${params.toString()}`;
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+
+    try {
+      const response = await fetch("/api/contact", {
+        body: formData,
+        method: "POST",
+      });
+
+      if (!response.ok) {
+        const data = (await response.json().catch(() => null)) as
+          | { error?: string }
+          | null;
+
+        throw new Error(data?.error ?? "Message could not be sent.");
+      }
+
+      form.reset();
+      setFiles([]);
+      setStatus("sent");
+      setStatusMessage("Thanks. Robert will get back to you within 24 hours.");
+    } catch (error) {
+      setStatus("error");
+      setStatusMessage(
+        error instanceof Error
+          ? error.message
+          : "Message could not be sent. Please try again.",
+      );
+    }
   }
 
   return (
@@ -51,25 +75,44 @@ export default function ContactPage() {
           </p>
         </div>
         <label>
+          <span>Name</span>
+          <input name="name" placeholder="Your name" type="text" />
+        </label>
+        <label>
+          <span>Email</span>
+          <input
+            autoComplete="email"
+            name="email"
+            placeholder="you@example.com"
+            required
+            type="email"
+          />
+        </label>
+        <label>
+          <span>Phone optional</span>
+          <input
+            autoComplete="tel"
+            name="phone"
+            placeholder="Best number to reach you"
+            type="tel"
+          />
+        </label>
+        <label>
           <span>Subject</span>
           <input
             name="subject"
-            onChange={(event) => setSubject(event.target.value)}
             placeholder="What would you like to talk about?"
             required
             type="text"
-            value={subject}
           />
         </label>
         <label>
           <span>Message</span>
           <textarea
             name="body"
-            onChange={(event) => setBody(event.target.value)}
             placeholder="A few details are helpful."
             required
             rows={8}
-            value={body}
           />
         </label>
         <label className="file-control">
@@ -91,7 +134,12 @@ export default function ContactPage() {
               : "Screenshots, briefs, mockups, or notes are welcome."}
           </small>
         </label>
-        <button type="submit">Send Message</button>
+        <button disabled={status === "sending"} type="submit">
+          {status === "sending" ? "Sending..." : "Send Message"}
+        </button>
+        <p className={`form-status form-status-${status}`} aria-live="polite">
+          {statusMessage}
+        </p>
       </form>
       <SiteFooter />
     </main>
