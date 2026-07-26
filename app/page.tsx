@@ -16,7 +16,7 @@ export default function Home() {
     "Weekly video call to review progress and decide what matters next.",
     "Daily email and text support for questions, feedback, and decisions.",
     "Design, development, launch, hosting guidance, and ongoing maintenance.",
-    "Plain-English tradeoffs so you always know what is happening and why.",
+    "No technical or product experience required to work together.",
   ];
 
   const process = [
