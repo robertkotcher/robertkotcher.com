@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Robert Kotcher - Software CV",
+  title: "robertkotcher.com - App Ideas Built Personally",
   description:
-    "A concise CV-style website for Robert Kotcher, highlighting software engineering, startup, security, legal-tech, and applied AI accomplishments.",
+    "Robert Kotcher helps people turn app ideas into working software with direct weekly support, clear communication, and senior technical execution.",
   icons: {
     icon: "/rk-mark.svg",
     shortcut: "/rk-mark.svg",

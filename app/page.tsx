@@ -1,233 +1,178 @@
-import { SiteHeader } from "./components/SiteHeader";
 import { SiteFooter } from "./components/SiteFooter";
+import { SiteHeader } from "./components/SiteHeader";
 
 export default function Home() {
-  const experience = [
-    {
-      role: "Founding Engineer",
-      org: "SoloSuit",
-      date: "2024-Present",
-      iconSrc: "https://www.google.com/s2/favicons?domain=solosuit.com&sz=128",
-      iconAlt: "SoloSuit logo",
-      detail:
-        "Founding engineer on a legal-tech platform helping Americans resolve debt lawsuits and settlement workflows.",
-      highlights: [
-        { value: "$2.7B", label: "debt protected" },
-        { value: "200K", label: "lawsuits helped negotiate" },
-        { value: "20x", label: "monthly settled-debt growth" },
-        { value: "8% -> 37%", label: "increase in offers sent" },
-      ],
-      notes: [
-        "Maintains a TypeScript, Rails, and Postgres system with 12,000+ RSpec tests.",
-        "Company context: Inc. 5000 #633, 1,200+ monthly paying customers, backed by YC, Kleiner Perkins, The LegalTech Fund, Temerity, and others.",
-      ],
-    },
-    {
-      role: "Lead Software Engineer / Second Hire",
-      org: "Synthesis AI",
-      date: "2020-2023",
-      iconSrc: "/synthesis-ai-icon.png",
-      iconAlt: "Synthesis AI logo",
-      detail:
-        "Built core data pipelines and render-farm infrastructure for synthetic-data generation.",
-      notes: [
-        "Joined as one of the earliest engineers and built much of the pipeline foundation from the ground up.",
-        "Worked primarily with Go, Kubernetes, and production data infrastructure.",
-      ],
-    },
-    {
-      role: "Product R&D",
-      org: "Codecov",
-      date: "2020-2022",
-      iconSrc: "/codecov-icon.svg",
-      iconAlt: "Codecov logo",
-      detail:
-        "Researched product directions around code testing, analysis, and engineering-quality signals.",
-      notes: [
-        "Worked before Codecov was acquired by Sentry.",
-        "Focused on the overlap between developer behavior, testing workflows, and product strategy.",
-      ],
-    },
-    {
-      role: "Mobile App Engineer",
-      org: "Moment",
-      date: "2019-2020",
-      iconSrc: "/moment-icon.png",
-      iconAlt: "Moment app icon",
-      detail:
-        "Built consumer mobile product features for an app used by millions of people.",
-      notes: [
-        "Worked on a product with 8M users.",
-        "Contributed to mobile engineering in a user-behavior and habit-change product domain.",
-      ],
-    },
-    {
-      role: "Software Engineer",
-      org: "NASA / Expii",
-      date: "2013-2017",
-      iconSrc: "https://www.google.com/s2/favicons?domain=nasa.gov&sz=128",
-      iconAlt: "NASA logo",
-      detail:
-        "Built software at NASA and later Expii, including published aerospace and education-technology work.",
-      notes: [
-        "Co-authored NASA-published research on ADS-B sense-and-avoid algorithms for UAS integration into national airspace.",
-        "At Expii, worked on software for an education platform described as a GPS for learning.",
-      ],
-    },
+  const proofPoints = [
+    { value: "CMU CS", label: "Carnegie Mellon computer science graduate" },
+    { value: "10+ yrs", label: "turning ideas into working software" },
+    { value: "3 apps", label: "apps I built that were acquired" },
+    { value: "8M", label: "users on a mobile product I helped build" },
   ];
 
-  const selectedWork = [
-    {
-      title: "OAuth security research",
-      meta: "ACM CCS / Black Hat USA",
-      iconSrc: "https://www.google.com/s2/favicons?domain=blackhat.com&sz=128",
-      iconAlt: "Black Hat icon",
-      copy:
-        "Co-authored highly-cited CMU web-security research that studied 600+ popular mobile apps and found 59.7% of OAuth implementations among sampled OAuth apps were vulnerable.",
-    },
-    {
-      title: "Startup operator",
-      meta: "6x co-founder",
-      iconSrc:
-        "https://www.google.com/s2/favicons?domain=indiehackers.com&sz=128",
-      iconAlt: "Indie Hackers icon",
-      copy:
-        "Publicly describes himself as a Carnegie Mellon CS alum and 6x startup co-founder, with work spanning legal tech, music collaboration, AI, education, and developer tools.",
-    },
-    {
-      title: "Applied ML and legal docs",
-      meta: "Hugging Face",
-      iconSrc:
-        "https://www.google.com/s2/favicons?domain=huggingface.co&sz=128",
-      iconAlt: "Hugging Face logo",
-      copy:
-        "Published a RoBERTa-based experiment exploring section extraction in legal documents with noisy PDF and HTML structure.",
-    },
+  const offerItems = [
+    "Weekly video call to review progress and decide what matters next.",
+    "Daily email and text support for questions, feedback, and decisions.",
+    "Design, development, launch, hosting guidance, and ongoing maintenance.",
+    "Plain-English tradeoffs so you always know what is happening and why.",
   ];
 
-  const skills = [
-    "Ruby on Rails",
-    "TypeScript",
-    "Postgres",
-    "RSpec",
-    "Go",
-    "Kubernetes",
-    "Python",
-    "Playwright",
-    "Flask",
-    "Next.js",
-    "Cursor",
-    "Codex",
-    "Claude Code",
-    "Devin",
+  const process = [
+    {
+      step: "01",
+      title: "Tell me the idea",
+      copy:
+        "We start with the outcome you want, who it helps, what you already have, and what would make the first version useful.",
+    },
+    {
+      step: "02",
+      title: "Shape the first version",
+      copy:
+        "I translate the vision into a clear build plan: what to include now, what to skip, and what should stay flexible.",
+    },
+    {
+      step: "03",
+      title: "Build in the open",
+      copy:
+        "You see steady progress, send feedback as it becomes real, and get direct access to the person doing the work.",
+    },
+    {
+      step: "04",
+      title: "Launch and improve",
+      copy:
+        "Once it is live, we keep it running, refine what users need, and add the next useful piece.",
+    },
   ];
 
   return (
     <main className="cv-page">
       <SiteHeader />
-      <section className="hero" aria-label="Robert Kotcher CV">
+
+      <section className="studio-hero" aria-labelledby="hero-title">
         <div className="hero-copy">
-          <h1>Robert Kotcher</h1>
+          <p className="eyebrow">Professional apps, built personally</p>
+          <h1 id="hero-title">Have an app idea you keep meaning to build?</h1>
           <p className="summary">
-            Product-minded software engineer with a track record of shipping
-            measurable systems: legal-tech settlement growth, synthetic-data
-            infrastructure, developer-tool research, mobile apps at scale, and
-            highly-cited security research from Carnegie Mellon.
+            I&apos;m Robert Kotcher, a Carnegie Mellon computer science graduate
+            who helps people turn ideas into working apps without breaking the
+            bank.
+          </p>
+          <div className="hero-actions" aria-label="Primary actions">
+            <a className="primary-action" href="/contact">
+              Reach Out Today
+            </a>
+            <a className="secondary-action" href="/contact">
+              Send Your Idea
+            </a>
+          </div>
+        </div>
+        <aside className="hero-card" aria-label="Robert Kotcher">
+          <div className="portrait-wrap">
+            <img
+              src="/robert-kotcher-osaka.jpg"
+              alt="Robert Kotcher"
+              className="portrait"
+            />
+          </div>
+          <div className="signature-note">
+            <p>
+              My goal is to make development feel less transactional and more
+              personal: building an app you&apos;re proud of, in a way that
+              stays affordable.
+            </p>
+            <img
+              src="/robert-kotcher-signature.png"
+              alt="Robert Kotcher signature"
+              className="signature-image"
+            />
+          </div>
+        </aside>
+      </section>
+
+      <section className="proof-strip" aria-label="Track record">
+        {proofPoints.map((point) => (
+          <div className="proof-item" key={point.value}>
+            <strong>{point.value}</strong>
+            <span>{point.label}</span>
+          </div>
+        ))}
+      </section>
+
+      <section className="offer-section" aria-labelledby="offer-title">
+        <div>
+          <h2 id="offer-title">Your technical partner for $1,200/month.</h2>
+          <p>
+            Professional development gets expensive quickly. My model is simple:
+            one senior technical partner who can meet weekly, answer questions
+            directly, and handle the practical work of designing, building,
+            launching, and maintaining your app.
           </p>
         </div>
-        <div className="portrait-wrap">
-          <img
-            src="/robert-kotcher.png"
-            alt="Robert Kotcher"
-            className="portrait"
-          />
+        <div className="offer-card">
+          <span>$1,200/mo</span>
+          <h3>Direct App Partner</h3>
+          <ul>
+            {offerItems.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+          <a href="/contact">Start a Conversation</a>
         </div>
       </section>
 
-      <div className="content-grid">
-        <section className="main-column" aria-labelledby="experience-title">
-          <div className="section-heading">
-            <p>Experience</p>
-            <h2 id="experience-title">Selected Roles</h2>
-          </div>
-          <div className="timeline">
-            {experience.map((item) => (
-              <article className="timeline-item" key={`${item.org}-${item.role}`}>
-                <div className="role-mark" aria-hidden="true">
-                  <img src={item.iconSrc} alt="" />
-                </div>
-                <div className="timeline-meta">
-                  <span>{item.date}</span>
-                </div>
-                <div>
-                  <h3>{item.role}</h3>
-                  <p className="org">{item.org}</p>
-                  <p>{item.detail}</p>
-                  {"highlights" in item && item.highlights ? (
-                    <div className="role-metrics" aria-label="SoloSuit metrics">
-                      {item.highlights.map((highlight) => (
-                        <div key={highlight.value}>
-                          <strong>{highlight.value}</strong>
-                          <span>{highlight.label}</span>
-                        </div>
-                      ))}
-                    </div>
-                  ) : null}
-                  <ul>
-                    {item.notes.map((note) => (
-                      <li key={note}>{note}</li>
-                    ))}
-                  </ul>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <aside className="side-column" aria-label="Education and skills">
-          <section>
-            <div className="section-heading small">
-              <p>Education</p>
-              <h2>Carnegie Mellon University</h2>
-            </div>
-            <p className="aside-copy">
-              Computer Science. Published 2 highly-cited web-security papers
-              while at CMU.
-            </p>
-          </section>
-
-          <section>
-            <div className="section-heading small">
-              <p>Core Strengths</p>
-              <h2>Engineering Range</h2>
-            </div>
-            <div className="skill-list">
-              {skills.map((skill) => (
-                <span key={skill}>{skill}</span>
-              ))}
-            </div>
-          </section>
-        </aside>
-      </div>
-
-      <section className="work-section" aria-labelledby="work-title">
+      <section className="process-section" aria-labelledby="process-title">
         <div className="section-heading">
-          <p>Research and Products</p>
-          <h2 id="work-title">Selected Work</h2>
+          <p>How it works</p>
+          <h2 id="process-title">Visible progress from idea to launch.</h2>
         </div>
-        <div className="work-grid">
-          {selectedWork.map((work) => (
-            <article className="work-item" key={work.title}>
-              <div className="work-title-row">
-                <img src={work.iconSrc} alt={work.iconAlt} />
-                <div>
-                  <p>{work.meta}</p>
-                  <h3>{work.title}</h3>
-                </div>
-              </div>
-              <span>{work.copy}</span>
+        <div className="process-list">
+          {process.map((item) => (
+            <article className="process-item" key={item.step}>
+              <span>{item.step}</span>
+              <h3>{item.title}</h3>
+              <p>{item.copy}</p>
             </article>
           ))}
+        </div>
+      </section>
+
+      <section className="note-section" aria-labelledby="note-title">
+        <div>
+          <p className="eyebrow">A personal note</p>
+          <h2 id="note-title">I care about doing things right.</h2>
+        </div>
+        <p>
+          Good software starts with listening. I&apos;ll ask careful questions,
+          help you make practical decisions, and build toward something people
+          can actually use. You do not need to speak in technical language or
+          arrive with a perfect plan. Bring the vision, the rough edges, and the
+          constraints. We&apos;ll turn them into a working product together.
+        </p>
+      </section>
+
+      <section className="apps-section" aria-labelledby="apps-title">
+        <div className="section-heading proof-cta">
+          <p>Track record</p>
+          <h2 id="apps-title">Proof that I can ship the hard parts.</h2>
+          <a className="secondary-action" href="/examples">
+            View Example Apps
+          </a>
+        </div>
+      </section>
+
+      <section className="final-cta" aria-labelledby="final-cta-title">
+        <div>
+          <p className="eyebrow">Ready when you are</p>
+          <h2 id="final-cta-title">Tell me what you want to build.</h2>
+        </div>
+        <div>
+          <p>
+            Call or text <a href="tel:2152923536">215-292-3536</a>, email{" "}
+            <a href="mailto:rkotcher@gmail.com">rkotcher@gmail.com</a>, or send
+            a few details through the contact form.
+          </p>
+          <a className="primary-action" href="/contact">
+            Contact Robert
+          </a>
         </div>
       </section>
 
