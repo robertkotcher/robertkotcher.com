@@ -150,7 +150,7 @@ export default function Home() {
 
       <section className="offer-section" aria-labelledby="offer-title">
         <div>
-          <h2 id="offer-title">Your technical partner for $1,200/month.</h2>
+          <h2 id="offer-title">Your technical partner for $850/month.</h2>
           <p>
             <CostContextModal />. My model is simple: one senior technical
             partner who can meet weekly, answer questions directly, and handle
@@ -159,7 +159,7 @@ export default function Home() {
           </p>
         </div>
         <div className="offer-card">
-          <span>$1,200/mo</span>
+          <span>$850/mo</span>
           <h3>Direct App Partner</h3>
           <ul>
             {offerItems.map((item) => (
