@@ -42,7 +42,7 @@ export function CostContextModal() {
         type="button"
         onClick={() => setIsOpen(true)}
       >
-        Professional development gets expensive quickly
+        Professional development gets expensive quickly.
       </button>
 
       {isOpen ? (

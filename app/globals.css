@@ -356,13 +356,15 @@ h1 {
 .cost-context-link {
   background: transparent;
   border: 0;
-  border-bottom: 1px solid currentColor;
   color: var(--accent-warm);
   cursor: pointer;
   display: inline;
   font: inherit;
   font-weight: 700;
   padding: 0;
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
 }
 
 .cost-context-link:hover,

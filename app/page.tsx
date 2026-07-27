@@ -152,7 +152,7 @@ export default function Home() {
         <div>
           <h2 id="offer-title">Your technical partner for $850/month.</h2>
           <p>
-            <CostContextModal />. My model is simple: one senior technical
+            <CostContextModal /> My model is simple: one senior technical
             partner who can meet weekly, answer questions directly, and handle
             the practical work of designing, building, launching, and
             maintaining your app.
