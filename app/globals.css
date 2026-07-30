@@ -58,7 +58,7 @@ p {
 .cv-page {
   margin: 0 auto;
   padding: 38px 0 46px;
-  width: min(1160px, calc(100% - 44px));
+  width: min(1000px, calc(100% - 44px));
 }
 
 .cv-page:has(> .landing-top) {
@@ -176,9 +176,9 @@ p {
 .landing-top {
   background: var(--studio-navy);
   color: var(--panel);
-  margin-left: calc((100vw - min(1160px, calc(100vw - 44px))) / -2);
-  margin-right: calc((100vw - min(1160px, calc(100vw - 44px))) / -2);
-  padding: 38px calc((100vw - min(1160px, calc(100vw - 44px))) / 2) 0;
+  margin-left: calc((100vw - min(1000px, calc(100vw - 44px))) / -2);
+  margin-right: calc((100vw - min(1000px, calc(100vw - 44px))) / -2);
+  padding: 38px max(calc((100vw - 1000px) / 2), 22px) 0;
 }
 
 .landing-top .site-header {
@@ -214,14 +214,29 @@ p {
 }
 
 .hero-intro {
-  align-items: start;
+  align-items: stretch;
   display: grid;
-  gap: 56px;
-  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 40px;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
 }
 
 .hero-copy {
   align-self: start;
+}
+
+.landing-top .hero-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  width: 100%;
+}
+
+.landing-top .hero-card {
+  margin-left: 0;
+  max-width: 250px;
+  min-width: 0;
+  width: 100%;
 }
 
 .hero-eyebrow {
@@ -247,8 +262,12 @@ h1 {
 
 .landing-top h1 {
   color: var(--panel);
-  font-size: clamp(3.6rem, 8vw, 7.15rem);
-  max-width: 1020px;
+  font-size: 6.25rem;
+  line-height: 1.16;
+  max-width: none;
+  min-width: 0;
+  overflow-wrap: normal;
+  width: 100%;
 }
 
 .summary {
@@ -400,10 +419,10 @@ h1 {
   background: var(--panel);
   border-bottom: 2px solid var(--foreground);
   min-height: 420px;
-  margin-left: calc((100vw - min(1160px, calc(100vw - 44px))) / -2);
-  margin-right: calc((100vw - min(1160px, calc(100vw - 44px))) / -2);
+  margin-left: calc((100vw - min(1000px, calc(100vw - 44px))) / -2);
+  margin-right: calc((100vw - min(1000px, calc(100vw - 44px))) / -2);
   overflow: hidden;
-  padding: 54px calc((100vw - min(1160px, calc(100vw - 44px))) / 2) 0;
+  padding: 54px calc((100vw - min(1000px, calc(100vw - 44px))) / 2) 0;
   position: relative;
 }
 
@@ -432,7 +451,7 @@ h1 {
   display: block;
   height: auto;
   position: absolute;
-  right: max(calc((100vw - min(1160px, calc(100vw - 44px))) / 2 - 50px), -24px);
+  right: max(calc((100vw - min(1000px, calc(100vw - 44px))) / 2 - 50px), -24px);
   width: min(560px, 46vw);
 }
 
@@ -996,9 +1015,9 @@ h1 {
   display: grid;
   gap: 46px;
   grid-template-columns: 0.8fr minmax(0, 1fr);
-  margin-left: calc((100vw - min(1160px, calc(100vw - 44px))) / -2);
-  margin-right: calc((100vw - min(1160px, calc(100vw - 44px))) / -2);
-  padding: 58px calc((100vw - min(1160px, calc(100vw - 44px))) / 2);
+  margin-left: calc((100vw - min(1000px, calc(100vw - 44px))) / -2);
+  margin-right: calc((100vw - min(1000px, calc(100vw - 44px))) / -2);
+  padding: 58px calc((100vw - min(1000px, calc(100vw - 44px))) / 2);
 }
 
 .note-section > p {
@@ -1015,9 +1034,9 @@ h1 {
   display: grid;
   gap: 34px;
   grid-template-columns: minmax(0, 1fr);
-  margin-left: calc((100vw - min(1160px, calc(100vw - 44px))) / -2);
-  margin-right: calc((100vw - min(1160px, calc(100vw - 44px))) / -2);
-  padding: 78px calc((100vw - min(1160px, calc(100vw - 44px))) / 2);
+  margin-left: calc((100vw - min(1000px, calc(100vw - 44px))) / -2);
+  margin-right: calc((100vw - min(1000px, calc(100vw - 44px))) / -2);
+  padding: 78px calc((100vw - min(1000px, calc(100vw - 44px))) / 2);
   text-align: center;
 }
 
@@ -1101,10 +1120,11 @@ h1 {
 
 .site-footer {
   align-items: end;
+  border-top: 1px solid var(--line);
   display: grid;
   gap: 28px;
-  grid-template-columns: minmax(260px, 0.9fr) minmax(0, 1fr);
-  padding: 24px 0 0;
+  grid-template-columns: minmax(260px, 0.9fr) minmax(220px, 0.7fr) auto;
+  padding: 30px 0 0;
 }
 
 .footer-brand {
@@ -1121,6 +1141,25 @@ h1 {
   font-size: 0.92rem;
   margin-top: 10px;
   max-width: 440px;
+}
+
+.footer-company {
+  color: var(--muted);
+  display: grid;
+  gap: 6px;
+  justify-self: center;
+}
+
+.footer-company strong {
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  font-weight: 760;
+}
+
+.footer-company span {
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.45;
 }
 
 .contact-page {
@@ -1543,9 +1582,9 @@ h1 {
   display: grid;
   gap: 46px;
   grid-template-columns: 0.85fr minmax(0, 1fr);
-  margin-left: calc((100vw - min(1160px, calc(100vw - 44px))) / -2);
-  margin-right: calc((100vw - min(1160px, calc(100vw - 44px))) / -2);
-  padding: 58px calc((100vw - min(1160px, calc(100vw - 44px))) / 2);
+  margin-left: calc((100vw - min(1000px, calc(100vw - 44px))) / -2);
+  margin-right: calc((100vw - min(1000px, calc(100vw - 44px))) / -2);
+  padding: 58px calc((100vw - min(1000px, calc(100vw - 44px))) / 2);
 }
 
 .about-principles ul {
@@ -1599,7 +1638,6 @@ h1 {
   }
 
   .studio-hero,
-  .hero-intro,
   .offer-section,
   .note-section,
   .final-cta,
@@ -1610,10 +1648,8 @@ h1 {
   .site-footer {
     grid-template-columns: 1fr;
   }
-
-  .hero-card {
-    align-items: center;
-    grid-template-columns: 142px minmax(0, 1fr);
+  .landing-top h1 {
+    font-size: 6.25rem;
   }
 
   .proof-strip,
@@ -1653,6 +1689,10 @@ h1 {
 
   .site-footer {
     align-items: start;
+  }
+
+  .footer-company {
+    justify-self: start;
   }
 
   .site-footer nav {
@@ -1742,11 +1782,18 @@ h1 {
   }
 
   .hero-intro {
-    display: contents;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow: visible;
   }
 
   .hero-copy {
     display: contents;
+  }
+
+  .landing-top .hero-copy {
+    display: flex;
   }
 
   .hero-copy .eyebrow,
@@ -1760,10 +1807,22 @@ h1 {
     margin: 18px auto 0;
   }
 
+  .landing-top .hero-card {
+    flex: none;
+    max-width: 250px;
+    min-width: 0;
+    width: 100%;
+  }
+
   h1 {
     font-size: clamp(3rem, 15vw, 4.7rem);
     line-height: 0.96;
     margin-top: 4px;
+  }
+
+  .landing-top h1 {
+    font-size: 2.65rem;
+    line-height: 1.02;
   }
 
   .summary {

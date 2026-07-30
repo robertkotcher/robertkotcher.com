@@ -128,9 +128,7 @@ export default function Home() {
                 <img className="legacy-mark" src="/rk-mark.svg" alt="" />
                 <span>Professional apps, practical price</span>
               </p>
-              <h1 id="hero-title">
-                Have an app or website idea you want to build?
-              </h1>
+              <h1 id="hero-title">Have a website or app idea you want to build?</h1>
             </div>
             <aside className="hero-card" aria-label="Robert Kotcher">
               <div className="portrait-wrap">

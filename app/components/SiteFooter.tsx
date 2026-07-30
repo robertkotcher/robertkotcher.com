@@ -1,7 +1,7 @@
 export function SiteFooter() {
   return (
     <footer className="site-footer">
-      <div>
+      <div className="footer-brand-block">
         <a className="footer-brand" href="/">
           <img
             className="brand-wordmark"
@@ -10,6 +10,10 @@ export function SiteFooter() {
           />
         </a>
         <p>Professional apps at a fraction of the price.</p>
+      </div>
+      <div className="footer-company">
+        <strong>Actually Useful Things</strong>
+        <span>&copy; 2026 Actually Useful Things. All rights reserved.</span>
       </div>
       <nav aria-label="Footer links">
         <a className="footer-contact" href="/contact">
