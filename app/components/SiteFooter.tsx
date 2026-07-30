@@ -3,10 +3,13 @@ export function SiteFooter() {
     <footer className="site-footer">
       <div>
         <a className="footer-brand" href="/">
-          <img src="/rk-mark.svg" alt="" />
-          <span>robertkotcher.com</span>
+          <img
+            className="brand-wordmark"
+            src="/robert-kotcher-wordmark.png"
+            alt="Robert Kotcher"
+          />
         </a>
-        <p>App ideas built personally, with direct senior technical support.</p>
+        <p>Professional apps at a fraction of the price.</p>
       </div>
       <nav aria-label="Footer links">
         <a href="/about">

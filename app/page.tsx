@@ -12,11 +12,33 @@ export default function Home() {
     { value: "8M", label: "users on a mobile product I helped build" },
   ];
 
-  const offerItems = [
-    "Weekly video call to review progress and decide what matters next.",
-    "Daily email and text support for questions, feedback, and decisions.",
-    "Design, development, launch, hosting guidance, and ongoing maintenance.",
-    "No technical or product experience required to work together.",
+  const pricingPlans = [
+    {
+      price: "$250/mo",
+      title: "Steady Business App",
+      tone: "steady",
+      description:
+        "For simpler business apps that do not change very frequently.",
+      items: [
+        "Best for straightforward internal tools, portals, and workflow apps.",
+        "Maintenance, small improvements, bug fixes, and hosting guidance.",
+        "Email and text support for questions, feedback, and decisions.",
+        "No technical or product experience required to work together.",
+      ],
+    },
+    {
+      price: "$850/mo",
+      title: "Startup-Style App Partner",
+      tone: "active",
+      description:
+        "For more complex apps that require more frequent updates.",
+      items: [
+        "Weekly video call to review progress and decide what matters next.",
+        "Daily email and text support for questions, feedback, and decisions.",
+        "Design, development, launch, hosting guidance, and ongoing maintenance.",
+        "No technical or product experience required to work together.",
+      ],
+    },
   ];
 
   const process = [
@@ -99,7 +121,10 @@ export default function Home() {
       <section className="studio-hero" aria-labelledby="hero-title">
         <div className="hero-intro">
           <div className="hero-copy">
-            <p className="eyebrow">Professional apps, built personally</p>
+            <p className="eyebrow hero-eyebrow">
+              <img className="legacy-mark" src="/rk-mark.svg" alt="" />
+              <span>Professional apps, practical price</span>
+            </p>
             <h1 id="hero-title">Have an app idea you keep meaning to build?</h1>
             <p className="summary">
               I&apos;m Robert Kotcher, a Carnegie Mellon computer science graduate
@@ -149,24 +174,42 @@ export default function Home() {
       </section>
 
       <section className="offer-section" aria-labelledby="offer-title">
-        <div>
-          <h2 id="offer-title">Your technical partner for $850/month.</h2>
+        <div className="offer-intro">
+          <h2 id="offer-title">Your technical partner for $250-$850/month.</h2>
           <p>
             <CostContextModal /> My model is simple: one senior technical
             partner who can meet weekly, answer questions directly, and handle
             the practical work of designing, building, launching, and
             maintaining your app.
           </p>
+          <p className="offer-range">
+            The right monthly plan depends on complexity, update frequency, and
+            how much active product work your app needs.
+          </p>
         </div>
-        <div className="offer-card">
-          <span>$850/mo</span>
-          <h3>Direct App Partner</h3>
-          <ul>
-            {offerItems.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-          <a href="/contact">Start a Conversation</a>
+        <div className="offer-plans">
+          {pricingPlans.map((plan) => (
+            <article
+              className="offer-card"
+              data-tone={plan.tone}
+              key={plan.price}
+            >
+              <div className="offer-card-heading">
+                <img className="legacy-mark" src="/rk-mark.svg" alt="" />
+                <div>
+                  <span>{plan.price}</span>
+                  <h3>{plan.title}</h3>
+                </div>
+              </div>
+              <p className="offer-card-copy">{plan.description}</p>
+              <ul>
+                {plan.items.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+              <a href="/contact">Start a Conversation</a>
+            </article>
+          ))}
         </div>
       </section>
 
@@ -207,7 +250,10 @@ export default function Home() {
 
       <section className="final-cta" aria-labelledby="final-cta-title">
         <div className="final-cta-copy">
-          <p className="eyebrow">Ready when you are</p>
+          <div className="final-cta-kicker">
+            <img className="legacy-mark" src="/rk-mark.svg" alt="" />
+            <p className="eyebrow">Ready when you are</p>
+          </div>
           <h2 id="final-cta-title">Ready to make your app real?</h2>
           <p>
             Send me the rough idea, the goal, or the problem you keep coming
