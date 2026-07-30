@@ -9,33 +9,35 @@ export default function Home() {
     { value: "CMU CS", label: "Carnegie Mellon computer science graduate" },
     { value: "10+ yrs", label: "turning ideas into working software" },
     { value: "3 apps", label: "apps I built that were acquired" },
-    { value: "8M", label: "users on a mobile product I helped build" },
+    { value: "8M", label: "active users on Moment" },
   ];
 
   const pricingPlans = [
     {
       price: "$250/mo",
-      title: "Steady Business App",
+      title: "Steady Business App or Website",
       tone: "steady",
+      cta: "I Need a Business App",
       description:
         "For simpler business apps that do not change very frequently.",
       items: [
         "Best for straightforward internal tools, portals, and workflow apps.",
-        "Maintenance, small improvements, bug fixes, and hosting guidance.",
+        "Maintenance, small improvements, bug fixes, and full hosting support.",
         "Email and text support for questions, feedback, and decisions.",
         "No technical or product experience required to work together.",
       ],
     },
     {
       price: "$850/mo",
-      title: "Startup-Style App Partner",
+      title: "Startup-Style App or Website",
       tone: "active",
+      cta: "I'm Building a Startup",
       description:
         "For more complex apps that require more frequent updates.",
       items: [
         "Weekly video call to review progress and decide what matters next.",
         "Daily email and text support for questions, feedback, and decisions.",
-        "Design, development, launch, hosting guidance, and ongoing maintenance.",
+        "Design, development, launch, full hosting support, and ongoing maintenance.",
         "No technical or product experience required to work together.",
       ],
     },
@@ -84,7 +86,7 @@ export default function Home() {
       eyebrow: "Screen-time mobile app",
       title: "Moment",
       description:
-        "An iOS and Android app that helped people monitor screen time, understand phone habits, and build healthier routines.",
+        "An iOS and Android app with 8 million active users that helped people monitor screen time, understand phone habits, and build healthier routines.",
       icon: "/moment-icon.png",
       iconAlt: "Moment icon",
       image: "/moment-overview.png",
@@ -116,52 +118,66 @@ export default function Home() {
 
   return (
     <main className="cv-page">
-      <SiteHeader />
+      <div className="landing-top">
+        <SiteHeader />
 
-      <section className="studio-hero" aria-labelledby="hero-title">
-        <div className="hero-intro">
-          <div className="hero-copy">
-            <p className="eyebrow hero-eyebrow">
-              <img className="legacy-mark" src="/rk-mark.svg" alt="" />
-              <span>Professional apps, practical price</span>
-            </p>
-            <h1 id="hero-title">Have an app idea you keep meaning to build?</h1>
-            <p className="summary">
-              I&apos;m Robert Kotcher, a Carnegie Mellon computer science graduate
-              who helps people turn ideas into working apps without breaking the
-              bank.
-            </p>
-          </div>
-          <aside className="hero-card" aria-label="Robert Kotcher">
-            <div className="portrait-wrap">
-              <img
-                src="/robert-kotcher-osaka.jpg"
-                alt="Robert Kotcher"
-                className="portrait"
-              />
-            </div>
-            <div className="signature-note">
-              <p>
-                My goal is to make development feel less transactional and more
-                personal: building an app you&apos;re proud of, in a way that
-                stays affordable.
+        <section className="studio-hero" aria-labelledby="hero-title">
+          <div className="hero-intro">
+            <div className="hero-copy">
+              <p className="eyebrow hero-eyebrow">
+                <img className="legacy-mark" src="/rk-mark.svg" alt="" />
+                <span>Professional apps, practical price</span>
               </p>
-              <img
-                src="/robert-kotcher-signature.png"
-                alt="Robert Kotcher signature"
-                className="signature-image"
-              />
+              <h1 id="hero-title">
+                Have an app or website idea you want to build?
+              </h1>
             </div>
-          </aside>
+            <aside className="hero-card" aria-label="Robert Kotcher">
+              <div className="portrait-wrap">
+                <img
+                  src="/robert-kotcher-osaka.jpg"
+                  alt="Robert Kotcher"
+                  className="portrait"
+                />
+              </div>
+              <div className="signature-note">
+                <p>
+                  My goal is to make development feel less transactional and
+                  more personal: building an app you&apos;re proud of, in a way
+                  that stays affordable.
+                </p>
+                <img
+                  src="/robert-kotcher-signature.png"
+                  alt="Robert Kotcher signature"
+                  className="signature-image"
+                />
+              </div>
+            </aside>
+          </div>
+        </section>
+      </div>
+
+      <section className="flyer-value-band" aria-label="Affordable app development">
+        <div className="flyer-value-copy">
+          <p>
+            Let&apos;s build and maintain it for a fraction of what a typical
+            agency would charge.
+          </p>
+          <div className="hero-actions" aria-label="Primary actions">
+            <a className="primary-action" href="/contact">
+              Reach Out Today
+            </a>
+            <a className="secondary-action" href="/contact">
+              Send Your Idea
+            </a>
+          </div>
         </div>
-        <div className="hero-actions" aria-label="Primary actions">
-          <a className="primary-action" href="/contact">
-            Reach Out Today
-          </a>
-          <a className="secondary-action" href="/contact">
-            Send Your Idea
-          </a>
-        </div>
+        <img
+          className="coffee-plate"
+          src="/coffee-plate.png"
+          alt=""
+          aria-hidden="true"
+        />
       </section>
 
       <section className="proof-strip" aria-label="Track record">
@@ -207,7 +223,7 @@ export default function Home() {
                   <li key={item}>{item}</li>
                 ))}
               </ul>
-              <a href="/contact">Start a Conversation</a>
+              <a href="/contact">{plan.cta}</a>
             </article>
           ))}
         </div>

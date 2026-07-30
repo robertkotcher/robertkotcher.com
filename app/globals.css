@@ -1,24 +1,28 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f6f7f4;
+  --background: #ffffff;
   --foreground: #171716;
   --muted: #666a64;
   --line: #d8ddd4;
-  --panel: #fffefa;
+  --panel: #ffffff;
   --panel-strong: #eef5f1;
   --accent: #0d7f73;
   --accent-warm: #d96733;
   --accent-blue: #244963;
+  --studio-navy: #020a35;
   --logo-teal: #05bea8;
+  --cta-primary: #05bea8;
+  --cta-primary-dark: #038f81;
+  --cta-secondary: #d96733;
   --ink-soft: #343832;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-open-sans);
+  --font-mono: var(--font-open-sans);
 }
 
 * {
@@ -28,7 +32,7 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-open-sans), Arial, Helvetica, sans-serif;
   margin: 0;
 }
 
@@ -55,6 +59,10 @@ p {
   margin: 0 auto;
   padding: 38px 0 46px;
   width: min(1160px, calc(100% - 44px));
+}
+
+.cv-page:has(> .landing-top) {
+  padding-top: 0;
 }
 
 .site-header {
@@ -104,8 +112,8 @@ p {
 .site-header nav a,
 .site-footer nav a {
   align-items: center;
-  background: rgba(255, 254, 250, 0.78);
-  border: 1px solid var(--line);
+  background: var(--panel);
+  border: 1px solid rgba(217, 103, 51, 0.68);
   display: inline-flex;
   gap: 7px;
   min-height: 34px;
@@ -124,7 +132,7 @@ p {
 
 .site-header nav span,
 .site-footer nav span {
-  color: var(--ink-soft);
+  color: var(--cta-secondary);
   font-size: 0.76rem;
   font-weight: 720;
   line-height: 1;
@@ -132,9 +140,9 @@ p {
 
 .site-header .contact-button,
 .site-footer .footer-contact {
-  background: var(--foreground);
-  border-color: var(--foreground);
-  color: var(--panel);
+  background: var(--cta-primary);
+  border-color: var(--cta-primary);
+  color: var(--studio-navy);
   font-weight: 780;
 }
 
@@ -151,7 +159,7 @@ p {
 .contact-card p,
 .contact-form span {
   color: var(--accent);
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-family: var(--font-open-sans), Arial, Helvetica, sans-serif;
   font-size: 0.78rem;
   font-weight: 760;
   letter-spacing: 0;
@@ -165,11 +173,51 @@ p {
   padding: 34px 0 44px;
 }
 
+.landing-top {
+  background: var(--studio-navy);
+  color: var(--panel);
+  margin-left: calc((100vw - min(1160px, calc(100vw - 44px))) / -2);
+  margin-right: calc((100vw - min(1160px, calc(100vw - 44px))) / -2);
+  padding: 38px calc((100vw - min(1160px, calc(100vw - 44px))) / 2) 0;
+}
+
+.landing-top .site-header {
+  margin-bottom: 56px;
+}
+
+.landing-top .site-header nav a {
+  background: rgba(217, 103, 51, 0.08);
+  border-color: rgba(255, 155, 74, 0.72);
+}
+
+.landing-top .site-header nav span {
+  color: #ff9b4a;
+}
+
+.landing-top .site-header .contact-button {
+  background: var(--cta-primary);
+  border-color: var(--cta-primary);
+  color: var(--studio-navy);
+}
+
+.landing-top .site-header .contact-button span {
+  color: var(--studio-navy);
+}
+
+.landing-top .site-header .contact-button:hover span {
+  color: var(--panel);
+}
+
+.landing-top .studio-hero {
+  border-bottom: 0;
+  padding: 0 0 52px;
+}
+
 .hero-intro {
   align-items: start;
   display: grid;
-  gap: 44px;
-  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 56px;
+  grid-template-columns: minmax(0, 1fr) 300px;
 }
 
 .hero-copy {
@@ -197,12 +245,23 @@ h1 {
   max-width: 980px;
 }
 
+.landing-top h1 {
+  color: var(--panel);
+  font-size: clamp(3.6rem, 8vw, 7.15rem);
+  max-width: 1020px;
+}
+
 .summary {
   color: var(--ink-soft);
   font-size: clamp(1.1rem, 2vw, 1.38rem);
   line-height: 1.48;
   margin-top: 24px;
   max-width: 760px;
+}
+
+.landing-top .summary {
+  color: rgba(255, 254, 250, 0.82);
+  max-width: 720px;
 }
 
 .hero-actions {
@@ -212,6 +271,11 @@ h1 {
   justify-content: center;
   padding: 34px 0 38px;
   width: 100%;
+}
+
+.landing-top .hero-actions {
+  justify-content: flex-start;
+  padding: 30px 0 0;
 }
 
 .hero-actions .primary-action,
@@ -237,15 +301,45 @@ h1 {
 
 .primary-action,
 .offer-card a {
-  background: var(--foreground);
-  border: 1px solid var(--foreground);
+  background: var(--cta-primary);
+  border: 1px solid var(--cta-primary);
+  color: var(--studio-navy);
+}
+
+.primary-action:hover,
+.offer-card a:hover,
+.site-header .contact-button:hover,
+.site-footer .footer-contact:hover {
+  background: var(--cta-primary-dark);
+  border-color: var(--cta-primary-dark);
   color: var(--panel);
 }
 
 .secondary-action {
   background: var(--panel);
-  border: 1px solid var(--line);
-  color: var(--foreground);
+  border: 1px solid var(--cta-secondary);
+  color: var(--cta-secondary);
+}
+
+.secondary-action:hover,
+.site-header nav a:hover,
+.site-footer nav a:hover {
+  background: rgba(217, 103, 51, 0.1);
+  border-color: var(--cta-secondary);
+  color: var(--cta-secondary);
+}
+
+.landing-top .secondary-action {
+  background: transparent;
+  border-color: var(--cta-secondary);
+  color: #ff9b4a;
+}
+
+.landing-top .secondary-action:hover,
+.landing-top .site-header nav a:hover {
+  background: rgba(217, 103, 51, 0.18);
+  border-color: #ff9b4a;
+  color: #ff9b4a;
 }
 
 .hero-card {
@@ -300,6 +394,46 @@ h1 {
   max-width: 245px;
   mix-blend-mode: multiply;
   width: 82%;
+}
+
+.flyer-value-band {
+  background: var(--panel);
+  border-bottom: 2px solid var(--foreground);
+  min-height: 420px;
+  margin-left: calc((100vw - min(1160px, calc(100vw - 44px))) / -2);
+  margin-right: calc((100vw - min(1160px, calc(100vw - 44px))) / -2);
+  overflow: hidden;
+  padding: 54px calc((100vw - min(1160px, calc(100vw - 44px))) / 2) 0;
+  position: relative;
+}
+
+.flyer-value-copy {
+  max-width: 760px;
+  position: relative;
+  z-index: 1;
+}
+
+.flyer-value-copy p {
+  color: var(--foreground);
+  font-size: clamp(1.85rem, 3.5vw, 3.25rem);
+  font-weight: 400;
+  line-height: 1.22;
+}
+
+.flyer-value-copy .hero-actions {
+  margin: 30px 0 0;
+  justify-content: flex-start;
+  padding: 0;
+  width: auto;
+}
+
+.coffee-plate {
+  bottom: -300px;
+  display: block;
+  height: auto;
+  position: absolute;
+  right: max(calc((100vw - min(1160px, calc(100vw - 44px))) / 2 - 50px), -24px);
+  width: min(560px, 46vw);
 }
 
 .proof-strip {
@@ -464,7 +598,7 @@ h1 {
 
 .cost-modal-sources span {
   color: var(--foreground);
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-family: var(--font-open-sans), Arial, Helvetica, sans-serif;
   font-size: 0.78rem;
   font-weight: 800;
   text-transform: uppercase;
@@ -874,7 +1008,7 @@ h1 {
 
 .final-cta {
   align-items: center;
-  background: var(--foreground);
+  background: var(--studio-navy);
   border-bottom: 0;
   border-top: 6px solid var(--accent-warm);
   color: var(--panel);
@@ -932,11 +1066,17 @@ h1 {
 }
 
 .final-cta .primary-action {
-  background: var(--panel);
-  border-color: var(--panel);
-  color: var(--foreground);
+  background: var(--cta-primary);
+  border-color: var(--cta-primary);
+  color: var(--studio-navy);
   min-height: 58px;
   min-width: 260px;
+}
+
+.final-cta .primary-action:hover {
+  background: var(--cta-primary-dark);
+  border-color: var(--cta-primary-dark);
+  color: var(--panel);
 }
 
 .final-contact-links {
@@ -1086,8 +1226,9 @@ h1 {
 }
 
 .file-control strong {
-  background: var(--foreground);
-  color: var(--panel);
+  background: rgba(217, 103, 51, 0.1);
+  border: 1px solid var(--cta-secondary);
+  color: var(--cta-secondary);
   display: inline-block;
   font-size: 0.86rem;
   font-weight: 780;
@@ -1108,9 +1249,9 @@ h1 {
 }
 
 .contact-form button {
-  background: var(--accent-blue);
-  border: 1px solid var(--accent-blue);
-  color: white;
+  background: var(--cta-primary);
+  border: 1px solid var(--cta-primary);
+  color: var(--studio-navy);
   cursor: pointer;
   font: inherit;
   font-size: 0.92rem;
@@ -1120,8 +1261,9 @@ h1 {
 }
 
 .contact-form button:hover {
-  background: var(--foreground);
-  border-color: var(--foreground);
+  background: var(--cta-primary-dark);
+  border-color: var(--cta-primary-dark);
+  color: var(--panel);
 }
 
 .contact-form button:disabled {
@@ -1184,7 +1326,7 @@ h1 {
 
 .success-popup p {
   color: var(--accent);
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-family: var(--font-open-sans), Arial, Helvetica, sans-serif;
   font-size: 0.78rem;
   font-weight: 800;
   text-transform: uppercase;
@@ -1235,7 +1377,7 @@ h1 {
 
 .promo-banner p {
   color: var(--accent-blue);
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-family: var(--font-open-sans), Arial, Helvetica, sans-serif;
   font-size: 0.84rem;
   font-weight: 800;
   text-transform: uppercase;
@@ -1256,14 +1398,19 @@ h1 {
 }
 
 .promo-banner a {
-  background: var(--foreground);
-  color: var(--panel);
+  background: var(--cta-primary);
+  color: var(--studio-navy);
   font-size: 0.98rem;
   font-weight: 780;
   justify-self: start;
   margin-top: 8px;
   padding: 14px 16px;
   text-decoration: none;
+}
+
+.promo-banner a:hover {
+  background: var(--cta-primary-dark);
+  color: var(--panel);
 }
 
 .promo-dismiss {
@@ -1443,6 +1590,14 @@ h1 {
 }
 
 @media (max-width: 940px) {
+  .landing-top {
+    padding-top: 30px;
+  }
+
+  .landing-top .site-header {
+    margin-bottom: 42px;
+  }
+
   .studio-hero,
   .hero-intro,
   .offer-section,
@@ -1503,6 +1658,15 @@ h1 {
   .site-footer nav {
     justify-content: flex-start;
   }
+
+  .flyer-value-band {
+    min-height: 390px;
+  }
+
+  .coffee-plate {
+    bottom: -250px;
+    width: min(480px, 58vw);
+  }
 }
 
 @media (max-width: 680px) {
@@ -1557,9 +1721,24 @@ h1 {
     padding-inline: 12px;
   }
 
+  .landing-top {
+    margin-left: -16px;
+    margin-right: -16px;
+    padding: 22px 16px 0;
+  }
+
+  .landing-top .site-header {
+    margin-bottom: 36px;
+  }
+
   .studio-hero {
     gap: 8px;
     padding: 24px 0 34px;
+  }
+
+  .landing-top .studio-hero {
+    gap: 20px;
+    padding: 0 0 34px;
   }
 
   .hero-intro {
@@ -1599,6 +1778,11 @@ h1 {
     padding: 0;
   }
 
+  .landing-top .hero-actions {
+    justify-content: stretch;
+    padding-top: 0;
+  }
+
   .hero-actions .primary-action,
   .hero-actions .secondary-action {
     font-size: 0.92rem;
@@ -1622,6 +1806,29 @@ h1 {
   .hero-card p {
     font-size: 0.9rem;
     padding: 0;
+  }
+
+  .flyer-value-band {
+    margin-left: -16px;
+    margin-right: -16px;
+    min-height: 420px;
+    padding: 40px 16px 0;
+  }
+
+  .flyer-value-copy p {
+    font-size: clamp(1.65rem, 7vw, 2.45rem);
+  }
+
+  .flyer-value-copy .hero-actions {
+    margin-top: 24px;
+  }
+
+  .coffee-plate {
+    bottom: -210px;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: min(520px, 105vw);
   }
 
   .proof-strip,

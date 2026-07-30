@@ -12,9 +12,6 @@ export function SiteFooter() {
         <p>Professional apps at a fraction of the price.</p>
       </div>
       <nav aria-label="Footer links">
-        <a href="/about">
-          <span>About</span>
-        </a>
         <a className="footer-contact" href="/contact">
           <span>Contact</span>
         </a>

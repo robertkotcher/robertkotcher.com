@@ -8,14 +8,6 @@ export function SiteHeader() {
           alt="Robert Kotcher"
         />
       </a>
-      <nav>
-        <a href="/about">
-          <span>About</span>
-        </a>
-        <a className="contact-button" href="/contact">
-          <span>Contact</span>
-        </a>
-      </nav>
     </header>
   );
 }
