@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
+import { ensureInboxSchema, storeOutboundEmail } from "@/app/lib/inbox-db";
 import { inboxCookie, isInboxSession, resendPost } from "@/app/lib/inbox";
+
+type SendEmailResponse = {
+  id?: string;
+};
 
 export async function POST(request: Request) {
   const cookieStore = await cookies();
@@ -14,19 +19,31 @@ export async function POST(request: Request) {
   }
 
   try {
+    const from = process.env.RESEND_FROM_EMAIL || "Robert Kotcher <hello@robertkotcher.com>";
+    await ensureInboxSchema();
+
     const headers: Record<string, string> = {};
     if (typeof messageId === "string" && messageId.trim()) {
       headers["In-Reply-To"] = messageId;
       headers.References = messageId;
     }
 
-    const result = await resendPost("/emails", {
-      from: process.env.INBOX_FROM_EMAIL || "Robert Kotcher <develop@robertkotcher.com>",
+    const result = await resendPost<SendEmailResponse>("/emails", {
+      from,
       headers,
-      reply_to: "develop@robertkotcher.com",
+      reply_to: from,
       subject: subject.trim(),
       text: body.trim(),
       to: [to.trim()],
+    });
+
+    await storeOutboundEmail({
+      from,
+      inReplyTo: typeof messageId === "string" ? messageId : null,
+      resendEmailId: result.id || null,
+      subject: subject.trim(),
+      text: body.trim(),
+      to: to.trim(),
     });
     return NextResponse.json(result);
   } catch (error) {

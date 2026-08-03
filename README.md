@@ -27,6 +27,36 @@ This starter does not use `wrangler.jsonc`.
 - `examples/d1/` contains an optional D1 example surface
 - `drizzle.config.ts` supports local migration generation when needed
 
+## Inbox Environment
+
+The `/inbox` experience stores sender-threaded conversations in Postgres.
+Inbound mail is ingested by Resend webhooks, and outbound replies are stored
+after Resend accepts the send.
+
+```bash
+DATABASE_URL=postgres://user:password@host/database?sslmode=require
+RESEND_API_KEY=re_xxxxxxxxx
+RESEND_WEBHOOK_SECRET=whsec_xxxxxxxxx
+RESEND_FROM_EMAIL="Robert Kotcher <hello@robertkotcher.com>"
+INBOX_PASSWORD=replace-with-the-login-password
+INBOX_SESSION_SECRET=replace-with-a-long-random-secret
+```
+
+Configure Resend to send `email.received` webhooks to:
+
+```text
+https://robertkotcher.com/api/inbox/webhook
+```
+
+Run the Postgres migration before deploying:
+
+```bash
+npm run db:migrate
+```
+
+For local Docker Postgres, `DATABASE_URL` can point at localhost. For Vercel,
+use the Neon pooled connection string with SSL enabled.
+
 ## Workspace Auth Headers
 
 OpenAI workspace sites can read the current user's email from

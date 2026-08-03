@@ -1777,8 +1777,32 @@ h1 {
 .inbox-message-head { border-bottom: 1px solid var(--line); padding-bottom: 22px; }
 .inbox-message-head h2 { font-size: 2.5rem; line-height: 1.05; margin: 10px 0; }
 .inbox-meta { color: var(--muted); font-size: 0.9rem; }
-.inbox-message-body { line-height: 1.65; padding: 28px 0; white-space: pre-wrap; }
-.inbox-attachments { border-top: 1px solid var(--line); display: grid; gap: 8px; padding: 22px 0; }
+.inbox-conversation { display: grid; gap: 18px; padding: 28px 0; }
+.inbox-conversation-message {
+  border: 1px solid var(--line);
+  display: grid;
+  gap: 12px;
+  padding: 20px;
+}
+.inbox-conversation-message.is-outbound { background: #f2f7fb; }
+.inbox-conversation-message h3 { font-size: 1.04rem; margin: 0; }
+.inbox-conversation-meta {
+  align-items: center;
+  color: var(--muted);
+  display: flex;
+  font-size: 0.84rem;
+  gap: 12px;
+  justify-content: space-between;
+}
+.inbox-conversation-meta strong {
+  color: var(--ink-soft);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.inbox-conversation-meta time { flex: 0 0 auto; }
+.inbox-message-body { line-height: 1.65; white-space: pre-wrap; }
+.inbox-attachments { border-top: 1px solid var(--line); display: grid; gap: 8px; padding-top: 16px; }
 .inbox-attachments a { color: var(--accent); font-weight: 700; }
 .inbox-reply { border-top: 1px solid var(--line); padding-top: 22px; }
 .inbox-reply textarea { min-height: 130px; resize: vertical; }

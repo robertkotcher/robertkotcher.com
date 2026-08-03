@@ -1,15 +1,7 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { inboxCookie, isInboxSession, resendGet } from "@/app/lib/inbox";
-
-type ReceivedMessage = {
-  id: string;
-  created_at: string;
-  from: string;
-  to: string[];
-  subject: string;
-  attachments?: { filename: string }[];
-};
+import { listInboxThreads } from "@/app/lib/inbox-db";
+import { inboxCookie, isInboxSession } from "@/app/lib/inbox";
 
 export async function GET() {
   const cookieStore = await cookies();
@@ -18,18 +10,10 @@ export async function GET() {
   }
 
   try {
-    const result = await resendGet<{ data: ReceivedMessage[] }>("/emails/receiving");
-    return NextResponse.json({
-      ...result,
-      data: result.data.map((message) => ({ ...message, email_id: message.id })),
-    });
+    const threads = await listInboxThreads();
+    return NextResponse.json({ data: threads });
   } catch (error) {
     console.error("Inbox list failed:", error);
-    const message = error instanceof Error ? error.message : "Unknown Resend error.";
-    const invalidKey = message.includes("API key is invalid");
-    return NextResponse.json(
-      { error: invalidKey ? "Resend rejected RESEND_API_KEY. Replace it with a valid API key." : "Could not load messages." },
-      { status: 502 },
-    );
+    return NextResponse.json({ error: "Could not load inbox threads." }, { status: 502 });
   }
 }

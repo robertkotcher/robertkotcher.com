@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { inboxCookie, isInboxSession, resendGet } from "@/app/lib/inbox";
+import { getInboxThread } from "@/app/lib/inbox-db";
+import { inboxCookie, isInboxSession } from "@/app/lib/inbox";
 
 export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
   const cookieStore = await cookies();
@@ -10,13 +11,11 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
 
   const { id } = await params;
   try {
-    const [message, attachments] = await Promise.all([
-      resendGet(`/emails/receiving/${encodeURIComponent(id)}`),
-      resendGet(`/emails/receiving/${encodeURIComponent(id)}/attachments`),
-    ]);
-    return NextResponse.json({ message, attachments });
+    const thread = await getInboxThread(id);
+    if (!thread) return NextResponse.json({ error: "Thread not found." }, { status: 404 });
+    return NextResponse.json(thread);
   } catch (error) {
-    console.error("Inbox message failed:", error);
-    return NextResponse.json({ error: "Could not load that message." }, { status: 502 });
+    console.error("Inbox thread failed:", error);
+    return NextResponse.json({ error: "Could not load that thread." }, { status: 502 });
   }
 }
