@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
 import { ReceivedEmail, storeInboundEmail, storeWebhookEvent } from "@/app/lib/inbox-db";
-import { resendGet } from "@/app/lib/inbox";
+import { resendGet, resendPost } from "@/app/lib/inbox";
 import { verifyResendWebhook } from "@/app/lib/resend-webhook";
+
+const notificationEmail = "rkotcher@gmail.com";
 
 type ResendWebhookEvent = {
   type?: string;
@@ -10,6 +12,36 @@ type ResendWebhookEvent = {
     email_id?: string;
   };
 };
+
+function stripHtml(value: string) {
+  return value.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+}
+
+function preview(email: ReceivedEmail) {
+  const body = email.text || (email.html ? stripHtml(email.html) : "");
+  return body.length > 600 ? `${body.slice(0, 600)}...` : body;
+}
+
+async function sendInboundNotification(email: ReceivedEmail) {
+  const from = process.env.RESEND_FROM_EMAIL || "Robert Kotcher <hello@robertkotcher.com>";
+  const subject = email.subject?.trim() || "No subject";
+
+  await resendPost("/emails", {
+    from,
+    reply_to: email.from,
+    subject: `New inbox message: ${subject}`,
+    text: [
+      `From: ${email.from}`,
+      `To: ${(email.to || []).join(", ") || "hello@robertkotcher.com"}`,
+      `Subject: ${subject}`,
+      "",
+      preview(email) || "No message preview available.",
+      "",
+      "Open the inbox: https://www.robertkotcher.com/inbox",
+    ].join("\n"),
+    to: [notificationEmail],
+  });
+}
 
 export async function POST(request: Request) {
   const payload = await request.text();
@@ -37,6 +69,7 @@ export async function POST(request: Request) {
   try {
     const email = await resendGet<ReceivedEmail>(`/emails/receiving/${encodeURIComponent(emailId)}`);
     await storeInboundEmail(email);
+    await sendInboundNotification(email);
     await storeWebhookEvent({ eventCreatedAt: event.created_at, id: webhookId, payload: event, status: "processed", type: event.type });
     return NextResponse.json({ ok: true });
   } catch (error) {
