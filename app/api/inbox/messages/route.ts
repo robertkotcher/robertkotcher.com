@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { listInboxThreads } from "@/app/lib/inbox-db";
+import { getFailedWebhookSummary, listInboxThreads } from "@/app/lib/inbox-db";
 import { inboxCookie, isInboxSession } from "@/app/lib/inbox";
 
 export async function GET() {
@@ -10,8 +10,11 @@ export async function GET() {
   }
 
   try {
-    const threads = await listInboxThreads();
-    return NextResponse.json({ data: threads });
+    const [threads, failed_webhooks] = await Promise.all([
+      listInboxThreads(),
+      getFailedWebhookSummary(),
+    ]);
+    return NextResponse.json({ data: threads, failed_webhooks });
   } catch (error) {
     console.error("Inbox list failed:", error);
     return NextResponse.json({ error: "Could not load inbox threads." }, { status: 502 });

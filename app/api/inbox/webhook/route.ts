@@ -37,10 +37,18 @@ export async function POST(request: Request) {
   try {
     const email = await resendGet<ReceivedEmail>(`/emails/receiving/${encodeURIComponent(emailId)}`);
     await storeInboundEmail(email);
-    await storeWebhookEvent({ eventCreatedAt: event.created_at, id: webhookId, payload: event, type: event.type });
+    await storeWebhookEvent({ eventCreatedAt: event.created_at, id: webhookId, payload: event, status: "processed", type: event.type });
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error("Inbound email storage failed:", error);
+    await storeWebhookEvent({
+      errorText: error instanceof Error ? error.message : "Unknown webhook processing error.",
+      eventCreatedAt: event.created_at,
+      id: webhookId,
+      payload: event,
+      status: "failed",
+      type: event.type,
+    }).catch((storeError) => console.error("Failed to record webhook failure:", storeError));
     return NextResponse.json({ error: "Could not store inbound email." }, { status: 500 });
   }
 }

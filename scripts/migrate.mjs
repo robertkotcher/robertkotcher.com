@@ -1,5 +1,5 @@
 import pg from "pg";
-import { readFile } from "node:fs/promises";
+import { readdir, readFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -17,16 +17,24 @@ const pool = new pg.Pool({
   connectionString: databaseUrl,
   ssl: useSsl ? { rejectUnauthorized: false } : undefined,
 });
-const migrationPath = join(root, "db", "migrations", "0001_inbox_threads.sql");
-const migration = await readFile(migrationPath, "utf8");
-const statements = migration
-  .split(";")
-  .map((statement) => statement.trim())
-  .filter(Boolean);
+const migrationsDir = join(root, "db", "migrations");
+const migrationFiles = (await readdir(migrationsDir))
+  .filter((file) => file.endsWith(".sql"))
+  .sort();
 
-for (const statement of statements) {
-  await pool.query(statement);
+let statementCount = 0;
+for (const file of migrationFiles) {
+  const migration = await readFile(join(migrationsDir, file), "utf8");
+  const statements = migration
+    .split(";")
+    .map((statement) => statement.trim())
+    .filter(Boolean);
+
+  for (const statement of statements) {
+    await pool.query(statement);
+    statementCount += 1;
+  }
 }
 
 await pool.end();
-console.log(`Applied ${statements.length} migration statements.`);
+console.log(`Applied ${statementCount} migration statements from ${migrationFiles.length} migration files.`);

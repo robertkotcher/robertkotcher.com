@@ -1695,12 +1695,15 @@ h1 {
 .inbox-login-card button,
 .inbox-reply button,
 .inbox-header-actions button {
+  align-items: center;
   background: var(--studio-navy);
   border: 1px solid var(--studio-navy);
   color: white;
   cursor: pointer;
+  display: inline-flex;
   font: inherit;
   font-weight: 750;
+  justify-content: center;
   padding: 7px 10px;
 }
 
@@ -1723,7 +1726,13 @@ h1 {
 
 .inbox-header h1 { margin-bottom: 0; }
 
-.inbox-header-actions { display: flex; gap: 8px; }
+.inbox-header-actions { display: flex; gap: 6px; }
+
+.inbox-header-actions button {
+  height: 28px;
+  padding: 0;
+  width: 28px;
+}
 
 .inbox-header-actions .inbox-logout {
   background: transparent;

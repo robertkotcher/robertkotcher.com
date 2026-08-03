@@ -162,11 +162,16 @@ export async function ensureInboxSchema() {
         type TEXT NOT NULL,
         payload JSONB NOT NULL,
         event_created_at TIMESTAMPTZ,
+        status TEXT NOT NULL DEFAULT 'processed',
+        error_text TEXT,
         processed_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
       )
     `);
+    await query("ALTER TABLE resend_webhook_events ADD COLUMN IF NOT EXISTS status TEXT NOT NULL DEFAULT 'processed'");
+    await query("ALTER TABLE resend_webhook_events ADD COLUMN IF NOT EXISTS error_text TEXT");
     await query("CREATE INDEX IF NOT EXISTS email_messages_thread_created_idx ON email_messages (thread_id, created_at)");
     await query("CREATE INDEX IF NOT EXISTS email_threads_last_message_idx ON email_threads (last_message_at DESC)");
+    await query("CREATE INDEX IF NOT EXISTS resend_webhook_events_status_idx ON resend_webhook_events (status, processed_at DESC)");
   })();
 
   return schemaReady;
@@ -288,19 +293,49 @@ export async function storeWebhookEvent(input: {
   type: string;
   payload: unknown;
   eventCreatedAt?: string | null;
+  errorText?: string | null;
+  status?: "failed" | "processed";
 }) {
   await ensureInboxSchema();
 
   await query(
     `
-      INSERT INTO resend_webhook_events (id, type, payload, event_created_at)
-      VALUES ($1, $2, $3::jsonb, $4)
+      INSERT INTO resend_webhook_events (id, type, payload, event_created_at, status, error_text)
+      VALUES ($1, $2, $3::jsonb, $4, $5, $6)
       ON CONFLICT (id) DO UPDATE SET
         payload = EXCLUDED.payload,
+        status = EXCLUDED.status,
+        error_text = EXCLUDED.error_text,
         processed_at = NOW()
     `,
-    [input.id, input.type, JSON.stringify(input.payload), input.eventCreatedAt || null],
+    [
+      input.id,
+      input.type,
+      JSON.stringify(input.payload),
+      input.eventCreatedAt || null,
+      input.status || "processed",
+      input.errorText || null,
+    ],
   );
+}
+
+export async function getFailedWebhookSummary() {
+  await ensureInboxSchema();
+
+  const { rows } = await query<{ failed_count: number; last_failed_at: string | null; last_error: string | null } & QueryResultRow>(`
+    SELECT
+      COUNT(*)::int AS failed_count,
+      MAX(processed_at)::text AS last_failed_at,
+      (ARRAY_AGG(error_text ORDER BY processed_at DESC))[1] AS last_error
+    FROM resend_webhook_events
+    WHERE status = 'failed'
+  `);
+
+  return {
+    count: Number(rows[0]?.failed_count || 0),
+    last_error: rows[0]?.last_error ? String(rows[0].last_error) : null,
+    last_failed_at: rows[0]?.last_failed_at ? String(rows[0].last_failed_at) : null,
+  };
 }
 
 export async function listInboxThreads(): Promise<InboxThreadSummary[]> {
