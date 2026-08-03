@@ -1,3 +1,4 @@
+import { ContactForm } from "./ContactForm";
 import { SiteFooter } from "../components/SiteFooter";
 import { SiteHeader } from "../components/SiteHeader";
 
@@ -20,6 +21,7 @@ export default function ContactPage() {
           <a href="mailto:rkotcher@gmail.com">rkotcher@gmail.com</a>
         </div>
       </section>
+      <ContactForm />
 
       <SiteFooter />
     </main>

@@ -1,6 +1,8 @@
+import { randomUUID } from "node:crypto";
 import { NextResponse } from "next/server";
+import { ReceivedEmail, storeInboundEmail } from "@/app/lib/inbox-db";
+import { resendPost } from "@/app/lib/inbox";
 
-const resendEndpoint = "https://api.resend.com/emails";
 const contactEmail = "rkotcher@gmail.com";
 const maxAttachmentBytes = 3 * 1024 * 1024;
 
@@ -25,27 +27,55 @@ function getField(formData: FormData, key: string) {
   return typeof value === "string" ? value.trim() : "";
 }
 
+function isUploadedFile(value: FormDataEntryValue): value is File {
+  return value instanceof File && value.size > 0;
+}
+
+function textBody(input: {
+  body: string;
+  email: string;
+  name: string;
+  phone: string;
+  subject: string;
+}) {
+  return [
+    `Name: ${input.name || "Not provided"}`,
+    `Email: ${input.email}`,
+    `Phone: ${input.phone || "Not provided"}`,
+    `Subject: ${input.subject}`,
+    "",
+    input.body,
+  ].join("\n");
+}
+
+function htmlBody(input: {
+  body: string;
+  email: string;
+  name: string;
+  phone: string;
+  subject: string;
+}) {
+  return `
+    <h1>New robertkotcher.com inquiry</h1>
+    <p><strong>Name:</strong> ${escapeHtml(input.name || "Not provided")}</p>
+    <p><strong>Email:</strong> ${escapeHtml(input.email)}</p>
+    <p><strong>Phone:</strong> ${escapeHtml(input.phone || "Not provided")}</p>
+    <p><strong>Subject:</strong> ${escapeHtml(input.subject)}</p>
+    <hr />
+    <p>${escapeHtml(input.body).replace(/\n/g, "<br />")}</p>
+  `;
+}
+
 export async function POST(request: Request) {
-  const apiKey = process.env.RESEND_API_KEY;
-  const fromEmail =
-    process.env.RESEND_FROM_EMAIL ?? "Robert Kotcher <contact@robertkotcher.com>";
-
-  if (!apiKey) {
-    return NextResponse.json(
-      { error: "Email is not configured yet." },
-      { status: 500 },
-    );
-  }
-
   const formData = await request.formData();
   const name = getField(formData, "name");
   const email = getField(formData, "email");
   const phone = getField(formData, "phone");
   const subject = getField(formData, "subject");
-  const message = getField(formData, "body");
-  const files = formData.getAll("files").filter((file) => file instanceof File);
+  const body = getField(formData, "body");
+  const files = formData.getAll("files").filter(isUploadedFile);
 
-  if (!email || !subject || !message) {
+  if (!email || !subject || !body) {
     return NextResponse.json(
       { error: "Email, subject, and message are required." },
       { status: 400 },
@@ -73,39 +103,46 @@ export async function POST(request: Request) {
     }),
   );
 
-  const safeName = escapeHtml(name || "Not provided");
-  const safeEmail = escapeHtml(email);
-  const safePhone = escapeHtml(phone || "Not provided");
-  const safeSubject = escapeHtml(subject);
-  const safeMessage = escapeHtml(message).replace(/\n/g, "<br />");
+  const messageText = textBody({ body, email, name, phone, subject });
+  const messageHtml = htmlBody({ body, email, name, phone, subject });
+  const createdAt = new Date().toISOString();
+  const id = `contact_${randomUUID()}`;
+  const from = name ? `${name} <${email}>` : email;
 
-  const response = await fetch(resendEndpoint, {
-    body: JSON.stringify({
+  const inboxMessage: ReceivedEmail = {
+    attachments: attachments.map((attachment) => ({
+      content: attachment.content,
+      content_type: attachment.content_type,
+      filename: attachment.filename,
+      size: Buffer.byteLength(attachment.content, "base64"),
+    })),
+    created_at: createdAt,
+    from,
+    headers: {
+      from,
+      "x-source": "robertkotcher.com/contact",
+    },
+    html: messageHtml,
+    id,
+    message_id: `<${id}@robertkotcher.com>`,
+    subject,
+    text: messageText,
+    to: ["hello@robertkotcher.com"],
+  };
+
+  try {
+    await storeInboundEmail(inboxMessage);
+    await resendPost("/emails", {
       attachments,
-      from: fromEmail,
-      html: `
-        <h1>New robertkotcher.com inquiry</h1>
-        <p><strong>Name:</strong> ${safeName}</p>
-        <p><strong>Email:</strong> ${safeEmail}</p>
-        <p><strong>Phone:</strong> ${safePhone}</p>
-        <p><strong>Subject:</strong> ${safeSubject}</p>
-        <hr />
-        <p>${safeMessage}</p>
-      `,
+      from: process.env.RESEND_FROM_EMAIL || "Robert Kotcher <hello@robertkotcher.com>",
+      html: messageHtml,
       reply_to: email,
       subject: `Website inquiry: ${subject}`,
+      text: messageText,
       to: [contactEmail],
-    }),
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-    },
-    method: "POST",
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    console.error("Resend contact email failed:", errorText);
+    });
+  } catch (error) {
+    console.error("Contact form failed:", error);
 
     return NextResponse.json(
       { error: "Message could not be sent. Please try again." },
