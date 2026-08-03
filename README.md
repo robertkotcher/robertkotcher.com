@@ -48,14 +48,15 @@ Configure Resend to send `email.received` webhooks to:
 https://robertkotcher.com/api/inbox/webhook
 ```
 
-Run the Postgres migration before deploying:
+Run the Postgres migration locally:
 
 ```bash
-npm run db:migrate
+npm run db:migrate:local
 ```
 
 For local Docker Postgres, `DATABASE_URL` can point at localhost. For Vercel,
-use the Neon pooled connection string with SSL enabled.
+use the Neon pooled connection string with SSL enabled. Vercel runs
+`npm run build:vercel`, which applies migrations before `next build`.
 
 ## Workspace Auth Headers
 
