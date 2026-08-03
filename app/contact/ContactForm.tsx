@@ -1,12 +1,26 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, MouseEvent, useRef, useState } from "react";
 
 export function ContactForm() {
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [files, setFiles] = useState<File[]>([]);
   const [status, setStatus] = useState("");
   const [sent, setSent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+
+  function removeFile(indexToRemove: number, event: MouseEvent<HTMLButtonElement>) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const nextFiles = files.filter((_, index) => index !== indexToRemove);
+    setFiles(nextFiles);
+
+    if (!fileInputRef.current) return;
+    const dataTransfer = new DataTransfer();
+    nextFiles.forEach((file) => dataTransfer.items.add(file));
+    fileInputRef.current.files = dataTransfer.files;
+  }
 
   async function submitForm(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -59,8 +73,17 @@ export function ContactForm() {
         <span>Attachments <em>(optional)</em></span>
         <strong>{files.length ? `${files.length} file${files.length === 1 ? "" : "s"} selected` : "Add files"}</strong>
         <small>Up to 3MB total.</small>
-        {files.length ? <ul className="selected-files">{files.map((file) => <li key={`${file.name}-${file.size}`}>{file.name}</li>)}</ul> : null}
-        <input multiple name="files" onChange={(event) => setFiles(Array.from(event.target.files || []))} type="file" />
+        {files.length ? (
+          <ul className="selected-files">
+            {files.map((file, index) => (
+              <li key={`${file.name}-${file.size}-${index}`}>
+                <span>{file.name}</span>
+                <button aria-label={`Remove ${file.name}`} onClick={(event) => removeFile(index, event)} type="button">x</button>
+              </li>
+            ))}
+          </ul>
+        ) : null}
+        <input multiple name="files" onChange={(event) => setFiles(Array.from(event.target.files || []))} ref={fileInputRef} type="file" />
       </label>
       <button disabled={submitting} type="submit">
         {submitting ? "Sending..." : "Send message"}

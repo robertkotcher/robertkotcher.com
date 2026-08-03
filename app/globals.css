@@ -1296,14 +1296,41 @@ h1 {
 }
 
 .selected-files li {
+  align-items: center;
   background: rgba(36, 73, 99, 0.07);
   border: 1px solid var(--line);
+  display: inline-flex;
   font-size: 0.82rem;
+  gap: 6px;
   max-width: 100%;
   overflow: hidden;
   padding: 5px 7px;
+}
+
+.selected-files li span {
+  min-width: 0;
+  overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.selected-files button {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: var(--muted);
+  cursor: pointer;
+  display: inline-flex;
+  flex: 0 0 auto;
+  font: inherit;
+  font-size: 0.82rem;
+  justify-content: center;
+  line-height: 1;
+  padding: 0 1px;
+}
+
+.selected-files button:hover {
+  color: var(--accent-blue);
 }
 
 .file-control .field-error {
