@@ -31,6 +31,14 @@ function attachmentValue(attachment: unknown, key: string) {
   return null;
 }
 
+function attachmentNumber(attachment: unknown, key: string) {
+  if (attachment && typeof attachment === "object" && key in attachment) {
+    const value = attachment[key as keyof typeof attachment];
+    return typeof value === "number" ? value : null;
+  }
+  return null;
+}
+
 function stripHtml(value: string) {
   return value.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
 }
@@ -43,22 +51,13 @@ function preview(email: ReceivedEmail) {
 async function notificationAttachments(email: ReceivedEmail): Promise<NotificationAttachment[]> {
   if (!email.attachments?.length) return [];
 
-  const attachments: Array<NotificationAttachment | null> = await Promise.all(
-    email.attachments.map(async (attachment) => {
-      const filename = attachmentValue(attachment, "filename") || "attachment";
-      const contentType = attachmentValue(attachment, "content_type") || undefined;
-      const content = attachmentValue(attachment, "content");
-      if (content) return { content, content_type: contentType, filename };
-
-      const downloadUrl = attachmentValue(attachment, "download_url");
-      if (!downloadUrl) return null;
-
-      const response = await fetch(downloadUrl);
-      if (!response.ok) throw new Error(`Could not download attachment ${filename}.`);
-      const buffer = Buffer.from(await response.arrayBuffer());
-      return { content: buffer.toString("base64"), content_type: contentType, filename };
-    }),
-  );
+  const attachments: Array<NotificationAttachment | null> = email.attachments.map((attachment) => {
+    const filename = attachmentValue(attachment, "filename") || "attachment";
+    const contentType = attachmentValue(attachment, "content_type") || undefined;
+    const content = attachmentValue(attachment, "content");
+    if (content) return { content, content_type: contentType, filename };
+    return null;
+  });
 
   return attachments.filter((attachment): attachment is NotificationAttachment => Boolean(attachment));
 }
@@ -90,7 +89,29 @@ async function enrichAttachments(email: ReceivedEmail) {
   if (!email.attachments?.length) return email;
 
   const attachments = await resendGet<ReceivedAttachmentList>(`/emails/receiving/${encodeURIComponent(email.id)}/attachments`);
-  return { ...email, attachments: attachments.data || email.attachments };
+  const metadata = Array.isArray(attachments.data) && attachments.data.length ? attachments.data : email.attachments;
+  const hydrated = await Promise.all(
+    metadata.map(async (attachment) => {
+      const content = attachmentValue(attachment, "content");
+      const downloadUrl = attachmentValue(attachment, "download_url");
+      if (content || !downloadUrl || !attachment || typeof attachment !== "object") return attachment;
+
+      const filename = attachmentValue(attachment, "filename") || "attachment";
+      const response = await fetch(downloadUrl);
+      if (!response.ok) throw new Error(`Could not download attachment ${filename}.`);
+      const buffer = Buffer.from(await response.arrayBuffer());
+
+      return {
+        ...(attachment as Record<string, unknown>),
+        content: buffer.toString("base64"),
+        content_type: attachmentValue(attachment, "content_type") || undefined,
+        filename,
+        size: attachmentNumber(attachment, "size") || buffer.byteLength,
+      };
+    }),
+  );
+
+  return { ...email, attachments: hydrated };
 }
 
 export async function POST(request: Request) {
