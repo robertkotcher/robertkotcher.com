@@ -2,13 +2,6 @@ export function SiteFooter() {
   return (
     <footer className="site-footer">
       <div className="footer-brand-block">
-        <a className="footer-brand" href="/">
-          <img
-            className="brand-wordmark"
-            src="/robert-kotcher-wordmark.png"
-            alt="Robert Kotcher"
-          />
-        </a>
         <p>Professional apps at a fraction of the price.</p>
       </div>
       <div className="footer-company">
