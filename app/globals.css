@@ -178,7 +178,7 @@ p {
   color: var(--panel);
   margin-left: calc((100vw - min(1000px, calc(100vw - 44px))) / -2);
   margin-right: calc((100vw - min(1000px, calc(100vw - 44px))) / -2);
-  padding: 38px max(calc((100vw - 1000px) / 2), 22px) 0;
+  padding: 42px max(calc((100vw - 1000px) / 2), 32px) 0;
 }
 
 .landing-top .site-header {
@@ -418,11 +418,10 @@ h1 {
 .flyer-value-band {
   background: var(--panel);
   border-bottom: 2px solid var(--foreground);
-  min-height: 420px;
   margin-left: calc((100vw - min(1000px, calc(100vw - 44px))) / -2);
   margin-right: calc((100vw - min(1000px, calc(100vw - 44px))) / -2);
   overflow: hidden;
-  padding: 54px calc((100vw - min(1000px, calc(100vw - 44px))) / 2) 0;
+  padding: 62px max(calc((100vw - min(1000px, calc(100vw - 44px))) / 2), 32px) 68px;
   position: relative;
 }
 
@@ -444,15 +443,6 @@ h1 {
   justify-content: flex-start;
   padding: 0;
   width: auto;
-}
-
-.coffee-plate {
-  bottom: -300px;
-  display: block;
-  height: auto;
-  position: absolute;
-  right: max(calc((100vw - min(1000px, calc(100vw - 44px))) / 2 - 50px), -24px);
-  width: min(560px, 46vw);
 }
 
 .proof-strip {
@@ -2021,12 +2011,7 @@ h1 {
   }
 
   .flyer-value-band {
-    min-height: 390px;
-  }
-
-  .coffee-plate {
-    bottom: -250px;
-    width: min(480px, 58vw);
+    padding-bottom: 62px;
   }
 }
 
@@ -2083,9 +2068,9 @@ h1 {
   }
 
   .landing-top {
-    margin-left: -16px;
-    margin-right: -16px;
-    padding: 22px 16px 0;
+    margin-left: -20px;
+    margin-right: -20px;
+    padding: 24px 20px 0;
   }
 
   .landing-top .site-header {
@@ -2189,10 +2174,9 @@ h1 {
   }
 
   .flyer-value-band {
-    margin-left: -16px;
-    margin-right: -16px;
-    min-height: 420px;
-    padding: 40px 16px 0;
+    margin-left: -20px;
+    margin-right: -20px;
+    padding: 44px 20px 52px;
   }
 
   .flyer-value-copy p {
@@ -2201,14 +2185,6 @@ h1 {
 
   .flyer-value-copy .hero-actions {
     margin-top: 24px;
-  }
-
-  .coffee-plate {
-    bottom: -210px;
-    left: 50%;
-    right: auto;
-    transform: translateX(-50%);
-    width: min(520px, 105vw);
   }
 
   .proof-strip,

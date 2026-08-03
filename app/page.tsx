@@ -170,12 +170,6 @@ export default function Home() {
             </a>
           </div>
         </div>
-        <img
-          className="coffee-plate"
-          src="/coffee-plate.png"
-          alt=""
-          aria-hidden="true"
-        />
       </section>
 
       <section className="proof-strip" aria-label="Track record">
