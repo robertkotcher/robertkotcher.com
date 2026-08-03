@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 
 export function ContactForm() {
+  const [files, setFiles] = useState<File[]>([]);
   const [status, setStatus] = useState("");
   const [sent, setSent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -27,6 +28,7 @@ export function ContactForm() {
     }
 
     form.reset();
+    setFiles([]);
     setSent(true);
     setStatus("Message sent.");
   }
@@ -55,9 +57,10 @@ export function ContactForm() {
       </label>
       <label className="file-control">
         <span>Attachments <em>(optional)</em></span>
-        <strong>Add files</strong>
+        <strong>{files.length ? `${files.length} file${files.length === 1 ? "" : "s"} selected` : "Add files"}</strong>
         <small>Up to 3MB total.</small>
-        <input multiple name="files" type="file" />
+        {files.length ? <ul className="selected-files">{files.map((file) => <li key={`${file.name}-${file.size}`}>{file.name}</li>)}</ul> : null}
+        <input multiple name="files" onChange={(event) => setFiles(Array.from(event.target.files || []))} type="file" />
       </label>
       <button disabled={submitting} type="submit">
         {submitting ? "Sending..." : "Send message"}

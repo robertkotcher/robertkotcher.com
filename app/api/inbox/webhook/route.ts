@@ -13,6 +13,24 @@ type ResendWebhookEvent = {
   };
 };
 
+type ReceivedAttachmentList = {
+  data?: unknown[];
+};
+
+type NotificationAttachment = {
+  content: string;
+  content_type?: string;
+  filename: string;
+};
+
+function attachmentValue(attachment: unknown, key: string) {
+  if (attachment && typeof attachment === "object" && key in attachment) {
+    const value = attachment[key as keyof typeof attachment];
+    return typeof value === "string" ? value : null;
+  }
+  return null;
+}
+
 function stripHtml(value: string) {
   return value.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
 }
@@ -22,11 +40,36 @@ function preview(email: ReceivedEmail) {
   return body.length > 600 ? `${body.slice(0, 600)}...` : body;
 }
 
+async function notificationAttachments(email: ReceivedEmail): Promise<NotificationAttachment[]> {
+  if (!email.attachments?.length) return [];
+
+  const attachments: Array<NotificationAttachment | null> = await Promise.all(
+    email.attachments.map(async (attachment) => {
+      const filename = attachmentValue(attachment, "filename") || "attachment";
+      const contentType = attachmentValue(attachment, "content_type") || undefined;
+      const content = attachmentValue(attachment, "content");
+      if (content) return { content, content_type: contentType, filename };
+
+      const downloadUrl = attachmentValue(attachment, "download_url");
+      if (!downloadUrl) return null;
+
+      const response = await fetch(downloadUrl);
+      if (!response.ok) throw new Error(`Could not download attachment ${filename}.`);
+      const buffer = Buffer.from(await response.arrayBuffer());
+      return { content: buffer.toString("base64"), content_type: contentType, filename };
+    }),
+  );
+
+  return attachments.filter((attachment): attachment is NotificationAttachment => Boolean(attachment));
+}
+
 async function sendInboundNotification(email: ReceivedEmail) {
   const from = process.env.RESEND_FROM_EMAIL || "Robert Kotcher <hello@robertkotcher.com>";
   const subject = email.subject?.trim() || "No subject";
+  const attachments = await notificationAttachments(email);
 
   await resendPost("/emails", {
+    attachments,
     from,
     reply_to: email.from,
     subject: `New inbox message: ${subject}`,
@@ -41,6 +84,13 @@ async function sendInboundNotification(email: ReceivedEmail) {
     ].join("\n"),
     to: [notificationEmail],
   });
+}
+
+async function enrichAttachments(email: ReceivedEmail) {
+  if (!email.attachments?.length) return email;
+
+  const attachments = await resendGet<ReceivedAttachmentList>(`/emails/receiving/${encodeURIComponent(email.id)}/attachments`);
+  return { ...email, attachments: attachments.data || email.attachments };
 }
 
 export async function POST(request: Request) {
@@ -67,7 +117,8 @@ export async function POST(request: Request) {
   if (!emailId) return NextResponse.json({ error: "Missing email_id." }, { status: 400 });
 
   try {
-    const email = await resendGet<ReceivedEmail>(`/emails/receiving/${encodeURIComponent(emailId)}`);
+    const receivedEmail = await resendGet<ReceivedEmail>(`/emails/receiving/${encodeURIComponent(emailId)}`);
+    const email = await enrichAttachments(receivedEmail);
     await storeInboundEmail(email);
     await sendInboundNotification(email);
     await storeWebhookEvent({ eventCreatedAt: event.created_at, id: webhookId, payload: event, status: "processed", type: event.type });
