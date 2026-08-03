@@ -34,7 +34,7 @@ export function ContactForm() {
   return (
     <form className="contact-form" onSubmit={submitForm}>
       <label>
-        <span>Name <em>optional</em></span>
+        <span>Name <em>(optional)</em></span>
         <input autoComplete="name" name="name" type="text" />
       </label>
       <label>
@@ -42,7 +42,7 @@ export function ContactForm() {
         <input autoComplete="email" name="email" required type="email" />
       </label>
       <label>
-        <span>Phone <em>optional</em></span>
+        <span>Phone <em>(optional)</em></span>
         <input autoComplete="tel" name="phone" type="tel" />
       </label>
       <label>
@@ -54,7 +54,7 @@ export function ContactForm() {
         <textarea name="body" required rows={7} />
       </label>
       <label className="file-control">
-        <span>Attachments <em>optional</em></span>
+        <span>Attachments <em>(optional)</em></span>
         <strong>Add files</strong>
         <small>Up to 3MB total.</small>
         <input multiple name="files" type="file" />
