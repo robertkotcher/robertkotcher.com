@@ -1859,6 +1859,33 @@ h1 {
   background: white;
   z-index: 1;
 }
+.inbox-message-head-top {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+}
+.inbox-message-head-top button {
+  align-items: center;
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--ink-soft);
+  cursor: pointer;
+  display: inline-flex;
+  flex: 0 0 auto;
+  height: 25px;
+  justify-content: center;
+  padding: 0;
+  width: 25px;
+}
+.inbox-message-head-top button:hover {
+  border-color: rgba(13, 127, 115, 0.45);
+  color: var(--accent);
+}
+.inbox-message-head-top button:disabled {
+  cursor: progress;
+  opacity: 0.55;
+}
 .inbox-message-head h2 {
   font-size: 1rem;
   line-height: 1.2;

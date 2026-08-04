@@ -27,6 +27,7 @@ export type ReceivedEmail = {
 };
 
 export type InboxThreadSummary = {
+  archived_at: string | null;
   id: string;
   sender_email: string;
   sender_name: string | null;
@@ -129,6 +130,7 @@ export async function ensureInboxSchema() {
         sender_name TEXT,
         last_subject TEXT NOT NULL DEFAULT '',
         last_message_at TIMESTAMPTZ NOT NULL,
+        archived_at TIMESTAMPTZ,
         created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
         updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
       )
@@ -167,9 +169,11 @@ export async function ensureInboxSchema() {
         processed_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
       )
     `);
+    await query("ALTER TABLE email_threads ADD COLUMN IF NOT EXISTS archived_at TIMESTAMPTZ");
     await query("ALTER TABLE resend_webhook_events ADD COLUMN IF NOT EXISTS status TEXT NOT NULL DEFAULT 'processed'");
     await query("ALTER TABLE resend_webhook_events ADD COLUMN IF NOT EXISTS error_text TEXT");
     await query("CREATE INDEX IF NOT EXISTS email_messages_thread_created_idx ON email_messages (thread_id, created_at)");
+    await query("CREATE INDEX IF NOT EXISTS email_threads_unarchived_last_message_idx ON email_threads (last_message_at DESC) WHERE archived_at IS NULL");
     await query("CREATE INDEX IF NOT EXISTS email_threads_last_message_idx ON email_threads (last_message_at DESC)");
     await query("CREATE INDEX IF NOT EXISTS resend_webhook_events_status_idx ON resend_webhook_events (status, processed_at DESC)");
   })();
@@ -189,6 +193,7 @@ async function upsertThread(sender: EmailAddress, subject: string, createdAt: st
           ELSE email_threads.last_subject
         END,
         last_message_at = GREATEST(email_threads.last_message_at, EXCLUDED.last_message_at),
+        archived_at = NULL,
         updated_at = NOW()
     `,
     [sender.email, sender.email, sender.name, subject, createdAt],
@@ -344,6 +349,7 @@ export async function listInboxThreads(): Promise<InboxThreadSummary[]> {
   const { rows } = await query<InboxThreadSummary & QueryResultRow>(`
     SELECT
       t.id,
+      t.archived_at::text,
       t.sender_email,
       t.sender_name,
       t.last_subject,
@@ -352,11 +358,13 @@ export async function listInboxThreads(): Promise<InboxThreadSummary[]> {
       COALESCE(SUM(CASE WHEN jsonb_array_length(m.attachments) > 0 THEN 1 ELSE 0 END), 0)::int AS attachment_count
     FROM email_threads t
     LEFT JOIN email_messages m ON m.thread_id = t.id
-    GROUP BY t.id, t.sender_email, t.sender_name, t.last_subject, t.last_message_at
+    WHERE t.archived_at IS NULL
+    GROUP BY t.id, t.archived_at, t.sender_email, t.sender_name, t.last_subject, t.last_message_at
     ORDER BY t.last_message_at DESC
   `);
 
   return rows.map((row) => ({
+    archived_at: row.archived_at ? String(row.archived_at) : null,
     id: String(row.id),
     sender_email: String(row.sender_email),
     sender_name: row.sender_name ? String(row.sender_name) : null,
@@ -374,6 +382,7 @@ export async function getInboxThread(id: string): Promise<InboxThreadDetail | nu
     `
       SELECT
         t.id,
+        t.archived_at::text,
         t.sender_email,
         t.sender_name,
         t.last_subject,
@@ -383,7 +392,7 @@ export async function getInboxThread(id: string): Promise<InboxThreadDetail | nu
       FROM email_threads t
       LEFT JOIN email_messages m ON m.thread_id = t.id
       WHERE t.id = $1
-      GROUP BY t.id, t.sender_email, t.sender_name, t.last_subject, t.last_message_at
+      GROUP BY t.id, t.archived_at, t.sender_email, t.sender_name, t.last_subject, t.last_message_at
     `,
     [id],
   );
@@ -419,6 +428,7 @@ export async function getInboxThread(id: string): Promise<InboxThreadDetail | nu
   const thread = threads[0];
   return {
     thread: {
+      archived_at: thread.archived_at ? String(thread.archived_at) : null,
       id: String(thread.id),
       sender_email: String(thread.sender_email),
       sender_name: thread.sender_name ? String(thread.sender_name) : null,
@@ -446,4 +456,19 @@ export async function getInboxThread(id: string): Promise<InboxThreadDetail | nu
       created_at: String(message.created_at),
     })),
   };
+}
+
+export async function archiveInboxThread(id: string) {
+  await ensureInboxSchema();
+
+  const { rowCount } = await query(
+    `
+      UPDATE email_threads
+      SET archived_at = NOW(), updated_at = NOW()
+      WHERE id = $1
+    `,
+    [id],
+  );
+
+  return Number(rowCount || 0) > 0;
 }
