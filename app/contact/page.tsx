@@ -16,7 +16,7 @@ export default function ContactPage() {
         </div>
         <div className="contact-card" aria-label="Contact details">
           <p>Phone</p>
-          <a href="tel:2152923536">215-292-3536</a>
+          <a href="tel:4122823952">(412) 282-3952</a>
           <p>Email</p>
           <a href="mailto:rkotcher@gmail.com">rkotcher@gmail.com</a>
         </div>

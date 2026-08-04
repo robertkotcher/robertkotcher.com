@@ -9,12 +9,13 @@ const openSans = Open_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "robertkotcher.com - App Ideas Built Personally",
+  title: "Robert Kotcher Web Studio",
   description:
-    "Robert Kotcher helps people turn app ideas into working software with direct weekly support, clear communication, and senior technical execution.",
+    "Robert Kotcher builds free first websites for small businesses within 24 hours, with an optional paid removal of the small site credit.",
   icons: {
-    icon: "/rk-mark.svg",
-    shortcut: "/rk-mark.svg",
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+    apple: "/rk-logo.png",
   },
 };
 
