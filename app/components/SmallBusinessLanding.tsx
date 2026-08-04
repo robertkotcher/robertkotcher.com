@@ -15,10 +15,15 @@ export function SmallBusinessLanding({ location = defaultLocation }: SmallBusine
             <img src="/rk-logo.png" alt="" />
             <span>Robert Kotcher Web Studio</span>
           </a>
-          <a className="sb-phone-pill" href="tel:4122823952">
-            <Phone aria-hidden="true" size={17} strokeWidth={2.3} />
-            <span>(412) 282-3952</span>
-          </a>
+          <div className="sb-header-actions">
+            <nav className="sb-header-nav" aria-label="Primary navigation">
+              <a href="/pricing">Pricing</a>
+            </nav>
+            <a className="sb-phone-pill" href="tel:4122823952">
+              <Phone aria-hidden="true" size={17} strokeWidth={2.3} />
+              <span>(412) 282-3952</span>
+            </a>
+          </div>
         </header>
         <div className="sb-hero-grid">
           <div className="sb-hero-copy">
@@ -28,7 +33,7 @@ export function SmallBusinessLanding({ location = defaultLocation }: SmallBusine
               We build and maintain websites that help small businesses in the Albuquerque area capture quote requests, appointments, customer forms, and service inquiries.
             </p>
             <div className="sb-hero-actions">
-              <a className="primary-action" href="/wizard/business">Launch my website for FREE</a>
+              <a className="primary-action" href="/wizard/business">Request a FREE website draft</a>
               <p className="sb-hero-cta-note">
                 Answer a few questions, then get a link to a draft of your website within 24 hours.
               </p>
