@@ -675,6 +675,42 @@ h1 {
   line-height: 1;
 }
 
+.offer-price {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.offer-price-original {
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 700;
+  opacity: 0.74;
+  text-decoration-line: line-through;
+  text-decoration-thickness: 2px;
+}
+
+.offer-card .offer-price-current,
+.offer-card[data-tone="steady"] .offer-price-current {
+  color: var(--logo-teal);
+  font-size: 1.14rem;
+  font-weight: 830;
+}
+
+.offer-card .offer-pill,
+.offer-card[data-tone="steady"] .offer-pill {
+  background: rgba(5, 190, 168, 0.12);
+  border: 1px solid rgba(5, 190, 168, 0.42);
+  color: var(--accent-blue);
+  display: inline-flex;
+  font-size: 0.64rem;
+  font-weight: 800;
+  line-height: 1;
+  padding: 5px 7px;
+  text-transform: uppercase;
+}
+
 .offer-card h3 {
   font-size: 1.45rem;
   font-weight: 780;

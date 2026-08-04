@@ -4,7 +4,18 @@ import { PromoBanner } from "./components/PromoBanner";
 import { SiteFooter } from "./components/SiteFooter";
 import { SiteHeader } from "./components/SiteHeader";
 
-export default function Home() {
+type HomeProps = {
+  searchParams?: Promise<{
+    cl?: string | string[];
+  }>;
+};
+
+export default async function Home({ searchParams }: HomeProps) {
+  const params = await searchParams;
+  const isCraigslistOffer = Array.isArray(params?.cl)
+    ? params.cl.includes("true")
+    : params?.cl === "true";
+  const contactHref = isCraigslistOffer ? "/contact?cl=true" : "/contact";
   const proofPoints = [
     { value: "CMU CS", label: "Carnegie Mellon computer science graduate" },
     { value: "10+ yrs", label: "turning ideas into working software" },
@@ -14,6 +25,7 @@ export default function Home() {
 
   const pricingPlans = [
     {
+      craigslistPrice: "$50 / month",
       price: "$250/mo",
       title: "Steady Business App or Website",
       tone: "steady",
@@ -28,6 +40,7 @@ export default function Home() {
       ],
     },
     {
+      craigslistPrice: null,
       price: "$850/mo",
       title: "Startup-Style App or Website",
       tone: "active",
@@ -162,10 +175,10 @@ export default function Home() {
             agency would charge.
           </p>
           <div className="hero-actions" aria-label="Primary actions">
-            <a className="primary-action" href="/contact">
+            <a className="primary-action" href={contactHref}>
               Reach Out Today
             </a>
-            <a className="secondary-action" href="/contact">
+            <a className="secondary-action" href={contactHref}>
               Send Your Idea
             </a>
           </div>
@@ -183,7 +196,11 @@ export default function Home() {
 
       <section className="offer-section" aria-labelledby="offer-title">
         <div className="offer-intro">
-          <h2 id="offer-title">Your technical partner for $250-$850/month.</h2>
+          <h2 id="offer-title">
+            {isCraigslistOffer
+              ? "Your Craigslist offer starts at $50/month."
+              : "Your technical partner for $250-$850/month."}
+          </h2>
           <p>
             <CostContextModal /> My model is simple: one senior technical
             partner who can meet weekly, answer questions directly, and handle
@@ -205,7 +222,15 @@ export default function Home() {
               <div className="offer-card-heading">
                 <img className="legacy-mark" src="/rk-mark.svg" alt="" />
                 <div>
-                  <span>{plan.price}</span>
+                  {isCraigslistOffer && plan.craigslistPrice ? (
+                    <div className="offer-price offer-price-discounted">
+                      <span className="offer-price-original">{plan.price}</span>
+                      <span className="offer-price-current">{plan.craigslistPrice}</span>
+                      <span className="offer-pill">limited-time offer</span>
+                    </div>
+                  ) : (
+                    <span className="offer-price">{plan.price}</span>
+                  )}
                   <h3>{plan.title}</h3>
                 </div>
               </div>
@@ -215,7 +240,7 @@ export default function Home() {
                   <li key={item}>{item}</li>
                 ))}
               </ul>
-              <a href="/contact">{plan.cta}</a>
+              <a href={contactHref}>{plan.cta}</a>
             </article>
           ))}
         </div>
@@ -269,7 +294,7 @@ export default function Home() {
           </p>
         </div>
         <div className="final-cta-actions">
-          <a className="primary-action" href="/contact">
+          <a className="primary-action" href={contactHref}>
             Send Your Idea
           </a>
           <div className="final-contact-links" aria-label="Direct contact">
