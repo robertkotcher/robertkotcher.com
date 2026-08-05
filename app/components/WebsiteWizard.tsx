@@ -12,8 +12,10 @@ type WizardData = {
   businessName: string;
   businessType: string;
   currentSite: string;
+  currentWebsiteUrl: string;
   goal: string;
   offeringsText: string;
+  redesignRequest: string;
   style: string;
   ownerName: string;
   email: string;
@@ -29,10 +31,12 @@ const initialData: WizardData = {
   businessName: "",
   businessType: "",
   currentSite: "No current website",
+  currentWebsiteUrl: "",
   email: "",
   goal: "",
   ownerName: "",
   offeringsText: "",
+  redesignRequest: "",
   style: "",
 };
 
@@ -44,11 +48,14 @@ export const wizardStepSlugs = ["business", "goals", "branding", "offerings", "p
 
 export function WebsiteWizard({ initialStepSlug = "business", location }: WizardProps) {
   const [data, setData] = useState<WizardData>(initialData);
+  const [currentSiteAnsweredOnLanding, setCurrentSiteAnsweredOnLanding] = useState(false);
+  const [currentSiteDecisionReady, setCurrentSiteDecisionReady] = useState(false);
   const [brandingFiles, setBrandingFiles] = useState<File[]>([]);
   const [offeringFiles, setOfferingFiles] = useState<File[]>([]);
   const [pages, setPages] = useState<WizardPage[]>(initialPages);
   const [status, setStatus] = useState("");
   const [sent, setSent] = useState(false);
+  const [businessStepNotified, setBusinessStepNotified] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   const steps = useMemo(
@@ -105,6 +112,16 @@ export function WebsiteWizard({ initialStepSlug = "business", location }: Wizard
     return index >= 0 ? index : initialStep;
   }
 
+  function currentSiteFromUrl() {
+    if (typeof window === "undefined") return "";
+
+    const answer = new URLSearchParams(window.location.search).get("website");
+    if (answer === "yes") return "I already have a website";
+    if (answer === "no") return "No current website";
+
+    return "";
+  }
+
   function setWizardUrl(nextStep: number, mode: "push" | "replace" = "push") {
     if (typeof window === "undefined") return;
 
@@ -125,6 +142,13 @@ export function WebsiteWizard({ initialStepSlug = "business", location }: Wizard
 
   useEffect(() => {
     setStep(stepFromUrl());
+
+    const currentSite = currentSiteFromUrl();
+    if (currentSite) {
+      setCurrentSiteAnsweredOnLanding(true);
+      setData((current) => ({ ...current, currentSite }));
+    }
+    setCurrentSiteDecisionReady(true);
 
     function syncStepFromHistory() {
       setStep(stepFromUrl());
@@ -176,10 +200,36 @@ export function WebsiteWizard({ initialStepSlug = "business", location }: Wizard
     setPages((current) => current.length > 1 ? current.filter((page) => page.id !== id) : current);
   }
 
+  async function notifyBusinessStepComplete() {
+    if (businessStepNotified) return;
+
+    setBusinessStepNotified(true);
+
+    try {
+      await fetch("/api/wizard/business", {
+        body: JSON.stringify({
+          businessName: data.businessName,
+          businessType: data.businessType,
+          currentSite: data.currentSite,
+          currentWebsiteUrl: data.currentWebsiteUrl,
+          location: `${location.city}, ${location.region} (${location.craigslistCode})`,
+          redesignRequest: data.redesignRequest,
+        }),
+        headers: { "Content-Type": "application/json" },
+        method: "POST",
+      });
+    } catch (error) {
+      console.error("Wizard step notification failed:", error);
+    }
+  }
+
   async function submit(event: FormEvent) {
     event.preventDefault();
 
     if (step < steps.length - 1) {
+      if (step === 0) {
+        void notifyBusinessStepComplete();
+      }
       goToStep(step + 1);
       return;
     }
@@ -199,6 +249,8 @@ export function WebsiteWizard({ initialStepSlug = "business", location }: Wizard
         `Business name: ${data.businessName || "Not provided"}`,
         `Business type: ${data.businessType || "Not provided"}`,
         `Current site: ${data.currentSite || "Not provided"}`,
+        `Current website URL: ${data.currentWebsiteUrl || "Not provided"}`,
+        `Looking for in new website: ${data.redesignRequest || "Not provided"}`,
         `Main goal: ${data.goal || "Not provided"}`,
         `Style notes: ${data.style || "Not provided"}`,
         `Branding files: ${brandingFiles.length ? brandingFiles.map((file) => file.name).join(", ") : "None uploaded"}`,
@@ -252,28 +304,64 @@ export function WebsiteWizard({ initialStepSlug = "business", location }: Wizard
       <h2 id="wizard-title">{steps[step].title}</h2>
       {steps[step].copy ? <p className="wizard-copy">{steps[step].copy}</p> : null}
       <form onSubmit={submit}>
+        {step === 0 && !currentSiteDecisionReady ? (
+          <div className="wizard-loading" role="status" aria-live="polite">
+            <span aria-hidden="true" />
+            <p>Loading...</p>
+          </div>
+        ) : null}
         {step === 0 ? (
           <>
-            <label>
-              <span>Business name</span>
-              <input value={data.businessName} onChange={(event) => update("businessName", event.target.value)} required />
-            </label>
-            <label>
-              <span>What kind of business?</span>
-              <input value={data.businessType} onChange={(event) => update("businessType", event.target.value)} placeholder="Restaurant, salon, contractor, shop..." required />
-            </label>
+            {currentSiteDecisionReady && data.currentSite === "I already have a website" ? (
+              <>
+                <label>
+                  <span>Current website URL</span>
+                  <input
+                    value={data.currentWebsiteUrl}
+                    onChange={(event) => update("currentWebsiteUrl", event.target.value)}
+                    placeholder="https://example.com"
+                    required
+                    type="url"
+                  />
+                </label>
+                <label>
+                  <span>What are you looking for in a new website?</span>
+                  <textarea
+                    value={data.redesignRequest}
+                    onChange={(event) => update("redesignRequest", event.target.value)}
+                    required
+                    rows={4}
+                  />
+                </label>
+              </>
+            ) : null}
+            {currentSiteDecisionReady && data.currentSite !== "I already have a website" ? (
+              <>
+                <label>
+                  <span>Business name</span>
+                  <input value={data.businessName} onChange={(event) => update("businessName", event.target.value)} required />
+                </label>
+                <label>
+                  <span>What kind of business?</span>
+                  <input value={data.businessType} onChange={(event) => update("businessType", event.target.value)} placeholder="Restaurant, salon, contractor, shop..." required />
+                </label>
+              </>
+            ) : null}
           </>
         ) : null}
         {step === 1 ? (
           <>
-            <label>
-              <span>Current website</span>
-              <select value={data.currentSite} onChange={(event) => update("currentSite", event.target.value)}>
-                <option>No current website</option>
-                <option>Old site that needs a refresh</option>
-                <option>I have a domain already</option>
-              </select>
-            </label>
+            {!currentSiteAnsweredOnLanding ? (
+              <label>
+                <span>Current website</span>
+                <select value={data.currentSite} onChange={(event) => update("currentSite", event.target.value)}>
+                  <option>No current website</option>
+                  <option>I already have a website</option>
+                  <option>Old site that needs a refresh</option>
+                  <option>I have a domain already</option>
+                </select>
+              </label>
+            ) : null}
             <label>
               <span>Main goal</span>
               <textarea value={data.goal} onChange={(event) => update("goal", event.target.value)} placeholder="Get calls, bookings, quote requests, menu views, event inquiries..." required rows={3} />
@@ -380,6 +468,7 @@ export function WebsiteWizard({ initialStepSlug = "business", location }: Wizard
         {!sent ? (
           <div className="wizard-actions">
             {step > 0 ? <button className="secondary-action" onClick={() => goToStep(step - 1)} type="button">Back</button> : null}
+            {step === 0 ? <a className="secondary-action" href="/">Back</a> : null}
             <button className="primary-action" disabled={submitting} type="submit">
               {step === steps.length - 1 ? (submitting ? "Sending..." : "Send my website request") : "Continue"}
             </button>

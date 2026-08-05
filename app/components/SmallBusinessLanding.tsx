@@ -32,10 +32,14 @@ export function SmallBusinessLanding({ location = defaultLocation }: SmallBusine
             <p className="sb-hero-summary">
               We build and maintain websites that help small businesses in the Albuquerque area capture quote requests, appointments, customer forms, and service inquiries.
             </p>
-            <div className="sb-hero-actions">
-              <a className="primary-action" href="/wizard/business">Request a FREE website draft</a>
+            <div className="sb-hero-actions sb-hero-question">
+              <p>Does your business have a website already?</p>
+              <div className="sb-hero-answer-actions" aria-label="Does your business have a website already?">
+                <a className="primary-action" href="/wizard/business?website=yes">YES</a>
+                <a className="secondary-action" href="/wizard/business?website=no">NO</a>
+              </div>
               <p className="sb-hero-cta-note">
-                Answer a few questions, then get a link to a draft of your website within 24 hours.
+                Answer a few questions, and get a link to a draft of your new website within minutes.
               </p>
             </div>
           </div>

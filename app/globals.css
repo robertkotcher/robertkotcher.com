@@ -364,11 +364,34 @@ p {
   margin-top: 30px;
 }
 
+.sb-hero-question > p:first-child {
+  color: #222a34;
+  font-size: 1.08rem;
+  font-weight: 840;
+  line-height: 1.35;
+  margin: 0;
+}
+
+.sb-hero-answer-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
 .sb-hero-actions .primary-action {
   font-size: 1.02rem;
   min-height: 58px;
   min-width: 270px;
   padding: 16px 24px;
+}
+
+.sb-hero-answer-actions .primary-action,
+.sb-hero-answer-actions .secondary-action {
+  min-height: 64px;
+  justify-content: center;
+  min-width: 148px;
+  width: 148px;
 }
 
 .sb-hero-cta-note {
@@ -670,6 +693,36 @@ p {
   margin-top: 18px;
 }
 
+.wizard-loading {
+  align-items: center;
+  color: var(--muted);
+  display: flex;
+  font-size: 0.92rem;
+  font-weight: 720;
+  gap: 10px;
+  min-height: 96px;
+}
+
+.wizard-loading span {
+  animation: wizard-spin 0.8s linear infinite;
+  border: 2px solid #dce5df;
+  border-top-color: var(--logo-teal);
+  border-radius: 999px;
+  display: block;
+  height: 22px;
+  width: 22px;
+}
+
+.wizard-loading p {
+  margin: 0;
+}
+
+@keyframes wizard-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .wizard-card label {
   display: grid;
   gap: 7px;
@@ -770,7 +823,8 @@ p {
   margin-top: 4px;
 }
 
-.wizard-actions button {
+.wizard-actions button,
+.wizard-actions a {
   cursor: pointer;
   font: inherit;
 }
@@ -3054,6 +3108,18 @@ h1 {
 
   .sb-hero-actions {
     align-items: stretch;
+  }
+
+  .sb-hero-answer-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+  }
+
+  .sb-hero-answer-actions .primary-action,
+  .sb-hero-answer-actions .secondary-action {
+    min-width: 0;
+    width: 100%;
   }
 
   .sb-hero-actions .secondary-action,
