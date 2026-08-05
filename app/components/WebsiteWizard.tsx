@@ -317,11 +317,14 @@ export function WebsiteWizard({ initialStepSlug = "business", location }: Wizard
                 <label>
                   <span>Current website URL</span>
                   <input
+                    autoCapitalize="none"
+                    inputMode="url"
+                    spellCheck={false}
                     value={data.currentWebsiteUrl}
                     onChange={(event) => update("currentWebsiteUrl", event.target.value)}
-                    placeholder="https://example.com"
+                    placeholder="www.example.com"
                     required
-                    type="url"
+                    type="text"
                   />
                 </label>
                 <label>
