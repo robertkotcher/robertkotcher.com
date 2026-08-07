@@ -1698,7 +1698,6 @@ h1 {
 }
 
 .pricing-hero {
-  border-top: 1px solid var(--line);
   display: grid;
   gap: 12px;
   padding: 40px 0 24px;
@@ -1713,7 +1712,6 @@ h1 {
 }
 
 .pricing-quality {
-  border-top: 1px solid var(--line);
   padding: 26px 0 56px;
 }
 
