@@ -14,17 +14,12 @@
     "start:vinext": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext start",
     "test": "npm run build && node --test tests/rendered-html.test.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
-    "db:migrate": "node scripts/migrate.mjs",
-    "db:migrate:local": "node --env-file=.env.local scripts/migrate.mjs",
-    "build:vercel": "npm run db:migrate && npm run build",
-    "db:generate": "drizzle-kit generate"
+    "build:vercel": "npm run build"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
-    "drizzle-orm": "0.45.2",
     "lucide-react": "^1.28.0",
     "next": "16.2.6",
-    "pg": "^8.22.0",
     "react": "19.2.6",
     "react-dom": "19.2.6"
   },
@@ -32,12 +27,10 @@
     "@cloudflare/vite-plugin": "1.37.1",
     "@tailwindcss/postcss": "4.2.1",
     "@types/node": "22.19.19",
-    "@types/pg": "^8.20.3",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "6.0.2",
     "@vitejs/plugin-rsc": "0.5.26",
-    "drizzle-kit": "0.31.10",
     "eslint": "9.39.4",
     "eslint-config-next": "16.2.6",
     "react-server-dom-webpack": "19.2.6",

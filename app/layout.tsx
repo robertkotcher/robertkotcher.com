@@ -11,7 +11,7 @@ const openSans = Open_Sans({
 export const metadata: Metadata = {
   title: "Robert Kotcher Web Studio",
   description:
-    "Robert Kotcher builds free first websites for small businesses within 24 hours, with an optional paid removal of the small site credit.",
+    "Robert Kotcher Web Studio builds and maintains clear, practical websites for small businesses.",
   icons: {
     icon: "/favicon.png",
     shortcut: "/favicon.png",

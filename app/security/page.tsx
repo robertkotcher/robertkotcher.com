@@ -12,11 +12,7 @@ export default function SecurityPage() {
       sections={[
         {
           heading: "Reasonable safeguards",
-          body: "We use reasonable technical and operational safeguards for submitted messages, uploaded files, email delivery, and database-backed inbox records.",
-        },
-        {
-          heading: "Uploads",
-          body: "Please only upload files that are relevant to your website request and that you have permission to share. Do not upload sensitive personal, financial, medical, or confidential legal information.",
+          body: "We use reasonable technical and operational safeguards for the website, analytics, hosting, and any direct messages you choose to send.",
         },
         {
           heading: "Reporting issues",

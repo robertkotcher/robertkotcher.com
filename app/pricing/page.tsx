@@ -40,8 +40,7 @@ export default function PricingPage() {
       <section className="pricing-hero" aria-labelledby="pricing-title">
         <p className="eyebrow" id="pricing-title">Pricing</p>
         <p>
-          Start with a free website draft. If you want to launch it, choose the monthly plan that fits how much studio
-          branding you want on the finished site.
+          Simple monthly care for small business websites, with hosting, updates, and analytics support handled for you.
         </p>
       </section>
       <section className="pricing-grid" aria-label="Pricing tiers">
@@ -63,9 +62,6 @@ export default function PricingPage() {
                 </li>
               ))}
             </ul>
-            <a className="primary-action" href="/wizard/business">
-              Request a FREE website draft
-            </a>
           </article>
         ))}
       </section>

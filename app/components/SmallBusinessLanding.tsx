@@ -1,12 +1,7 @@
 import { Phone } from "lucide-react";
 import { SiteFooter } from "./SiteFooter";
-import { defaultLocation, type LocationLanding } from "./locationData";
 
-type SmallBusinessLandingProps = {
-  location?: LocationLanding;
-};
-
-export function SmallBusinessLanding({ location = defaultLocation }: SmallBusinessLandingProps) {
+export function SmallBusinessLanding() {
   return (
     <main className="cv-page small-business-page">
       <section className="sb-hero" aria-labelledby="hero-title">
@@ -27,27 +22,17 @@ export function SmallBusinessLanding({ location = defaultLocation }: SmallBusine
         </header>
         <div className="sb-hero-grid">
           <div className="sb-hero-copy">
-            <p className="sb-hero-eyebrow">For {location.city} businesses</p>
+            <p className="sb-hero-eyebrow">For small businesses</p>
             <h1 id="hero-title">Get more local leads from your website</h1>
             <p className="sb-hero-summary">
-              We build and maintain websites that help small businesses in the Albuquerque area capture quote requests, appointments, customer forms, and service inquiries.
+              We build and maintain websites that help small businesses capture quote requests, appointments, customer forms, and service inquiries.
             </p>
-            <div className="sb-hero-actions sb-hero-question">
-              <p>Does your business have a website already?</p>
-              <div className="sb-hero-answer-actions" aria-label="Does your business have a website already?">
-                <a className="primary-action" href="/wizard/business?website=yes">YES</a>
-                <a className="secondary-action" href="/wizard/business?website=no">NO</a>
-              </div>
-              <p className="sb-hero-cta-note">
-                Answer a few questions, and get a link to a draft of your new website within minutes.
-              </p>
-            </div>
           </div>
           <div className="sb-hero-media" aria-label="Small business owner reviewing leads">
             <img src="/hero-owner.jpg" alt="Small business owner checking customer leads on his phone" />
-            <div className="sb-lead-card" aria-label="Example lead inbox">
+            <div className="sb-lead-card" aria-label="Example customer inquiries">
               <div className="sb-lead-card-head">
-                <strong>Lead inbox</strong>
+                <strong>Customer inquiries</strong>
                 <span>2 unanswered</span>
               </div>
               <ul>

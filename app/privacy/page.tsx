@@ -12,15 +12,15 @@ export default function PrivacyPage() {
       sections={[
         {
           heading: "Information we collect",
-          body: "When you use the website wizard or contact forms, we collect the details you choose to provide, including your name, email address, business information, page notes, uploaded files, and message content.",
+          body: "If you contact us directly, we collect the details you choose to provide, such as your name, email address, business information, and message content.",
         },
         {
           heading: "How we use it",
-          body: "We use submitted information to understand your business, prepare a website draft, reply to you, maintain conversation history, and improve the service experience.",
+          body: "We use submitted information to understand your business, reply to you, and improve the service experience.",
         },
         {
           heading: "Service providers",
-          body: "We may use hosting, email, database, analytics, and infrastructure providers to operate this website and deliver messages. These providers process information only as needed to support the site.",
+          body: "We may use hosting, email, analytics, and infrastructure providers to operate this website and deliver messages. These providers process information only as needed to support the site.",
         },
         {
           heading: "Your choices",

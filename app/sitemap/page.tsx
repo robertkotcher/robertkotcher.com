@@ -8,14 +8,12 @@ export const metadata = {
 const links = [
   { href: "/", label: "Home" },
   { href: "/pricing", label: "Pricing" },
-  { href: "/wizard/business", label: "Website Wizard" },
-  { href: "/contact", label: "Contact" },
   { href: "/privacy", label: "Privacy Policy" },
   { href: "/terms", label: "Terms & Conditions" },
   { href: "/accessibility", label: "Accessibility" },
   { href: "/cookies", label: "Cookie Notice" },
   { href: "/security", label: "Security" },
-  { href: "/inbox", label: "Inbox" },
+  { href: "/sitemap", label: "Sitemap" },
 ];
 
 export default function SitemapPage() {
@@ -25,7 +23,7 @@ export default function SitemapPage() {
       <section className="legal-content" aria-labelledby="sitemap-title">
         <p className="eyebrow">Robert Kotcher Web Studio</p>
         <h1 id="sitemap-title">Sitemap</h1>
-        <p className="legal-updated">Useful pages and account areas.</p>
+        <p className="legal-updated">Useful pages on this site.</p>
         <ul className="sitemap-list">
           {links.map((link) => (
             <li key={link.href}>

@@ -12,15 +12,15 @@ export default function TermsPage() {
       sections={[
         {
           heading: "Use of this website",
-          body: "This website is provided for general information and project intake. You agree not to misuse the forms, upload malicious files, interfere with the site, or submit information you do not have the right to share.",
+          body: "This website is provided for general information. You agree not to interfere with the site, misuse it, or submit information you do not have the right to share.",
         },
         {
-          heading: "Website drafts",
-          body: "A submitted request does not guarantee any particular business result, ranking, revenue, lead volume, design outcome, delivery date, or ongoing availability of a free offer.",
+          heading: "Website services",
+          body: "Any website work or consulting is subject to separate written agreement. This website does not guarantee any particular business result, ranking, revenue, lead volume, design outcome, or delivery date.",
         },
         {
-          heading: "Content you submit",
-          body: "You remain responsible for the accuracy, ownership, and legality of business details, images, logos, text, files, and other materials you provide.",
+          heading: "Content you provide",
+          body: "You remain responsible for the accuracy, ownership, and legality of business details, images, logos, text, and other materials you provide for project work.",
         },
         {
           heading: "Changes",

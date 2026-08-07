@@ -16,7 +16,7 @@ export default function CookiesPage() {
         },
         {
           heading: "Analytics",
-          body: "Basic analytics may help us understand page performance and usage patterns. We use this information to improve the site and the customer intake flow.",
+          body: "Basic analytics may help us understand page performance and usage patterns. We use this information to improve the site.",
         },
         {
           heading: "Controls",
