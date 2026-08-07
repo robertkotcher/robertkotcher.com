@@ -7,7 +7,6 @@ export const metadata = {
 
 const links = [
   { href: "/", label: "Home" },
-  { href: "/pricing", label: "Pricing" },
   { href: "/privacy", label: "Privacy Policy" },
   { href: "/terms", label: "Terms & Conditions" },
   { href: "/accessibility", label: "Accessibility" },

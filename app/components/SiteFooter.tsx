@@ -13,7 +13,6 @@ export function SiteFooter() {
       </div>
       <div className="footer-bottom">
         <nav className="footer-legal-links" aria-label="Footer links">
-          <a href="/pricing">Pricing</a>
           <a href="/privacy">Privacy Policy</a>
           <a href="/terms">Terms &amp; Conditions</a>
           <a href="/accessibility">Accessibility</a>
