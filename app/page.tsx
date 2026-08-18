@@ -1,5 +1,6 @@
 import {
   ArrowUpRight,
+  GitFork,
   Mail,
   Phone,
 } from "lucide-react";
@@ -56,6 +57,19 @@ export default function Home() {
                 in
               </span>
               <span>linkedin.com/in/robert-kotcher-639105196</span>
+              <ArrowUpRight
+                aria-hidden="true"
+                className="external-icon"
+                size={13}
+              />
+            </a>
+            <a
+              href="https://github.com/robertkotcher"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <GitFork aria-hidden="true" size={15} strokeWidth={1.8} />
+              <span>github.com/robertkotcher</span>
               <ArrowUpRight
                 aria-hidden="true"
                 className="external-icon"
