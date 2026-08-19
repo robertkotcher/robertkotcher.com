@@ -22,7 +22,8 @@ test("replaces the QR code and preserves publication links", async () => {
   const page = await readFile(new URL("app/page.tsx", root), "utf8");
 
   assert.match(page, /className="sidebar-link project-title-link"/);
-  assert.match(page, /1LFjzmtWBJ3fqks8kKzOzf3_S7e0Y21-TdN0E6fmffho/);
+  assert.match(page, /photos\.app\.goo\.gl\/2DL7bfRMNnXi1g3d8/);
+  assert.doesNotMatch(page, /1LFjzmtWBJ3fqks8kKzOzf3_S7e0Y21-TdN0E6fmffho/);
   assert.match(page, /Cross-origin_pixel_stealing_Timing_attacks_using_CSS_filters/);
   assert.match(page, /OAuth_Demystified_for_Mobile_Application_Developers/);
   assert.doesNotMatch(page, /<img[^>]+qr/i);

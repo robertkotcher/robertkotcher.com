@@ -5,8 +5,7 @@ import {
   Phone,
 } from "lucide-react";
 
-const projectUrl =
-  "https://docs.google.com/document/d/1LFjzmtWBJ3fqks8kKzOzf3_S7e0Y21-TdN0E6fmffho/edit?tab=t.0";
+const projectUrl = "https://photos.app.goo.gl/2DL7bfRMNnXi1g3d8";
 
 const research = [
   {
