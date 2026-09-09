@@ -144,31 +144,25 @@ export default function Home() {
                 <h3>
                   Founder @{" "}
                   <a
-                    href="https://marketpup.com"
+                    href="https://inflightsimulator.com"
                     target="_blank"
                     rel="noreferrer"
                   >
-                    marketpup.com
+                    inflightsimulator.com
                   </a>
                 </h3>
-                <p>June 2026 – Present</p>
+                <p>August 2026 – Present</p>
               </div>
 
               <p>
-                MarketPup creates hyper-personalized outbound customer discovery
-                campaigns for startups.
+                Inflight Simulator lets people explore the world as an airline
+                passenger, choosing destinations and collecting country flags
+                as they complete virtual flights.
               </p>
               <p>
-                Using MarketPup, I ran a campaign against a hypothetical company
-                called RingNovo and received a 1% positive response rate.
-              </p>
-              <p>MarketPup got its first paying customer after 3 days.</p>
-              <p>
-                From a technical angle, I’m focused on customer cost
-                optimization: The current solution relies on a 3rd party mail
-                API, where I distribute a pool of domain slots across customers
-                and can run a campaign for $60/mo. The new solution will run on
-                a Stalwart server, and deliver the same service for $30/mo.
+                I built an immersive 3D cabin experience with Next.js, React,
+                Three.js, and MapLibre, backed by PostgreSQL for saved flight
+                sessions.
               </p>
             </div>
 
