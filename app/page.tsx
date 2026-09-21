@@ -160,9 +160,8 @@ export default function Home() {
                 as they complete virtual flights.
               </p>
               <p>
-                I built an immersive 3D cabin experience with Next.js, React,
-                Three.js, and MapLibre, backed by PostgreSQL for saved flight
-                sessions.
+                Inflight Simulator went viral, with 30,000 flights created and
+                1.6K backlinks earned in its first week.
               </p>
             </div>
 
