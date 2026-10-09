@@ -47,7 +47,7 @@ a {
   background: var(--navy-soft);
   color: var(--paper);
   display: grid;
-  grid-template-columns: minmax(290px, 44.5%) minmax(0, 55.5%);
+  grid-template-columns: minmax(0, 52%) minmax(0, 48%);
 }
 
 .identity,
@@ -61,29 +61,32 @@ a {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  padding-right: 20px;
 }
 
 .identity h1 {
   font-family: var(--font-garamond), Georgia, serif;
-  font-size: clamp(3rem, 5.2vw, 4.25rem);
+  font-size: clamp(2.6rem, 5.2vw, 4rem);
   font-weight: 500;
   letter-spacing: -0.035em;
-  line-height: 0.92;
+  line-height: 1.05;
   margin: 0;
 }
 
 .identity p {
   color: var(--periwinkle);
   font-family: var(--font-garamond), Georgia, serif;
-  font-size: clamp(1.25rem, 2vw, 1.56rem);
+  font-size: clamp(0.75rem, 3.6vw, 1.35rem);
   font-weight: 500;
   line-height: 1.15;
-  margin: 12px 0 0;
+  margin: 14px 0 0;
+  white-space: nowrap;
 }
 
 .summary {
   align-items: center;
   display: flex;
+  padding-left: 24px;
 }
 
 .summary p {
@@ -318,6 +321,23 @@ a:focus-visible {
   border-radius: 2px;
   outline: 3px solid #86a6ef;
   outline-offset: 3px;
+}
+
+@media (max-width: 980px) {
+  .resume-header {
+    grid-template-columns: 1fr;
+  }
+
+  .identity {
+    min-height: auto;
+    padding-bottom: 20px;
+  }
+
+  .summary {
+    min-height: auto;
+    padding-top: 0;
+    padding-left: 44px;
+  }
 }
 
 @media (max-width: 760px) {
