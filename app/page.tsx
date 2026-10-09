@@ -30,14 +30,6 @@ export default function Home() {
             <p>Engineering, product, early-stage startups</p>
           </div>
 
-          <div className="summary">
-            <p>
-              Founder and engineering team lead building and growing products
-              through experimentation, technical leadership, and a focus on
-              customer needs.
-            </p>
-          </div>
-
           <address className="contact-bar">
             <a href="tel:+12152923536" aria-label="Call Robert Kotcher">
               <Phone aria-hidden="true" size={15} strokeWidth={1.8} />
@@ -151,7 +143,7 @@ export default function Home() {
                     inflightsimulator.com
                   </a>
                 </h3>
-                <p>August 2026 – Present</p>
+                <p>(August 2026 – present)</p>
               </div>
 
               <p>
@@ -177,7 +169,7 @@ export default function Home() {
                     solosuit.com
                   </a>
                 </h3>
-                <p>August 2024 – Present</p>
+                <p>(2024 – present)</p>
               </div>
 
               <p>SoloSuit (Y Combinator, W21) helps Americans navigate debt lawsuits.</p>
@@ -206,7 +198,7 @@ export default function Home() {
             <div className="role">
               <div className="role-heading">
                 <h3>Product R&amp;D @ Codecov</h3>
-                <p>2020 – 2022</p>
+                <p>(2020 – 2022)</p>
               </div>
 
               <p>
@@ -218,7 +210,7 @@ export default function Home() {
             <div className="role">
               <div className="role-heading">
                 <h3>Senior Software Engineer @ SynthesisAI</h3>
-                <p>2020 – 2023</p>
+                <p>(2020 – 2023)</p>
               </div>
               <p>
                 SynthesisAI was building a synthetic data generation platform.
@@ -246,7 +238,7 @@ export default function Home() {
             <div className="role role-last">
               <div className="role-heading">
                 <h3>Software Engineer @ NASA</h3>
-                <p>2013 – 2015</p>
+                <p>(2013 – 2015)</p>
               </div>
               <p>
                 I developed software for an ADS-B sense-and-avoid system that
