@@ -6,11 +6,15 @@ const root = new URL("../", import.meta.url);
 
 test("publishes the complete résumé content and contact links", async () => {
   const page = await readFile(new URL("app/page.tsx", root), "utf8");
+  const header = page.match(
+    /<header className="resume-header">([\s\S]*?)<\/header>/,
+  )?.[1];
 
   assert.match(page, /Robert Kotcher/);
-  assert.match(page, /Serial founding engineer/);
-  assert.match(page, /Founder @/);
-  assert.match(page, /Founding engineer @/);
+  assert.ok(header);
+  assert.match(header, /Engineering, product, early-stage startups/);
+  assert.match(page, /Founder, engineer @/);
+  assert.match(page, /Founding engineer, team lead @/);
   assert.match(page, /Product R&amp;D @ Codecov/);
   assert.match(page, /href="tel:\+12152923536"/);
   assert.match(page, /href="mailto:rkotcher@gmail\.com"/);
@@ -36,7 +40,7 @@ test("sets résumé-specific metadata and responsive styles", async () => {
     readFile(new URL("app/globals.css", root), "utf8"),
   ]);
 
-  assert.match(layout, /Robert Kotcher \| Serial Founding Engineer/);
+  assert.match(layout, /Robert Kotcher \| Engineering, Product & Startups/);
   assert.match(layout, /https:\/\/www\.robertkotcher\.com/);
   assert.match(layout, /EB_Garamond/);
   assert.match(layout, /Ubuntu/);

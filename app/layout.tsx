@@ -18,16 +18,16 @@ const ubuntu = Ubuntu({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.robertkotcher.com"),
-  title: "Robert Kotcher | Serial Founding Engineer",
+  title: "Robert Kotcher | Engineering, Product & Startups",
   description:
-    "Robert Kotcher is a founding software engineer focused on data-driven product development, clear communication, and empathetic teams.",
+    "Robert Kotcher is a founder and engineering team lead with experience across product, growth, AI, developer tools, and early-stage startups.",
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "Robert Kotcher | Serial Founding Engineer",
+    title: "Robert Kotcher | Engineering, Product & Startups",
     description:
-      "Founding software engineer with a proven track record building and growing products.",
+      "Founder and engineering team lead building and growing products across AI, developer tools, and early-stage startups.",
     url: "/",
     siteName: "Robert Kotcher",
     type: "profile",

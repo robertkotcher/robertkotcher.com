@@ -27,14 +27,14 @@ export default function Home() {
         <header className="resume-header">
           <div className="identity">
             <h1>Robert Kotcher</h1>
-            <p>Serial founding engineer</p>
+            <p>Engineering, product, early-stage startups</p>
           </div>
 
           <div className="summary">
             <p>
-              Founding software engineer with a proven track record looking to
-              join a team that is data-driven, prioritizes good communication,
-              and operates with empathy.
+              Founder and engineering team lead building and growing products
+              through experimentation, technical leadership, and a focus on
+              customer needs.
             </p>
           </div>
 
@@ -142,7 +142,7 @@ export default function Home() {
             <div className="role">
               <div className="role-heading">
                 <h3>
-                  Founder @{" "}
+                  Founder, engineer @{" "}
                   <a
                     href="https://inflightsimulator.com"
                     target="_blank"
@@ -160,15 +160,15 @@ export default function Home() {
                 as they complete virtual flights.
               </p>
               <p>
-                Inflight Simulator went viral, with 30,000 flights created and
-                1.6K backlinks earned in its first week.
+                Inflight Simulator went viral, reaching 60,000 flights within days
+                of release.
               </p>
             </div>
 
             <div className="role">
               <div className="role-heading">
                 <h3>
-                  Founding engineer @{" "}
+                  Founding engineer, team lead @{" "}
                   <a
                     href="https://solosuit.com"
                     target="_blank"
@@ -180,7 +180,7 @@ export default function Home() {
                 <p>August 2024 – Present</p>
               </div>
 
-              <p>SoloSuit helps Americans navigate debt lawsuits.</p>
+              <p>SoloSuit (Y Combinator, W21) helps Americans navigate debt lawsuits.</p>
               <p>
                 I contributed to SoloSuit’s debt resolution platform, helping
                 200,000+ Americans navigate debt lawsuits and protecting $2.7
@@ -193,21 +193,64 @@ export default function Home() {
                 sent settlement offers from 8% to 37%.
               </p>
               <p>
+                I lead a pod of 3–6 engineers, with team composition changing
+                quarterly, and am responsible for the team’s successful output.
+              </p>
+              <p>
                 I built and maintained core product features across a
                 TypeScript, Ruby on Rails, and PostgreSQL stack, supporting a
                 12,000+ spec test suite.
               </p>
             </div>
 
-            <div className="role role-last">
+            <div className="role">
               <div className="role-heading">
                 <h3>Product R&amp;D @ Codecov</h3>
                 <p>2020 – 2022</p>
               </div>
 
               <p>
-                Codecov was acquired by Sentry in 2022. I built MVPs that were
-                later handed off to the engineering team.
+                Codecov was acquired by Sentry in 2022. I researched and built
+                new products that were later handed off to the engineering team.
+                My testing tool was one of the reasons for the acquisition.
+              </p>
+            </div>
+            <div className="role">
+              <div className="role-heading">
+                <h3>Senior Software Engineer @ SynthesisAI</h3>
+                <p>2020 – 2023</p>
+              </div>
+              <p>
+                SynthesisAI was building a synthetic data generation platform.
+                I maintained a server farm on AWS, orchestrated with Kubernetes,
+                with an API built in Go.
+              </p>
+            </div>
+
+            <div className="role">
+              <div className="role-heading">
+                <h3>
+                  Investor, advisor @{" "}
+                  <a href="https://tourdash.app" target="_blank" rel="noreferrer">
+                    tourdash.app
+                  </a>
+                </h3>
+              </div>
+              <p>
+                TourDash reduces friction between tour guides, operators, and
+                booking platforms. It is growing 5% month over month and works
+                with 1,500 tour operators worldwide.
+              </p>
+            </div>
+
+            <div className="role role-last">
+              <div className="role-heading">
+                <h3>Software Engineer @ NASA</h3>
+                <p>2013 – 2015</p>
+              </div>
+              <p>
+                I developed software for an ADS-B sense-and-avoid system that
+                was licensed to Vigilant Aerospace.
               </p>
             </div>
           </section>
