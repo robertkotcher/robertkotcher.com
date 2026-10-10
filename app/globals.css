@@ -82,3 +82,19 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
   .resume { box-shadow: none; max-width: none; }
   .expii-gallery, .expii-lightbox { display: none; }
 }
+
+.focus-controls { padding: 26px 54px; border-bottom: 1px solid var(--line); }
+.focus-controls > p { margin: 0 0 14px; font-size: .96rem; color: var(--navy); }
+.focus-pills { display: flex; flex-wrap: wrap; gap: 10px; }
+.focus-pill { border: 1px solid var(--navy-soft); border-radius: 999px; background: transparent; color: var(--navy); font: inherit; font-size: .9rem; padding: 9px 20px; min-height: 44px; cursor: pointer; }
+.focus-pill:hover { background: #eef2fc; }
+.focus-pill[aria-pressed="true"] { background: var(--navy-soft); color: white; }
+.focus-pill:focus-visible { outline: 3px solid #86a6ef; outline-offset: 3px; }
+.focus-clear { border-color: var(--line); color: #606778; }
+[data-background] { transition: opacity 180ms ease; }
+.focus-view[data-focus="engineering"] [data-background]:not([data-background~="engineering"]),
+.focus-view[data-focus="product"] [data-background]:not([data-background~="product"]),
+.focus-view[data-focus="growth"] [data-background]:not([data-background~="growth"]) { opacity: .18; }
+@media (max-width: 760px) { .focus-controls { padding: 24px 26px; } }
+@media (prefers-reduced-motion: reduce) { [data-background] { transition: none; } }
+@media print { .focus-controls { display: none; } .focus-view [data-background] { opacity: 1 !important; } }

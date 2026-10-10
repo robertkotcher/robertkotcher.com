@@ -4,6 +4,7 @@ import {
   Mail,
 } from "lucide-react";
 import ExpiiGallery from "./ExpiiGallery";
+import ResumeFocus from "./ResumeFocus";
 
 const projectUrl = "https://photos.app.goo.gl/2DL7bfRMNnXi1g3d8";
 
@@ -43,17 +44,18 @@ export default function Home() {
           </nav>
         </header>
 
+        <ResumeFocus>
         <div className="resume-body">
           <aside className="sidebar">
             <section>
               <h2>Education</h2>
 
-              <div className="compact-item">
+              <div className="compact-item" data-background="engineering product">
                 <h3>Carnegie Mellon University ‘12</h3>
                 <p>BXA Computer Science, Arts</p>
               </div>
 
-              <div className="compact-item">
+              <div className="compact-item" data-background="product growth">
                 <h3>AlphaLab Accelerator ‘12</h3>
                 <p>with Tunessence (acquired)</p>
               </div>
@@ -62,7 +64,7 @@ export default function Home() {
             <section>
               <h2>Projects</h2>
 
-              <div className="compact-item">
+              <div className="compact-item" data-background="engineering">
                 <h3>
                   <a
                     className="sidebar-link project-title-link"
@@ -87,6 +89,7 @@ export default function Home() {
                 {research.map((publication) => (
                   <a
                     className="sidebar-link research-item"
+                    data-background="engineering"
                     href={publication.href}
                     key={publication.href}
                     target="_blank"
@@ -105,7 +108,7 @@ export default function Home() {
             <h2 id="experience-title">Recent professional experience</h2>
 
             <div className="role">
-              <div className="role-heading">
+              <div className="role-heading" data-background="engineering product growth">
                 <h3>
                   Founder, engineer @{" "}
                   <a
@@ -119,19 +122,19 @@ export default function Home() {
                 <p>(August 2026 – present)</p>
               </div>
 
-              <p>
+              <p data-background="product">
                 Inflight Simulator lets people explore the world as an airline
                 passenger, choosing destinations and collecting country flags
                 as they complete virtual flights.
               </p>
-              <p>
+              <p data-background="growth">
                 Inflight Simulator went viral, reaching 60,000 flights within days
                 of release.
               </p>
             </div>
 
             <div className="role">
-              <div className="role-heading">
+              <div className="role-heading" data-background="engineering product growth">
                 <h3>
                   Founding engineer, team lead @{" "}
                   <a
@@ -145,23 +148,23 @@ export default function Home() {
                 <p>(2024 – present)</p>
               </div>
 
-              <p>SoloSuit (Y Combinator, W21) helps Americans navigate debt lawsuits.</p>
-              <p>
+              <p data-background="product">SoloSuit (Y Combinator, W21) helps Americans navigate debt lawsuits.</p>
+              <p data-background="engineering product">
                 I contributed to SoloSuit’s debt resolution platform, helping
                 200,000+ Americans navigate debt lawsuits and protecting $2.7
                 billion in claimed debt.
               </p>
-              <p>
+              <p data-background="product growth">
                 I increased the monthly settlement volume on SoloSettle by 20x
                 over 20 months by leading dozens of A/B tests across the
                 settlement funnel. I shipped a key experiment that increased
                 sent settlement offers from 8% to 37%.
               </p>
-              <p>
+              <p data-background="engineering">
                 I lead a pod of 3–6 engineers, with team composition changing
                 quarterly, and am responsible for the team’s successful output.
               </p>
-              <p>
+              <p data-background="engineering">
                 I built and maintained core product features across a
                 TypeScript, Ruby on Rails, and PostgreSQL stack, supporting a
                 12,000+ spec test suite.
@@ -169,23 +172,23 @@ export default function Home() {
             </div>
 
             <div className="role">
-              <div className="role-heading">
+              <div className="role-heading" data-background="engineering product">
                 <h3>Product R&amp;D @ Codecov</h3>
                 <p>(2020 – 2022)</p>
               </div>
 
-              <p>
+              <p data-background="engineering product">
                 Codecov was acquired by Sentry in 2022. I researched and built
                 new products that were later handed off to the engineering team.
                 My testing tool was one of the reasons for the acquisition.
               </p>
             </div>
             <div className="role">
-              <div className="role-heading">
+              <div className="role-heading" data-background="engineering">
                 <h3>Senior Software Engineer @ SynthesisAI</h3>
                 <p>(2020 – 2023)</p>
               </div>
-              <p>
+              <p data-background="engineering">
                 SynthesisAI was building a synthetic data generation platform.
                 I maintained a server farm on AWS, orchestrated with Kubernetes,
                 with an API built in Go.
@@ -193,26 +196,27 @@ export default function Home() {
             </div>
 
             <div className="role">
-              <div className="role-heading">
+              <div className="role-heading" data-background="engineering product">
                 <h3>Software Engineer @ <a href="https://www.expii.com" target="_blank" rel="noreferrer">expii.com</a></h3>
                 <p>(2015 – 2017)</p>
               </div>
-              <p>I worked on Expii’s interactive math and science learning platform, built with a React.js frontend and Flask backend.</p>
-              <ExpiiGallery />
+              <p data-background="engineering">I worked on Expii’s interactive math and science learning platform, built with a React.js frontend and Flask backend.</p>
+              <div data-background="engineering"><ExpiiGallery /></div>
             </div>
 
             <div className="role role-last">
-              <div className="role-heading">
+              <div className="role-heading" data-background="engineering">
                 <h3>Software Engineer @ NASA</h3>
                 <p>(2013 – 2015)</p>
               </div>
-              <p>
+              <p data-background="engineering">
                 I developed software for an ADS-B sense-and-avoid system that
                 was licensed to Vigilant Aerospace.
               </p>
             </div>
           </section>
         </div>
+        </ResumeFocus>
       </article>
     </main>
   );
