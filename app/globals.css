@@ -83,7 +83,7 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
   .expii-gallery, .expii-lightbox { display: none; }
 }
 
-.focus-controls { display: flex; align-items: center; justify-content: center; gap: 18px; padding: 26px 54px; border-bottom: 1px solid var(--line); }
+.focus-controls { display: flex; align-items: center; justify-content: center; gap: 18px; padding: 26px 54px; }
 .focus-controls > p { margin: 0; font-size: .96rem; color: var(--navy); white-space: nowrap; }
 .focus-pills { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
 .focus-pill { border: 1px solid var(--navy-soft); border-radius: 999px; background: transparent; color: var(--navy); font: inherit; font-size: .9rem; padding: 9px 20px; min-height: 44px; cursor: pointer; }
