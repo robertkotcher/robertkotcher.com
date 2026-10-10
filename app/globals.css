@@ -49,6 +49,15 @@ a { color: var(--link); text-underline-offset: 0.12em; }
 .role > p { font-size: .96rem; line-height: 1.45; margin: 0; }
 .role > p + p { margin-top: 22px; }
 a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset: 3px; }
+.expii-carousel { border: 1px solid var(--line); border-radius: 6px; margin-top: 18px; overflow: hidden; }
+.expii-carousel > a { display: block; background: var(--canvas); }
+.expii-carousel img { display: block; width: 100%; height: auto; }
+.carousel-controls { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 12px; }
+.carousel-controls p { font-size: .8rem; margin: 0; text-align: center; }
+.carousel-controls span { color: #666; margin-left: 8px; white-space: nowrap; }
+.carousel-controls button { background: white; border: 1px solid var(--line); border-radius: 4px; color: var(--navy); cursor: pointer; font: inherit; min-width: 44px; min-height: 44px; }
+.carousel-controls button:hover { background: var(--canvas); }
+.carousel-controls button:focus-visible { outline: 3px solid #86a6ef; outline-offset: 2px; }
 
 @media (max-width: 760px) {
   .resume-shell { padding: 0; }
@@ -70,4 +79,5 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
   html, body, .resume-shell { background: white; }
   .resume-shell { padding: 0; }
   .resume { box-shadow: none; max-width: none; }
+  .expii-carousel { display: none; }
 }

@@ -4,6 +4,7 @@ import {
   Mail,
   Phone,
 } from "lucide-react";
+import ExpiiCarousel from "./ExpiiCarousel";
 
 const projectUrl = "https://photos.app.goo.gl/2DL7bfRMNnXi1g3d8";
 
@@ -217,6 +218,15 @@ export default function Home() {
                 I maintained a server farm on AWS, orchestrated with Kubernetes,
                 with an API built in Go.
               </p>
+            </div>
+
+            <div className="role">
+              <div className="role-heading">
+                <h3>Software Engineer @ <a href="https://www.expii.com" target="_blank" rel="noreferrer">expii.com</a></h3>
+                <p>(2015 – 2017)</p>
+              </div>
+              <p>I worked on Expii’s interactive math and science learning platform, built with a React.js frontend and Flask backend.</p>
+              <ExpiiCarousel />
             </div>
 
             <div className="role role-last">
