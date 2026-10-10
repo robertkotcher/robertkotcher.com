@@ -4,7 +4,7 @@ import {
   Mail,
   Phone,
 } from "lucide-react";
-import ExpiiCarousel from "./ExpiiCarousel";
+import ExpiiGallery from "./ExpiiGallery";
 
 const projectUrl = "https://photos.app.goo.gl/2DL7bfRMNnXi1g3d8";
 
@@ -226,7 +226,7 @@ export default function Home() {
                 <p>(2015 – 2017)</p>
               </div>
               <p>I worked on Expii’s interactive math and science learning platform, built with a React.js frontend and Flask backend.</p>
-              <ExpiiCarousel />
+              <ExpiiGallery />
             </div>
 
             <div className="role role-last">
