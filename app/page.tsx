@@ -2,7 +2,6 @@ import Image from "next/image";
 import {
   ArrowUpRight,
   Mail,
-  Phone,
 } from "lucide-react";
 import ExpiiGallery from "./ExpiiGallery";
 
@@ -29,10 +28,6 @@ export default function Home() {
           <div className="identity">
             <h1>Robert Kotcher</h1>
             <p>Serial first hire with a focus on engineering and product.</p>
-            <a className="header-phone" href="tel:+12152923536" aria-label="Call Robert Kotcher">
-              <Phone aria-hidden="true" size={14} strokeWidth={1.8} />
-              +1 215 292 3536
-            </a>
           </div>
 
           <nav className="header-socials" aria-label="Social and contact links">

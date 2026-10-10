@@ -16,7 +16,6 @@ test("publishes the complete résumé content and contact links", async () => {
   assert.match(page, /Founder, engineer @/);
   assert.match(page, /Founding engineer, team lead @/);
   assert.match(page, /Product R&amp;D @ Codecov/);
-  assert.match(page, /href="tel:\+12152923536"/);
   assert.match(page, /href="mailto:rkotcher@gmail\.com"/);
   assert.match(page, /linkedin\.com\/in\/robert-kotcher-639105196/);
   assert.match(page, /href="https:\/\/github\.com\/robertkotcher"/);
