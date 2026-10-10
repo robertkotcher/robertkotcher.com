@@ -219,22 +219,6 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="role">
-              <div className="role-heading">
-                <h3>
-                  Investor, advisor @{" "}
-                  <a href="https://tourdash.app" target="_blank" rel="noreferrer">
-                    tourdash.app
-                  </a>
-                </h3>
-              </div>
-              <p>
-                TourDash reduces friction between tour guides, operators, and
-                booking platforms. It is growing 5% month over month and works
-                with 1,500 tour operators worldwide.
-              </p>
-            </div>
-
             <div className="role role-last">
               <div className="role-heading">
                 <h3>Software Engineer @ NASA</h3>
