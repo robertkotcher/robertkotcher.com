@@ -92,6 +92,7 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
 .focus-pill:focus-visible { outline: 3px solid #86a6ef; outline-offset: 3px; }
 .focus-clear { border-color: var(--line); color: #606778; }
 [data-background] { transition: opacity 180ms ease; }
+.focus-view [data-focus-hidden] { display: none !important; }
 .focus-view[data-focus="engineering"] [data-background]:not([data-background~="engineering"]),
 .focus-view[data-focus="product"] [data-background]:not([data-background~="product"]),
 .focus-view[data-focus="growth"] [data-background]:not([data-background~="growth"]) { opacity: .18; }
@@ -103,4 +104,4 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
 }
 @media (max-width: 760px) { .focus-controls { flex-direction: column; gap: 14px; padding: 24px 26px; text-align: center; } .focus-controls > p { white-space: normal; } }
 @media (prefers-reduced-motion: reduce) { [data-background] { transition: none; } }
-@media print { .focus-controls { display: none; } .focus-view [data-background] { opacity: 1 !important; } }
+@media print { .focus-controls { display: none; } .focus-view [data-background] { opacity: 1 !important; } .focus-view [data-focus-hidden] { display: block !important; } }
