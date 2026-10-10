@@ -91,6 +91,14 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
 .focus-pill[aria-pressed="true"] { background: var(--navy-soft); color: white; }
 .focus-pill:focus-visible { outline: 3px solid #86a6ef; outline-offset: 3px; }
 .focus-clear { border-color: var(--line); color: #606778; }
+.technical-skills { margin-top: 16px; }
+.technical-skills summary { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--navy-soft); border-radius: 999px; color: var(--navy); cursor: pointer; font-size: .85rem; padding: 9px 16px; min-height: 44px; list-style: none; }
+.technical-skills summary::-webkit-details-marker { display: none; }
+.technical-skills summary::after { content: "+"; }
+.technical-skills[open] summary::after { content: "−"; }
+.technical-skills summary:hover { background: #eef2fc; }
+.technical-skills summary:focus-visible { outline: 3px solid #86a6ef; outline-offset: 3px; }
+.technical-skills > p { margin: 12px 0 0; font-size: .96rem; line-height: 1.45; }
 [data-background] { transition: opacity 180ms ease; }
 .focus-view[data-focus="engineering"] [data-background]:not([data-background~="engineering"]),
 .focus-view[data-focus="product"] [data-background]:not([data-background~="product"]),

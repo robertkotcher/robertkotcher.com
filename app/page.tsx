@@ -131,6 +131,13 @@ export default function Home() {
                 Inflight Simulator went viral, reaching 60,000 flights within days
                 of release.
               </p>
+              <details className="technical-skills" data-background="engineering">
+                <summary>Technical skills</summary>
+                <p>
+                  Shadow mapping, geometry reduction, scene culling, frustum
+                  streaming, and character rigging.
+                </p>
+              </details>
             </div>
 
             <div className="role">
