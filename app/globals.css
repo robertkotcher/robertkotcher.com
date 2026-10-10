@@ -83,9 +83,9 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
   .expii-gallery, .expii-lightbox { display: none; }
 }
 
-.focus-controls { padding: 26px 54px; border-bottom: 1px solid var(--line); }
-.focus-controls > p { margin: 0 0 14px; font-size: .96rem; color: var(--navy); }
-.focus-pills { display: flex; flex-wrap: wrap; gap: 10px; }
+.focus-controls { display: flex; align-items: center; justify-content: center; gap: 18px; padding: 26px 54px; border-bottom: 1px solid var(--line); }
+.focus-controls > p { margin: 0; font-size: .96rem; color: var(--navy); white-space: nowrap; }
+.focus-pills { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
 .focus-pill { border: 1px solid var(--navy-soft); border-radius: 999px; background: transparent; color: var(--navy); font: inherit; font-size: .9rem; padding: 9px 20px; min-height: 44px; cursor: pointer; }
 .focus-pill:hover { background: #eef2fc; }
 .focus-pill[aria-pressed="true"] { background: var(--navy-soft); color: white; }
@@ -103,6 +103,12 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
 .focus-view[data-focus="engineering"] [data-background]:not([data-background~="engineering"]),
 .focus-view[data-focus="product"] [data-background]:not([data-background~="product"]),
 .focus-view[data-focus="growth"] [data-background]:not([data-background~="growth"]) { opacity: .18; }
-@media (max-width: 760px) { .focus-controls { padding: 24px 26px; } }
+@media (min-width: 761px) and (max-width: 1000px) {
+  .focus-controls { padding: 24px; gap: 12px; }
+  .focus-controls > p { font-size: .85rem; }
+  .focus-pills { gap: 8px; flex-wrap: nowrap; }
+  .focus-pill { font-size: .85rem; padding-inline: 14px; white-space: nowrap; }
+}
+@media (max-width: 760px) { .focus-controls { flex-direction: column; gap: 14px; padding: 24px 26px; text-align: center; } .focus-controls > p { white-space: normal; } }
 @media (prefers-reduced-motion: reduce) { [data-background] { transition: none; } }
 @media print { .focus-controls { display: none; } .focus-view [data-background] { opacity: 1 !important; } }
