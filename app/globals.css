@@ -85,8 +85,8 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
 
 .focus-controls { display: flex; align-items: center; justify-content: center; gap: 18px; padding: 26px 54px; }
 .focus-controls > p { margin: 0; font-size: .96rem; color: var(--navy); white-space: nowrap; }
-.focus-pills { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
-.focus-pill { border: 1px solid var(--navy-soft); border-radius: 999px; background: transparent; color: var(--navy); font: inherit; font-size: .9rem; padding: 9px 20px; min-height: 44px; cursor: pointer; }
+.focus-pills { display: flex; flex-wrap: wrap; justify-content: center; gap: 7px; }
+.focus-pill { border: 1px solid var(--navy-soft); border-radius: 999px; background: transparent; color: var(--navy); font: inherit; font-size: .8rem; padding: 5px 13px; min-height: 32px; cursor: pointer; }
 .focus-pill:hover { background: #eef2fc; }
 .focus-pill[aria-pressed="true"] { background: var(--navy-soft); color: white; }
 .focus-pill:focus-visible { outline: 3px solid #86a6ef; outline-offset: 3px; }
@@ -99,8 +99,8 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
 @media (min-width: 761px) and (max-width: 1000px) {
   .focus-controls { padding: 24px; gap: 12px; }
   .focus-controls > p { font-size: .85rem; }
-  .focus-pills { gap: 8px; flex-wrap: nowrap; }
-  .focus-pill { font-size: .85rem; padding-inline: 14px; white-space: nowrap; }
+  .focus-pills { gap: 7px; flex-wrap: nowrap; }
+  .focus-pill { font-size: .8rem; padding-inline: 12px; white-space: nowrap; }
 }
 @media (max-width: 760px) { .focus-controls { flex-direction: column; gap: 14px; padding: 24px 26px; text-align: center; } .focus-controls > p { white-space: normal; } }
 @media (prefers-reduced-motion: reduce) { [data-background] { transition: none; } }
