@@ -12,7 +12,7 @@ test("publishes the complete résumé content and contact links", async () => {
 
   assert.match(page, /Robert Kotcher/);
   assert.ok(header);
-  assert.match(header, /Engineering, product, early-stage startups/);
+  assert.match(header, /Serial first hire with a focus on engineering and product\./);
   assert.match(page, /Founder, engineer @/);
   assert.match(page, /Founding engineer, team lead @/);
   assert.match(page, /Product R&amp;D @ Codecov/);

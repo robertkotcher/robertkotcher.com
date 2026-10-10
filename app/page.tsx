@@ -28,7 +28,7 @@ export default function Home() {
         <header className="resume-header">
           <div className="identity">
             <h1>Robert Kotcher</h1>
-            <p>Engineering, product, early-stage startups</p>
+            <p>Serial first hire with a focus on engineering and product.</p>
           </div>
 
           <address className="contact-bar">
