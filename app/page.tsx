@@ -1,6 +1,6 @@
+import Image from "next/image";
 import {
   ArrowUpRight,
-  GitFork,
   Mail,
   Phone,
 } from "lucide-react";
@@ -29,46 +29,23 @@ export default function Home() {
           <div className="identity">
             <h1>Robert Kotcher</h1>
             <p>Serial first hire with a focus on engineering and product.</p>
+            <a className="header-phone" href="tel:+12152923536" aria-label="Call Robert Kotcher">
+              <Phone aria-hidden="true" size={14} strokeWidth={1.8} />
+              +1 215 292 3536
+            </a>
           </div>
 
-          <address className="contact-bar">
-            <a href="tel:+12152923536" aria-label="Call Robert Kotcher">
-              <Phone aria-hidden="true" size={15} strokeWidth={1.8} />
-              <span>+1 215 292 3536</span>
+          <nav className="header-socials" aria-label="Social and contact links">
+            <a href="https://github.com/robertkotcher" target="_blank" rel="noreferrer" aria-label="Robert Kotcher on GitHub" title="GitHub">
+              <Image src="/github-icon.svg" alt="" width={24} height={24} />
             </a>
-            <a href="mailto:rkotcher@gmail.com">
-              <Mail aria-hidden="true" size={15} strokeWidth={1.8} />
-              <span>rkotcher@gmail.com</span>
+            <a href="https://www.linkedin.com/in/robert-kotcher-639105196" target="_blank" rel="noreferrer" aria-label="Robert Kotcher on LinkedIn" title="LinkedIn">
+              <Image src="/linkedin-icon.svg" alt="" width={24} height={24} />
             </a>
-            <a
-              href="https://www.linkedin.com/in/robert-kotcher-639105196"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <span className="linkedin-mark" aria-hidden="true">
-                in
-              </span>
-              <span>linkedin.com/in/robert-kotcher-639105196</span>
-              <ArrowUpRight
-                aria-hidden="true"
-                className="external-icon"
-                size={13}
-              />
+            <a href="mailto:rkotcher@gmail.com" aria-label="Email Robert Kotcher" title="rkotcher@gmail.com">
+              <Mail aria-hidden="true" size={24} strokeWidth={1.8} />
             </a>
-            <a
-              href="https://github.com/robertkotcher"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <GitFork aria-hidden="true" size={15} strokeWidth={1.8} />
-              <span>github.com/robertkotcher</span>
-              <ArrowUpRight
-                aria-hidden="true"
-                className="external-icon"
-                size={13}
-              />
-            </a>
-          </address>
+          </nav>
         </header>
 
         <div className="resume-body">
