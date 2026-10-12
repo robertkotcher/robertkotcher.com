@@ -40,7 +40,9 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
             <div className="header-portrait"><Image src="/robert-kotcher-portrait.png" alt="Robert Kotcher" width={998} height={1004} priority /></div>
           <div className="identity">
             <h1>Robert Kotcher</h1>
-            <p>YC alum, Carnegie Mellon alum, viral app founder, 2 exits</p>
+            <p className="identity-highlights">
+              <span>YC alum</span><span>Carnegie Mellon alum</span><span>viral app founder</span><span>2 exits</span>
+            </p>
           </div>
           </div>
 

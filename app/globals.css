@@ -158,3 +158,9 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
 .header-portrait img { display: block; width: 155%; max-width: none; height: auto; transform: translate(-17%, -4%); }
 @media (max-width: 760px) { .header-person { gap: 14px; } .header-portrait { flex-basis: 72px; height: 84px; } }
 @media print { .header-person { gap: 16px; } .header-portrait { flex-basis: 68px; height: 78px; border-radius: 6px; } }
+
+.identity-highlights { display: flex; flex-wrap: wrap; align-items: baseline; gap: 5px 0; }
+.identity-highlights span { white-space: nowrap; }
+.identity-highlights span + span::before { content: "·"; display: inline-block; margin: 0 12px; }
+@media (max-width: 760px) { .identity-highlights span + span::before { margin-inline: 8px; } }
+@media print { .identity-highlights span + span::before { margin-inline: 8px; } }
