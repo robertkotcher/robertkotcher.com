@@ -34,7 +34,7 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
         <header className="resume-header">
           <div className="identity">
             <h1>Robert Kotcher</h1>
-            <p>Serial first hire with a focus on engineering and product.</p>
+            <p>YC alum, Carnegie Mellon alum, viral app founder, 2 exits</p>
           </div>
 
           {!printable && <nav className="header-socials" aria-label="Social and contact links">
