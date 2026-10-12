@@ -236,3 +236,10 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
 @media screen and (max-width: 600px) { .identity .identity-highlights { font-size: .75rem; gap: 6px; } .identity-highlights span { padding: 3px 8px; } }
 @media screen and (max-width: 380px) { .identity .identity-highlights { font-size: .7rem; } }
 @media print { .identity .identity-highlights { font-size: 10pt; gap: 6px; } .identity-highlights span { padding: 3px 8px; } }
+
+/* Match the portrait to the visible name-and-highlights block, not font leading. */
+.header-person { align-items: stretch; }
+.header-portrait { position: relative; height: auto; margin-top: 12px; }
+.header-portrait img { position: absolute; top: 0; left: 0; height: 108%; width: 155%; object-fit: cover; object-position: center top; transform: translate(-17%, -4%); }
+@media screen and (max-width: 600px) { .header-portrait { height: auto; margin-top: 6px; } }
+@media print { .header-portrait { height: auto; margin-top: 8px; } }
