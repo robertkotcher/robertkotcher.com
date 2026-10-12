@@ -1,6 +1,7 @@
 import { chromium } from "playwright";
 import QRCode from "qrcode";
-import { mkdir } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
 
 await mkdir("public/qr", { recursive: true });
 const links = {
@@ -26,6 +27,8 @@ try {
     printBackground: true,
     displayHeaderFooter: false,
   });
+  const revision = createHash("sha256").update(await readFile("public/robert-kotcher-resume.pdf")).digest("hex").slice(0, 12);
+  await writeFile("app/resumePdf.ts", `// Updated by npm run export:resume whenever the PDF changes.\nexport const resumePdfUrl = "/robert-kotcher-resume.pdf?v=${revision}";\n`);
 } finally {
   await browser.close();
 }

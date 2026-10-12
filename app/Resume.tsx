@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { resumePdfUrl } from "./resumePdf";
 import { FaGithub, FaLinkedinIn } from "react-icons/fa6";
 import {
   ArrowUpRight,
@@ -58,7 +59,7 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
             <a href="mailto:rkotcher@gmail.com" aria-label="Email Robert Kotcher" title="rkotcher@gmail.com">
               <Mail aria-hidden="true" size={24} strokeWidth={1.8} />
             </a>
-            {!printable && <a href="/robert-kotcher-resume.pdf" target="_blank" rel="noreferrer" aria-label="Open résumé PDF in a new tab" title="Open PDF"><FileDown aria-hidden="true" size={24} strokeWidth={1.8} /></a>}
+            {!printable && <a href={resumePdfUrl} target="_blank" rel="noreferrer" aria-label="Open résumé PDF in a new tab" title="Open PDF"><FileDown aria-hidden="true" size={24} strokeWidth={1.8} /></a>}
           </nav>}
         </header>
 
