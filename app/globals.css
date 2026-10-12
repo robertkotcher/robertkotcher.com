@@ -262,11 +262,7 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
 .resume-directory { max-width: 850px; margin: 60px auto; padding: 24px; }
 .resume-directory article { margin-top: 32px; padding: 24px; border: 1px solid var(--line); border-radius: 8px; }
 .resume-directory small, .print-controls small { color: #666; }
-.variant-summary { padding: 24px 54px 0; }
-.variant-summary h2 { font-size: 1.2rem; margin: 0 0 10px; }
-.variant-summary p { font-size: .96rem; line-height: 1.5; margin: 0; }
-@media screen and (max-width: 760px) { .variant-summary { padding-inline: 26px; } .print-controls { flex-wrap: wrap; gap: 8px; } }
-@media print { .tailored-resume .variant-summary { display: none; } }
+@media screen and (max-width: 760px) { .print-controls { flex-wrap: wrap; gap: 8px; } }
 
 /* Keep the photo square independently of wrapped header highlights. */
 .header-person { align-items: center; }

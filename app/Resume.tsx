@@ -73,7 +73,6 @@ export default function Resume({ printable = false, variant }: { printable?: boo
 
 
         <Content>
-        {variant && <section className="variant-summary"><h2>Full-Stack Product Engineering</h2><p>Y Combinator alumnus, Carnegie Mellon graduate, and product builder with two exits, 10 years of React.js experience and 8 years of TypeScript. Built a responsive, multi-format learning-content editor; helped build a platform serving 200,000+ people; and grew monthly settlement volume 20x in 20 months.</p></section>}
         <div className="resume-body">
           <aside className="sidebar">
             <section>
