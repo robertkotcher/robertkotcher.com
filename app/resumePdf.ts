@@ -1,2 +1,2 @@
 // Updated by npm run export:resume whenever the PDF changes.
-export const resumePdfUrl = "/robert-kotcher-resume.pdf?v=a29f978788b5";
+export const resumePdfUrl = "/robert-kotcher-resume.pdf?v=29f41e6baaef";

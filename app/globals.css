@@ -43,7 +43,12 @@ a { color: var(--link); text-underline-offset: 0.12em; }
 .technology-experience-track { height: 4px; margin-top: 4px; background: #e5eaf3; border-radius: 2px; overflow: hidden; }
 .technology-experience-track > div { height: 100%; background: var(--navy-soft); border-radius: inherit; }
 .additional-technical-skills { margin: 12px 0 0; font-size: .8rem; line-height: 1.5; }
+.technology-experience-groups { display: grid; gap: 16px; }
+.technology-experience-group h3 { margin: 0 0 6px; font-size: .8rem; font-weight: 700; color: var(--navy-soft); }
+.technology-group-extra { font-weight: 400; }
 @media print {
+  .technology-experience-groups { gap: 6px; }
+  .technology-experience-group h3 { font-size: 8pt; margin-bottom: 4px; }
   .additional-technical-skills { font-size: 8pt; }
   .technology-experience-list { gap: 5px; }
   .technology-experience-label { font-size: 8pt; line-height: 1.2; }
