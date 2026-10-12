@@ -42,7 +42,7 @@ test("sets résumé-specific metadata and responsive styles", async () => {
   assert.match(layout, /Robert Kotcher \| Engineering, Product & Startups/);
   assert.match(layout, /https:\/\/www\.robertkotcher\.com/);
   assert.match(layout, /EB_Garamond/);
-  assert.match(layout, /Ubuntu/);
+  assert.match(layout, /Open_Sans/);
   assert.match(css, /--navy:\s*#162e66/);
   assert.match(css, /@media \(max-width:\s*760px\)/);
   assert.match(css, /@media print/);

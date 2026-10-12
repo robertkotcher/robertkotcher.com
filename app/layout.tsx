@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { EB_Garamond, Ubuntu } from "next/font/google";
+import { EB_Garamond, Open_Sans } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
@@ -9,8 +9,8 @@ const garamond = EB_Garamond({
   display: "swap",
 });
 
-const ubuntu = Ubuntu({
-  variable: "--font-ubuntu",
+const openSans = Open_Sans({
+  variable: "--font-open-sans",
   subsets: ["latin"],
   weight: ["300", "400", "500", "700"],
   display: "swap",
@@ -46,7 +46,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${garamond.variable} ${ubuntu.variable}`}>
+      <body className={`${garamond.variable} ${openSans.variable}`}>
         {children}
         <Analytics />
       </body>
