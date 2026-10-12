@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { resumePdfUrl, fullStackProductPdfUrl } from "./resumePdf";
+import { resumePdfUrl } from "./resumePdf";
 import { FaGithub, FaLinkedinIn } from "react-icons/fa6";
 import {
   ArrowUpRight,
@@ -39,11 +39,11 @@ function EngineeringSkills({ skills }: { skills: string[] }) {
   return <ul className="engineering-skills" aria-label="Engineering skills used">{skills.map(skill => <li key={skill}>{skill}</li>)}</ul>;
 }
 
-export default function Resume({ printable = false, variant }: { printable?: boolean; variant?: "full-stack-product-engineering" }) {
-  const pdfUrl = variant ? fullStackProductPdfUrl : resumePdfUrl;
+export default function Resume({ printable = false }: { printable?: boolean }) {
+  const pdfUrl = resumePdfUrl;
   const Content = printable ? "div" : ResumeFocus;
   return (
-    <main className={`resume-shell${printable ? " printable-resume" : ""}${variant ? " tailored-resume" : ""}`}>
+    <main className={`resume-shell${printable ? " printable-resume" : ""}`}>
       <article className="resume" aria-label="Robert Kotcher résumé">
         <header className="resume-header">
           <div className="header-person">
@@ -147,7 +147,6 @@ export default function Resume({ printable = false, variant }: { printable?: boo
                   </div>
                 ))}
               </div>
-              <p className="additional-technical-skills">Full-stack / back-end web development · Software development</p>
             </section>
             {printable && <section className="print-contact-section">
               <h2>Contact</h2>
@@ -263,7 +262,7 @@ export default function Resume({ printable = false, variant }: { printable?: boo
                 <h3>Software Engineer @ <a href="https://www.expii.com" target="_blank" rel="noreferrer">expii.com</a></h3>
                 <p>(2015 – 2017)</p>
               </div>
-              <p data-background="engineering">{variant ? "Built Expii’s responsive learning-content editor in React.js, CSS, and Flexbox, supporting image, diagram, multiple-choice, text, and video blocks with pixel-perfect implementation of professional designs. The platform used a Python/Flask backend on AWS." : "I worked on Expii’s interactive math and science learning platform, built with a React.js frontend and Python/Flask backend on AWS."}</p>
+              <p data-background="engineering">Built Expii’s responsive learning-content editor in React.js, CSS, and Flexbox, supporting image, diagram, multiple-choice, text, and video blocks with pixel-perfect implementation of professional designs. The platform used a Python/Flask backend on AWS.</p>
               <ExperienceTags categories="engineering" />
               {!printable && <EngineeringSkills skills={["React", "Flask", "AWS"]} />}
             </div>

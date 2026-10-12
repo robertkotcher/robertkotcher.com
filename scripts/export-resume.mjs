@@ -9,7 +9,6 @@ try {
   const page = await browser.newPage();
   const outputs = [
     { route: "/print", file: "robert-kotcher-resume.pdf", name: "resumePdfUrl" },
-    { route: "/directory/full-stack-product-engineering/print", file: "robert-kotcher-full-stack-product-engineering.pdf", name: "fullStackProductPdfUrl" },
   ];
   const exports = [];
   for (const { route, file, name } of outputs) {

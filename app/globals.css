@@ -42,14 +42,12 @@ a { color: var(--link); text-underline-offset: 0.12em; }
 .technology-experience-label > span:last-child { white-space: nowrap; font-variant-numeric: tabular-nums; }
 .technology-experience-track { height: 4px; margin-top: 4px; background: #e5eaf3; border-radius: 2px; overflow: hidden; }
 .technology-experience-track > div { height: 100%; background: var(--navy-soft); border-radius: inherit; }
-.additional-technical-skills { margin: 12px 0 0; font-size: .8rem; line-height: 1.5; }
-.technology-experience-groups { display: grid; gap: 16px; }
+.technology-experience-groups { display: grid; gap: 22px; }
 .technology-experience-group h3 { margin: 0 0 6px; font-size: .8rem; font-weight: 700; color: var(--navy-soft); }
 .technology-group-extra { font-weight: 400; }
 @media print {
-  .technology-experience-groups { gap: 6px; }
+  .technology-experience-groups { gap: 10px; }
   .technology-experience-group h3 { font-size: 8pt; margin-bottom: 4px; }
-  .additional-technical-skills { font-size: 8pt; }
   .technology-experience-list { gap: 5px; }
   .technology-experience-label { font-size: 8pt; line-height: 1.2; }
   .technology-experience-track { height: 3px; margin-top: 2px; }
@@ -259,9 +257,6 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
 
 @media screen { .research-item { display: block; }  .research-title svg { display: inline-block; vertical-align: baseline; margin: 0; } }
 
-.resume-directory { max-width: 850px; margin: 60px auto; padding: 24px; }
-.resume-directory article { margin-top: 32px; padding: 24px; border: 1px solid var(--line); border-radius: 8px; }
-.resume-directory small, .print-controls small { color: #666; }
 @media screen and (max-width: 760px) { .print-controls { flex-wrap: wrap; gap: 8px; } }
 
 /* Keep the photo square independently of wrapped header highlights. */
