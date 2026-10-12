@@ -97,8 +97,7 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
             <section>
               <h2>Projects</h2>
 
-              <div className={printable ? "compact-item qr-project" : "compact-item"} data-background="engineering">
-                {printable && <Image className="resume-qr" src="/qr/cat-project.png" alt="QR code for the cat robot project" width={400} height={400} />}
+              <div className="compact-item" data-background="engineering">
                 <div>
                 <h3>
                   <a
@@ -132,7 +131,6 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    {printable && <Image className="resume-qr" src={`/qr/paper-${research.indexOf(publication)}.png`} alt={`QR code for ${publication.title}`} width={400} height={400} />}
                     <span><span className="research-title">{publication.title}{!printable && <> <ArrowUpRight aria-hidden="true" size={14} /></>}</span><small>{publication.citations}</small><ExperienceTags categories="engineering" /></span>
                   </a>
                 ))}

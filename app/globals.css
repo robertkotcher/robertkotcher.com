@@ -47,7 +47,7 @@ a { color: var(--link); text-underline-offset: 0.12em; }
   .technology-experience-label { font-size: 8pt; line-height: 1.2; }
   .technology-experience-track { height: 3px; margin-top: 2px; }
 }
-.research-item { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 3px 4px; }
+.research-item { display: block; }
 .research-item small { color: var(--ink); font-size: .96rem; grid-column: 1; font-weight: 400; }
 .research-item svg { grid-column: 2; grid-row: 1; margin-top: 3px; }
 .role { padding-bottom: 48px; }
@@ -199,10 +199,7 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
 
 .research-item small { display: block; }
 
-.printable-resume .qr-project, .printable-resume .research-item { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); align-items: start; gap: 6px; }
 .printable-resume .project-title-link { display: inline; }
-.resume-qr { width: 100%; height: auto; }
-.printable-resume .research-item > span { min-width: 0; }
 
 /* Give the identity the full header width; keep actions in their own top row. */
 @media screen {
@@ -217,10 +214,6 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
   .header-socials { top: 10px; right: 16px; }
 }
 
-/* Align the visible QR ink, allowing its white scanning border into the margin. */
-.qr-project .resume-qr { transform: translateX(-9.7561%); }
-.research-item .resume-qr[src*="paper-0"] { transform: translateX(-7.5472%); }
-.research-item .resume-qr[src*="paper-1"] { transform: translateX(-8.1633%); }
 
 /* Keep complete highlights together as compact badges on narrower screens. */
 @media screen and (max-width: 1100px) {
@@ -257,4 +250,4 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
 @media screen and (max-width: 600px) { .header-portrait { height: auto; margin-top: 6px; } }
 @media print { .header-portrait { height: auto; margin-top: 8px; } }
 
-@media screen { .research-item { display: block; } .printable-resume .research-item { display: grid; } .research-title svg { display: inline-block; vertical-align: baseline; margin: 0; } }
+@media screen { .research-item { display: block; }  .research-title svg { display: inline-block; vertical-align: baseline; margin: 0; } }
