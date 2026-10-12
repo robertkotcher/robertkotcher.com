@@ -258,3 +258,28 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
 @media print { .header-portrait { height: auto; margin-top: 8px; } }
 
 @media screen { .research-item { display: block; }  .research-title svg { display: inline-block; vertical-align: baseline; margin: 0; } }
+
+.resume-directory { max-width: 850px; margin: 60px auto; padding: 24px; }
+.resume-directory article { margin-top: 32px; padding: 24px; border: 1px solid var(--line); border-radius: 8px; }
+.resume-directory small, .print-controls small { color: #666; }
+.variant-summary { padding: 24px 54px 0; }
+.variant-summary h2 { font-size: 1.2rem; margin: 0 0 10px; }
+.variant-summary p { font-size: .96rem; line-height: 1.5; margin: 0; }
+@media screen and (max-width: 760px) { .variant-summary { padding-inline: 26px; } .print-controls { flex-wrap: wrap; gap: 8px; } }
+@media print {
+  .tailored-resume .resume-header { background: white; color: var(--ink); padding: 10mm 12mm 0; }
+  .tailored-resume .header-portrait, .tailored-resume .identity-highlights, .tailored-resume .experience-tags { display: none; }
+  .tailored-resume .identity h1 { font-size: 26pt; }
+  .tailored-resume .variant-summary { padding: 12px 12mm 0; }
+  .tailored-resume .variant-summary h2 { font-size: 12pt; }
+  .tailored-resume .variant-summary p { font-size: 10pt; }
+  .tailored-resume .resume-body { display: flex; flex-direction: column; padding: 18px 12mm 10mm; }
+  .tailored-resume .experience { order: 0; margin: 0; }
+  .tailored-resume .sidebar { order: 1; float: none; width: 100%; padding: 0; }
+  .tailored-resume .sidebar h2, .tailored-resume .experience > h2 { text-align: left; margin: 14px 0 10px; }
+  .tailored-resume .sidebar section + section { margin-top: 14px; }
+  .tailored-resume .technology-experience-track { display: none; }
+  .tailored-resume .technology-experience-groups { grid-template-columns: 1fr; }
+  .tailored-resume .role > p, .tailored-resume .compact-item p, .tailored-resume .sidebar-link { font-size: 10pt; }
+  .tailored-resume .role { break-inside: avoid; padding-bottom: 12px; }
+}

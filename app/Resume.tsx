@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { resumePdfUrl } from "./resumePdf";
+import { resumePdfUrl, fullStackProductPdfUrl } from "./resumePdf";
 import { FaGithub, FaLinkedinIn } from "react-icons/fa6";
 import {
   ArrowUpRight,
@@ -40,10 +40,11 @@ function EngineeringSkills({ skills }: { skills: string[] }) {
   return <ul className="engineering-skills" aria-label="Engineering skills used">{skills.map(skill => <li key={skill}>{skill}</li>)}</ul>;
 }
 
-export default function Resume({ printable = false }: { printable?: boolean }) {
+export default function Resume({ printable = false, variant }: { printable?: boolean; variant?: "full-stack-product-engineering" }) {
+  const pdfUrl = variant ? fullStackProductPdfUrl : resumePdfUrl;
   const Content = printable ? "div" : ResumeFocus;
   return (
-    <main className={`resume-shell${printable ? " printable-resume" : ""}`}>
+    <main className={`resume-shell${printable ? " printable-resume" : ""}${variant ? " tailored-resume" : ""}`}>
       <article className="resume" aria-label="Robert Kotcher résumé">
         <header className="resume-header">
           <div className="header-person">
@@ -66,12 +67,13 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
             <a href="mailto:rkotcher@gmail.com" aria-label="Email Robert Kotcher" title="rkotcher@gmail.com">
               <Mail aria-hidden="true" size={24} strokeWidth={1.8} />
             </a>
-            {!printable && <a href={resumePdfUrl} target="_blank" rel="noreferrer" aria-label="Open résumé PDF in a new tab" title="Open PDF"><FileDown aria-hidden="true" size={24} strokeWidth={1.8} /></a>}
+            {!printable && <a href={pdfUrl} target="_blank" rel="noreferrer" aria-label="Open résumé PDF in a new tab" title="Open PDF"><FileDown aria-hidden="true" size={24} strokeWidth={1.8} /></a>}
           </nav>}
         </header>
 
 
         <Content>
+        {variant && <section className="variant-summary"><h2>Full-Stack Product Engineering</h2><p>Y Combinator alumnus, Carnegie Mellon graduate, and product builder with two exits, 10 years of React.js experience and 8 years of TypeScript. Built a responsive, multi-format learning-content editor; helped build a platform serving 200,000+ people; and grew monthly settlement volume 20x in 20 months.</p></section>}
         <div className="resume-body">
           <aside className="sidebar">
             <section>
@@ -264,6 +266,7 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
                 <p>(2015 – 2017)</p>
               </div>
               <p data-background="engineering">I worked on Expii’s interactive math and science learning platform, built with a React.js frontend and Python/Flask backend on AWS.</p>
+              {variant && <p data-background="engineering">I built the learning engine’s content editor, enabling moderators to create image, diagram, multiple-choice, text, and video blocks. Using React.js, CSS, and Flexbox, I implemented a professional designer’s specifications with pixel-perfect detail in a responsive, highly interactive interface.</p>}
               <div data-background="engineering"><ExpiiGallery /></div>
               <ExperienceTags categories="engineering" />
               {!printable && <EngineeringSkills skills={["React", "Flask", "AWS"]} />}
