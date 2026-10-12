@@ -35,10 +35,9 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
           <div className="identity">
             <h1>Robert Kotcher</h1>
             <p>Serial first hire with a focus on engineering and product.</p>
-            <p className="print-contact">rkotcher@gmail.com · robertkotcher.com</p>
           </div>
 
-          <nav className="header-socials" aria-label="Social and contact links">
+          {!printable && <nav className="header-socials" aria-label="Social and contact links">
             <a href="https://github.com/robertkotcher" target="_blank" rel="noreferrer" aria-label="Robert Kotcher on GitHub" title="GitHub">
               <Image src="/github-icon.svg" alt="" width={24} height={24} />
             </a>
@@ -49,8 +48,14 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
               <Mail aria-hidden="true" size={24} strokeWidth={1.8} />
             </a>
             {!printable && <a href="/print" target="_blank" rel="noreferrer" aria-label="Print résumé or save as PDF" title="Print / Save as PDF"><Printer aria-hidden="true" size={24} strokeWidth={1.8} /></a>}
-          </nav>
+          </nav>}
         </header>
+        {printable && <address className="contact-bar">
+          <a href="mailto:rkotcher@gmail.com">rkotcher@gmail.com</a>
+          <a href="tel:+12152923536">+1 215 292 3536</a>
+          <a href="https://github.com/robertkotcher">github.com/robertkotcher</a>
+          <a href="https://www.linkedin.com/in/robert-kotcher-639105196">linkedin.com/in/robert-kotcher-639105196</a>
+        </address>}
 
         <Content>
         <div className="resume-body">

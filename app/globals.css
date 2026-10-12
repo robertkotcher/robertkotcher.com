@@ -134,7 +134,12 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
   .sidebar section { break-inside: avoid; }
 }
 
-.print-contact { display: none; }
-.printable-resume .print-contact { display: block; font-size: .85rem; }
-@media print { .identity .print-contact { display: block; font-size: 9pt; margin-top: 8px; } .role { padding-bottom: 16px; } .role > p + p { margin-top: 8px; } }
+@media print { .role { padding-bottom: 16px; } .role > p + p { margin-top: 8px; } }
 @media print { .resume-header { padding-block: 18px; } .resume-body { padding-top: 18px; } .role-last { padding-bottom: 0; } }
+
+.contact-bar { background: var(--navy); display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px 22px; padding: 12px 26px; font-style: normal; }
+.contact-bar a { color: white; font-size: .8rem; text-decoration: none; white-space: nowrap; }
+@media print { .contact-bar { padding: 8px 18px; gap: 4px 18px; } .contact-bar a { font-size: 8pt; } }
+
+.print-help { text-align: center; padding: 0 20px; color: var(--navy); font-size: .85rem; }
+@media print { .print-help { display: none; } }
