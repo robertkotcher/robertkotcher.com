@@ -228,3 +228,11 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
   .header-portrait { flex-basis: 56px; height: 66px; }
   .identity .identity-highlights { font-size: .7rem; }
 }
+
+/* Use the same highlight badges at every screen size and in the PDF. */
+.identity .identity-highlights { gap: 7px; font-size: .85rem; line-height: 1.4; font-weight: 400; }
+.identity-highlights span { border: 1px solid rgba(172,193,243,.45); border-radius: 999px; padding: 4px 10px; }
+.identity-highlights span + span::before { content: none; }
+@media screen and (max-width: 600px) { .identity .identity-highlights { font-size: .75rem; gap: 6px; } .identity-highlights span { padding: 3px 8px; } }
+@media screen and (max-width: 380px) { .identity .identity-highlights { font-size: .7rem; } }
+@media print { .identity .identity-highlights { font-size: 10pt; gap: 6px; } .identity-highlights span { padding: 3px 8px; } }
