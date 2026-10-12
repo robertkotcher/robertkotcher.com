@@ -280,3 +280,14 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
 @media print {
   .sidebar section:first-child > h2 { margin-bottom: 19.5px; }
 }
+
+/* A full-bleed, quiet background distinguishes the narrower column. */
+@media screen and (min-width: 761px) {
+  .resume-body { background: linear-gradient(to right, #f3f4f6 0, #f3f4f6 calc(54px + (100% - 108px) * .318 - 14px), white calc(54px + (100% - 108px) * .318 - 14px)); }
+}
+@media screen and (max-width: 760px) {
+  .sidebar { background: #f3f4f6; margin-inline: -26px; margin-bottom: -44px; padding: 32px 26px 44px; border-top: 0; }
+}
+@media print {
+  .resume-body { background: linear-gradient(to right, #f3f4f6 0, #f3f4f6 calc(10mm + (100% - 20mm) * .29 - 10px), white calc(10mm + (100% - 20mm) * .29 - 10px)); }
+}
