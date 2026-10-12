@@ -312,3 +312,15 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
   .role { padding-bottom: 12px; }
   .role-last { padding-bottom: 0; }
 }
+
+@media screen and (min-width: 761px) {
+  .experience { padding-left: 14px; }
+  .focus-view .focus-controls { padding-left: 14px; }
+}
+@media print {
+  .experience { padding-left: 10px; }
+}
+@media print {
+  .role { padding-bottom: 10px; }
+  .role-last { padding-bottom: 0; }
+}
