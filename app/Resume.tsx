@@ -21,6 +21,8 @@ const technologyExperience = [
   { technology: "AWS", years: 8 },
   { technology: "Docker", years: 7 },
   { technology: "Kubernetes", years: 3 },
+  { technology: "Deep learning", years: 6 },
+  { technology: "React.js", years: 10 },
 ].sort((a, b) => b.years - a.years);
 
 const research = [
