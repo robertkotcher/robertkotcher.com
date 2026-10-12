@@ -332,3 +332,5 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
   .resume-body { padding-bottom: 6mm; }
 }
 .role-last { padding-bottom: 0; }
+
+.project-title-link { color: var(--link); font-weight: 400; }
