@@ -174,7 +174,7 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
             <div className="role">
               <div className="role-heading" data-background="engineering product growth">
                 <h3>
-                  Founding engineer, team lead @{" "}
+                  Founding engineer, pod lead @{" "}
                   <a
                     href="https://solosuit.com"
                     target="_blank"

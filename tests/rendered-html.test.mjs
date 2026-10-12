@@ -14,7 +14,7 @@ test("publishes the complete résumé content and contact links", async () => {
   assert.ok(header);
   for (const highlight of ["Y Combinator alumni", "Carnegie Mellon graduate", "viral app founder", "2 exits"]) assert.ok(header.includes(highlight));
   assert.match(page, /Founder, engineer @/);
-  assert.match(page, /Founding engineer, team lead @/);
+  assert.match(page, /Founding engineer, pod lead @/);
   assert.match(page, /Product R&amp;D @ Codecov/);
   assert.match(page, /href="mailto:rkotcher@gmail\.com"/);
   assert.match(page, /linkedin\.com\/in\/robert-kotcher-639105196/);
