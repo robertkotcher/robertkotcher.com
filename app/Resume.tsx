@@ -146,6 +146,7 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
                   </li>
                 ))}
               </ul>
+              <p className="additional-technical-skills">Additional skills: HTML5, full-stack development, back-end web development, software development, microservices.</p>
             </section>
             {printable && <section className="print-contact-section">
               <h2>Contact</h2>
@@ -159,7 +160,7 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
           </aside>
 
           <section className="experience" aria-labelledby="experience-title">
-            <h2 id="experience-title">Recent professional experience</h2>
+            <h2 id="experience-title">Professional experience</h2>
 
             <div className="role">
               <div className="role-heading" data-background="engineering product growth">
@@ -186,7 +187,7 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
                 as they complete virtual flights.
               </p>
               <p className="technical-skills" data-background="engineering">
-                Technical skills required included shadow mapping, geometry
+                Technical skills required included Three.js, Node.js, shadow mapping, geometry
                 reduction, scene culling, frustum streaming, and character rigging.
               </p>
               <ExperienceTags categories="engineering product growth" />
@@ -238,7 +239,7 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
 
               <p data-background="engineering product">
                 Codecov was acquired by Sentry in 2022. I researched and built
-                new products that were later handed off to the engineering team.
+                new products in JavaScript and Jest that were later handed off to the engineering team.
                 My testing tool was one of the reasons for the acquisition.
               </p>
               <ExperienceTags categories="engineering product" />
@@ -246,13 +247,11 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
             </div>
             <div className="role">
               <div className="role-heading" data-background="engineering">
-                <h3>Senior Software Engineer @ SynthesisAI</h3>
+                <h3>Lead Software Engineer @ Synthesis AI</h3>
                 <p>(2020 – 2023)</p>
               </div>
               <p data-background="engineering">
-                SynthesisAI was building a synthetic data generation platform.
-                I maintained a server farm on AWS, orchestrated with Kubernetes,
-                with an API built in Go.
+                As a founding engineer, I built most of Synthesis AI’s data pipelines from the ground up using Go (Golang) and Kubernetes. I maintained AWS infrastructure, Docker containers, and a Go API.
               </p>
               <ExperienceTags categories="engineering" />
               {!printable && <EngineeringSkills skills={["Kubernetes", "Docker", "Go", "AWS"]} />}
@@ -263,23 +262,32 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
                 <h3>Software Engineer @ <a href="https://www.expii.com" target="_blank" rel="noreferrer">expii.com</a></h3>
                 <p>(2015 – 2017)</p>
               </div>
-              <p data-background="engineering">I worked on Expii’s interactive math and science learning platform, built with a React.js frontend and Flask backend.</p>
+              <p data-background="engineering">I worked on Expii’s interactive math and science learning platform, built with a React.js frontend and Python/Flask backend on AWS.</p>
               <div data-background="engineering"><ExpiiGallery /></div>
               <ExperienceTags categories="engineering" />
               {!printable && <EngineeringSkills skills={["React", "Flask", "AWS"]} />}
             </div>
 
-            <div className="role role-last">
+            <div className="role">
               <div className="role-heading" data-background="engineering">
                 <h3>Software Engineer @ NASA</h3>
                 <p>(2013 – 2015)</p>
               </div>
               <p data-background="engineering">
-                I developed software for an ADS-B sense-and-avoid system that
+                I developed Java software for an ADS-B sense-and-avoid system that
                 was licensed to Vigilant Aerospace.
               </p>
               <ExperienceTags categories="engineering" />
               {!printable && <EngineeringSkills skills={["Java"]} />}
+            </div>
+            <div className="role role-last">
+              <div className="role-heading" data-background="engineering">
+                <h3>Full Stack Engineer @ Tunessence</h3>
+                <p>(April 2012 – June 2014)</p>
+              </div>
+              <p data-background="engineering">I was the first hire at Tunessence, a guitar-teaching startup acquired by music publisher Hal Leonard. I worked across the stack using Python and JavaScript.</p>
+              <ExperienceTags categories="engineering" />
+              {!printable && <EngineeringSkills skills={["Python", "JavaScript"]} />}
             </div>
           </section>
         </div>
