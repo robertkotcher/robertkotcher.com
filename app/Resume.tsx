@@ -227,13 +227,13 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
             </div>
 
             <div className="role">
-              <div className="role-heading" data-background="engineering product">
+              <div className="role-heading" data-background="engineering">
                 <h3>Software Engineer @ <a href="https://www.expii.com" target="_blank" rel="noreferrer">expii.com</a></h3>
                 <p>(2015 – 2017)</p>
               </div>
               <p data-background="engineering">I worked on Expii’s interactive math and science learning platform, built with a React.js frontend and Flask backend.</p>
               <div data-background="engineering"><ExpiiGallery /></div>
-              <ExperienceTags categories="engineering product" />
+              <ExperienceTags categories="engineering" />
               {!printable && <EngineeringSkills skills={["React", "Flask", "AWS"]} />}
             </div>
 
