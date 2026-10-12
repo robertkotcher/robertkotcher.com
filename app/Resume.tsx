@@ -26,7 +26,7 @@ const research = [
 ] as const;
 
 function ExperienceTags({ categories }: { categories: string }) {
-  return <div className="experience-tags" aria-label="Experience areas">{categories.split(" ").map(category => <span key={category}>{category}</span>)}</div>;
+  return <span className="experience-tags" aria-label="Experience areas">{categories.split(" ").map(category => <span key={category}>{category}</span>)}</span>;
 }
 
 function EngineeringSkills({ skills }: { skills: string[] }) {
@@ -101,9 +101,9 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
                 <p>
                   I built a robot to spray my cat when he gets on the counter.
                 </p>
+                <ExperienceTags categories="engineering" />
                 </div>
               </div>
-              <ExperienceTags categories="engineering" />
             </section>
 
             <section>
@@ -120,12 +120,11 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
                     rel="noreferrer"
                   >
                     {printable && <Image className="resume-qr" src={`/qr/paper-${research.indexOf(publication)}.png`} alt={`QR code for ${publication.title}`} width={400} height={400} />}
-                    <span>{publication.title}<small>{publication.citations}</small></span>
+                    <span>{publication.title}<small>{publication.citations}</small><ExperienceTags categories="engineering" /></span>
                     {!printable && <ArrowUpRight aria-hidden="true" size={14} />}
                   </a>
                 ))}
               </div>
-              <ExperienceTags categories="engineering" />
             </section>
             {printable && <section className="print-contact-section">
               <h2>Contact</h2>

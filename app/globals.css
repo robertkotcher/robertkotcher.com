@@ -203,3 +203,8 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
   .resume-header { padding-top: 64px; padding-bottom: 30px; }
   .header-socials { top: 10px; right: 16px; }
 }
+
+/* Align the visible QR ink, allowing its white scanning border into the margin. */
+.qr-project .resume-qr { transform: translateX(-9.7561%); }
+.research-item .resume-qr[src*="paper-0"] { transform: translateX(-7.5472%); }
+.research-item .resume-qr[src*="paper-1"] { transform: translateX(-8.1633%); }
