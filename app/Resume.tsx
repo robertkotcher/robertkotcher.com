@@ -26,6 +26,10 @@ function ExperienceTags({ categories }: { categories: string }) {
   return <div className="experience-tags" aria-label="Experience areas">{categories.split(" ").map(category => <span key={category}>{category}</span>)}</div>;
 }
 
+function EngineeringSkills({ skills }: { skills: string[] }) {
+  return <ul className="engineering-skills" aria-label="Engineering skills used">{skills.map(skill => <li key={skill}>{skill}</li>)}</ul>;
+}
+
 export default function Resume({ printable = false }: { printable?: boolean }) {
   const Content = printable ? "div" : ResumeFocus;
   return (
@@ -151,6 +155,7 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
                 reduction, scene culling, frustum streaming, and character rigging.
               </p>
               <ExperienceTags categories="engineering product growth" />
+              {!printable && <EngineeringSkills skills={["Three.js", "character rigging", "Node.js"]} />}
             </div>
 
             <div className="role">
@@ -190,6 +195,7 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
                 12,000+ spec test suite.
               </p>
               <ExperienceTags categories="engineering product growth" />
+              {!printable && <EngineeringSkills skills={["TypeScript", "Ruby on Rails", "Postgres"]} />}
             </div>
 
             <div className="role">
@@ -204,6 +210,7 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
                 My testing tool was one of the reasons for the acquisition.
               </p>
               <ExperienceTags categories="engineering product" />
+              {!printable && <EngineeringSkills skills={["JavaScript", "Jest"]} />}
             </div>
             <div className="role">
               <div className="role-heading" data-background="engineering">
@@ -216,6 +223,7 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
                 with an API built in Go.
               </p>
               <ExperienceTags categories="engineering" />
+              {!printable && <EngineeringSkills skills={["Kubernetes", "Docker", "Go", "AWS"]} />}
             </div>
 
             <div className="role">
@@ -226,6 +234,7 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
               <p data-background="engineering">I worked on Expii’s interactive math and science learning platform, built with a React.js frontend and Flask backend.</p>
               <div data-background="engineering"><ExpiiGallery /></div>
               <ExperienceTags categories="engineering product" />
+              {!printable && <EngineeringSkills skills={["React", "Flask", "AWS"]} />}
             </div>
 
             <div className="role role-last">
@@ -238,6 +247,7 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
                 was licensed to Vigilant Aerospace.
               </p>
               <ExperienceTags categories="engineering" />
+              {!printable && <EngineeringSkills skills={["Java"]} />}
             </div>
           </section>
         </div>
