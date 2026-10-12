@@ -14,7 +14,8 @@
     "start:vinext": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext start",
     "test": "npm run build && node --test tests/rendered-html.test.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
-    "build:vercel": "npm run build"
+    "build:vercel": "npm run build",
+    "export:resume": "node scripts/export-resume.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
@@ -33,6 +34,7 @@
     "@vitejs/plugin-rsc": "0.5.26",
     "eslint": "9.39.4",
     "eslint-config-next": "16.2.6",
+    "playwright": "^1.64.0",
     "react-server-dom-webpack": "19.2.6",
     "tailwindcss": "4.2.1",
     "typescript": "5.9.3",

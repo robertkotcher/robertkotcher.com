@@ -2,7 +2,7 @@ import Image from "next/image";
 import {
   ArrowUpRight,
   Mail,
-  Printer,
+  FileDown,
 } from "lucide-react";
 import ExpiiGallery from "./ExpiiGallery";
 import ResumeFocus from "./ResumeFocus";
@@ -47,7 +47,7 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
             <a href="mailto:rkotcher@gmail.com" aria-label="Email Robert Kotcher" title="rkotcher@gmail.com">
               <Mail aria-hidden="true" size={24} strokeWidth={1.8} />
             </a>
-            {!printable && <a href="/print" target="_blank" rel="noreferrer" aria-label="Print résumé or save as PDF" title="Print / Save as PDF"><Printer aria-hidden="true" size={24} strokeWidth={1.8} /></a>}
+            {!printable && <a href="/robert-kotcher-resume.pdf" target="_blank" rel="noreferrer" aria-label="Open résumé PDF in a new tab" title="Open PDF"><FileDown aria-hidden="true" size={24} strokeWidth={1.8} /></a>}
           </nav>}
         </header>
         {printable && <address className="contact-bar">
