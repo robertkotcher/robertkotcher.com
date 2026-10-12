@@ -33,9 +33,9 @@ export const metadata: Metadata = {
     type: "profile",
   },
   icons: {
-    icon: { url: "/favicon.svg", type: "image/svg+xml" },
-    shortcut: "/favicon.svg",
-    apple: "/rk-logo.png",
+    icon: { url: "/portrait-favicon.svg", type: "image/svg+xml" },
+    shortcut: "/portrait-favicon.svg",
+    apple: "/robert-kotcher-portrait.png",
   },
 };
 

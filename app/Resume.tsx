@@ -36,9 +36,12 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
     <main className={`resume-shell${printable ? " printable-resume" : ""}`}>
       <article className="resume" aria-label="Robert Kotcher résumé">
         <header className="resume-header">
+          <div className="header-person">
+            <div className="header-portrait"><Image src="/robert-kotcher-portrait.png" alt="Robert Kotcher" width={998} height={1004} priority /></div>
           <div className="identity">
             <h1>Robert Kotcher</h1>
             <p>YC alum, Carnegie Mellon alum, viral app founder, 2 exits</p>
+          </div>
           </div>
 
           {!printable && <nav className="header-socials" aria-label="Social and contact links">
