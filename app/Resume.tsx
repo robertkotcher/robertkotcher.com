@@ -173,26 +173,23 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
                 <p>(2024 – present)</p>
               </div>
 
-              <p data-background="product">SoloSuit (Y Combinator, W21) helps Americans navigate debt lawsuits.</p>
-              <p data-background="engineering product">
-                I contributed to SoloSuit’s debt resolution platform, helping
-                200,000+ Americans navigate debt lawsuits and protecting $2.7
-                billion in claimed debt.
+              <p data-background="engineering">
+                As a founding engineer at SoloSuit (Y Combinator, W21), I helped
+                build a debt resolution platform serving 200,000+ Americans and
+                protecting $2.7 billion in claimed debt.
               </p>
-              <p data-background="product growth">
-                I increased the monthly settlement volume on SoloSettle by 20x
-                over 20 months by leading dozens of A/B tests across the
-                settlement funnel. I shipped a key experiment that increased
-                sent settlement offers from 8% to 37%.
+              <p data-background="growth">
+                I grew SoloSettle’s monthly settlement volume 20x in 20 months,
+                leading dozens of A/B tests across the settlement funnel.
+              </p>
+              <p data-background="product">
+                I shipped a product experiment that increased the settlement-offer
+                send rate from 8% to 37%.
               </p>
               <p data-background="engineering">
-                I lead a pod of 3–6 engineers, with team composition changing
-                quarterly, and am responsible for the team’s successful output.
-              </p>
-              <p data-background="engineering">
-                I built and maintained core product features across a
-                TypeScript, Ruby on Rails, and PostgreSQL stack, supporting a
-                12,000+ spec test suite.
+                I lead a pod of 3–6 engineers and own the team’s delivery. I build
+                and maintain core features in TypeScript, Ruby on Rails, and
+                PostgreSQL, supporting a 12,000+ spec test suite.
               </p>
               <ExperienceTags categories="engineering product growth" />
               {!printable && <EngineeringSkills skills={["TypeScript", "Ruby on Rails", "Postgres"]} />}
