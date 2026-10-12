@@ -180,3 +180,6 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
 
 .identity .identity-highlights { font-size: clamp(.9rem, 3.8vw, 1.45rem); }
 @media print { .identity .identity-highlights { font-size: 12pt; } }
+
+/* Align the portrait with the sidebar's text inset in the PDF. */
+@media print { .resume-header { padding-inline: 10mm; } }
