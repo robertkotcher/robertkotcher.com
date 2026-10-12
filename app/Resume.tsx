@@ -7,7 +7,6 @@ import {
   Phone,
   FileDown,
 } from "lucide-react";
-import ExpiiGallery from "./ExpiiGallery";
 import ResumeFocus from "./ResumeFocus";
 
 const projectUrl = "https://photos.app.goo.gl/2DL7bfRMNnXi1g3d8";
@@ -265,7 +264,6 @@ export default function Resume({ printable = false, variant }: { printable?: boo
                 <p>(2015 – 2017)</p>
               </div>
               <p data-background="engineering">{variant ? "Built Expii’s responsive learning-content editor in React.js, CSS, and Flexbox, supporting image, diagram, multiple-choice, text, and video blocks with pixel-perfect implementation of professional designs. The platform used a Python/Flask backend on AWS." : "I worked on Expii’s interactive math and science learning platform, built with a React.js frontend and Python/Flask backend on AWS."}</p>
-              <div data-background="engineering"><ExpiiGallery /></div>
               <ExperienceTags categories="engineering" />
               {!printable && <EngineeringSkills skills={["React", "Flask", "AWS"]} />}
             </div>
