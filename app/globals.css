@@ -291,3 +291,24 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
 @media print {
   .resume-body { background: linear-gradient(to right, #f3f4f6 0, #f3f4f6 calc(10mm + (100% - 20mm) * .29 - 10px), white calc(10mm + (100% - 20mm) * .29 - 10px)); }
 }
+
+@media screen and (min-width: 761px) {
+  .focus-view { display: grid; grid-template-columns: 31.8% minmax(0, 68.2%); padding: 30px 54px 84px; background: linear-gradient(to right, #f3f4f6 0, #f3f4f6 calc(54px + (100% - 108px) * .318 - 14px), white calc(54px + (100% - 108px) * .318 - 14px)); }
+  .focus-view .resume-body { display: contents; }
+  .focus-view .focus-controls { grid-column: 2; padding: 0 0 26px; margin: 0; justify-content: flex-start; }
+  .focus-view .sidebar { grid-column: 1; grid-row: 2; }
+  .focus-view .experience { grid-column: 2; grid-row: 2; }
+  .sidebar section + section { margin-top: 84px; }
+  .role { padding-bottom: 54px; }
+}
+@media screen and (max-width: 760px) {
+  .focus-controls { padding: 24px 26px 0; align-items: flex-start; }
+  .sidebar section + section { margin-top: 42px; }
+  .role { padding-bottom: 42px; }
+}
+@media print {
+  .sidebar { padding-right: 22px; }
+  .sidebar section + section { margin-top: 24px; }
+  .role { padding-bottom: 12px; }
+  .role-last { padding-bottom: 0; }
+}

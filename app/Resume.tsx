@@ -107,7 +107,7 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
                 <p>
                   I built a robot to spray my cat when he gets on the counter.
                 </p>
-                
+
                 </div>
               </div>
             </section>

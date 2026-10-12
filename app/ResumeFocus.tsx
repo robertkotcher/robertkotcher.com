@@ -90,7 +90,6 @@ export default function ResumeFocus({ children }: { children: ReactNode }) {
   return (
     <div ref={root} className="focus-view" data-focus={focus ?? undefined}>
       <section className="focus-controls" aria-label="Focus résumé by experience">
-        <p>I&apos;m interested in Robert&apos;s experience in:</p>
         <div className="focus-pills">
           {focuses.map((value) => (
             <button key={value} type="button" className="focus-pill" aria-pressed={focus === value} onClick={() => selectFocus(value)}>{value}</button>
