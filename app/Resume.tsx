@@ -1,7 +1,9 @@
 import Image from "next/image";
+import { FaGithub, FaLinkedinIn } from "react-icons/fa6";
 import {
   ArrowUpRight,
   Mail,
+  Phone,
   FileDown,
 } from "lucide-react";
 import ExpiiGallery from "./ExpiiGallery";
@@ -59,12 +61,7 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
             {!printable && <a href="/robert-kotcher-resume.pdf" target="_blank" rel="noreferrer" aria-label="Open résumé PDF in a new tab" title="Open PDF"><FileDown aria-hidden="true" size={24} strokeWidth={1.8} /></a>}
           </nav>}
         </header>
-        {printable && <address className="contact-bar">
-          <a href="mailto:rkotcher@gmail.com">rkotcher@gmail.com</a>
-          <a href="tel:+12152923536">+1 215 292 3536</a>
-          <a href="https://github.com/robertkotcher">github.com/robertkotcher</a>
-          <a href="https://www.linkedin.com/in/robert-kotcher-639105196">linkedin.com/in/robert-kotcher-639105196</a>
-        </address>}
+
 
         <Content>
         <div className="resume-body">
@@ -126,6 +123,15 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
               </div>
               <ExperienceTags categories="engineering" />
             </section>
+            {printable && <section className="print-contact-section">
+              <h2>Contact</h2>
+              <address className="print-contact-links">
+                <a href="mailto:rkotcher@gmail.com" aria-label="Email: rkotcher@gmail.com" title="rkotcher@gmail.com"><Mail size={22} aria-hidden="true" /></a>
+                <a href="tel:+12152923536" aria-label="Phone: +1 215 292 3536" title="+1 215 292 3536"><Phone size={22} aria-hidden="true" /></a>
+                <a href="https://github.com/robertkotcher" aria-label="Robert Kotcher on GitHub" title="GitHub"><FaGithub size={22} aria-hidden="true" /></a>
+                <a href="https://www.linkedin.com/in/robert-kotcher-639105196" aria-label="Robert Kotcher on LinkedIn" title="LinkedIn"><FaLinkedinIn size={22} aria-hidden="true" /></a>
+              </address>
+            </section>}
           </aside>
 
           <section className="experience" aria-labelledby="experience-title">

@@ -137,11 +137,6 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
 @media print { .role { padding-bottom: 16px; } .role > p + p { margin-top: 8px; } }
 @media print { .resume-header { padding-block: 18px; } .resume-body { padding-top: 18px; } .role-last { padding-bottom: 0; } }
 
-.contact-bar { background: var(--navy); display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px 22px; padding: 12px 26px; font-style: normal; }
-.contact-bar a { color: white; font-size: .8rem; text-decoration: none; white-space: nowrap; }
-@media print { .contact-bar { padding: 8px 18px; gap: 4px 18px; } .contact-bar a { font-size: 8pt; } }
-
-
 /* Keep the first surviving paragraph flush with the heading during collapse. */
 @media screen {
   .role > p + p { margin-top: 0; }
@@ -164,3 +159,6 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
 .identity-highlights span + span::before { content: "·"; display: inline-block; margin: 0 12px; }
 @media (max-width: 760px) { .identity-highlights span + span::before { margin-inline: 8px; } }
 @media print { .identity-highlights span + span::before { margin-inline: 8px; } }
+
+.print-contact-links { display: flex; align-items: center; justify-content: center; gap: 16px; font-style: normal; }
+.print-contact-links a { display: inline-flex; color: var(--navy-soft); }
