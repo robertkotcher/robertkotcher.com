@@ -183,3 +183,8 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
 
 /* Align the portrait with the sidebar's text inset in the PDF. */
 @media print { .resume-header { padding-inline: 10mm; } }
+
+.research-item small { display: block; }
+.printable-resume .project-title-link, .printable-resume .research-item { display: flex; align-items: flex-start; gap: 8px; }
+.resume-qr { flex: 0 0 106px; width: 106px; height: 106px; max-width: none; }
+@media print { .resume-qr { flex-basis: 28mm; width: 28mm; height: 28mm; } .printable-resume .project-title-link, .printable-resume .research-item { gap: 2mm; } }

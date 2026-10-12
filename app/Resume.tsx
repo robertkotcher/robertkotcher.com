@@ -91,8 +91,9 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
                     target="_blank"
                     rel="noreferrer"
                   >
+                    {printable && <Image className="resume-qr" src="/qr/cat-project.png" alt="QR code for the cat robot project" width={400} height={400} />}
                     <span>Cat-astrophe prevention unit</span>
-                    <ArrowUpRight aria-hidden="true" size={14} />
+                    {!printable && <ArrowUpRight aria-hidden="true" size={14} />}
                   </a>
                 </h3>
                 <p>
@@ -115,9 +116,9 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    <span>{publication.title}</span>
-                    <small>{publication.citations}</small>
-                    <ArrowUpRight aria-hidden="true" size={14} />
+                    {printable && <Image className="resume-qr" src={`/qr/paper-${research.indexOf(publication)}.png`} alt={`QR code for ${publication.title}`} width={400} height={400} />}
+                    <span>{publication.title}<small>{publication.citations}</small></span>
+                    {!printable && <ArrowUpRight aria-hidden="true" size={14} />}
                   </a>
                 ))}
               </div>
