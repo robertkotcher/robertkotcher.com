@@ -324,3 +324,11 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
   .role { padding-bottom: 10px; }
   .role-last { padding-bottom: 0; }
 }
+
+@media screen and (min-width: 761px) { .role { padding-bottom: 60px; } }
+@media screen and (max-width: 760px) { .role { padding-bottom: 48px; } }
+@media print {
+  .role { padding-bottom: 12px; }
+  .resume-body { padding-bottom: 6mm; }
+}
+.role-last { padding-bottom: 0; }
