@@ -107,7 +107,7 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
                 <p>
                   I built a robot to spray my cat when he gets on the counter.
                 </p>
-                <ExperienceTags categories="engineering" />
+                
                 </div>
               </div>
             </section>
@@ -125,7 +125,7 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    <span><span className="research-title">{publication.title}{!printable && <> <ArrowUpRight aria-hidden="true" size={14} /></>}</span><small>{publication.citations}</small><ExperienceTags categories="engineering" /></span>
+                    <span><span className="research-title">{publication.title}{!printable && <> <ArrowUpRight aria-hidden="true" size={14} /></>}</span><small>{publication.citations}</small></span>
                   </a>
                 ))}
               </div>
