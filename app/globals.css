@@ -177,3 +177,6 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
 @media (min-width: 761px) { .resume-header { padding-block: 52px; } }
 @media (max-width: 760px) { .resume-header { padding-block: 33px; } }
 @media print { .resume-header { padding-block: calc(5mm + 18px); } }
+
+.identity .identity-highlights { font-size: clamp(.9rem, 3.8vw, 1.45rem); }
+@media print { .identity .identity-highlights { font-size: 12pt; } }
