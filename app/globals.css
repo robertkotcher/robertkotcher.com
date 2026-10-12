@@ -160,5 +160,8 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
 @media (max-width: 760px) { .identity-highlights span + span::before { margin-inline: 8px; } }
 @media print { .identity-highlights span + span::before { margin-inline: 8px; } }
 
-.print-contact-links { display: flex; align-items: center; justify-content: center; gap: 16px; font-style: normal; }
-.print-contact-links a { display: inline-flex; color: var(--navy-soft); }
+.print-contact-links { display: grid; gap: 10px; font-style: normal; }
+.print-contact-links a { display: flex; align-items: flex-start; gap: 6px; color: var(--navy-soft); font-size: .65rem; line-height: 1.5; text-decoration: none; }
+.print-contact-links svg { flex: 0 0 14px; margin-top: 1px; }
+.print-contact-links span { min-width: 0; overflow-wrap: anywhere; }
+@media print { .print-contact-links a { font-size: 6.5pt; } }

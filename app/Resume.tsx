@@ -126,10 +126,10 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
             {printable && <section className="print-contact-section">
               <h2>Contact</h2>
               <address className="print-contact-links">
-                <a href="mailto:rkotcher@gmail.com" aria-label="Email: rkotcher@gmail.com" title="rkotcher@gmail.com"><Mail size={22} aria-hidden="true" /></a>
-                <a href="tel:+12152923536" aria-label="Phone: +1 215 292 3536" title="+1 215 292 3536"><Phone size={22} aria-hidden="true" /></a>
-                <a href="https://github.com/robertkotcher" aria-label="Robert Kotcher on GitHub" title="GitHub"><FaGithub size={22} aria-hidden="true" /></a>
-                <a href="https://www.linkedin.com/in/robert-kotcher-639105196" aria-label="Robert Kotcher on LinkedIn" title="LinkedIn"><FaLinkedinIn size={22} aria-hidden="true" /></a>
+                <a href="mailto:rkotcher@gmail.com" aria-label="Email: rkotcher@gmail.com" title="rkotcher@gmail.com"><Mail size={14} aria-hidden="true" /><span>rkotcher@gmail.com</span></a>
+                <a href="tel:+12152923536" aria-label="Phone: +1 215 292 3536" title="+1 215 292 3536"><Phone size={14} aria-hidden="true" /><span>+1 215 292 3536</span></a>
+                <a href="https://github.com/robertkotcher" aria-label="Robert Kotcher on GitHub" title="GitHub"><FaGithub size={14} aria-hidden="true" /><span>github.com/robertkotcher</span></a>
+                <a href="https://www.linkedin.com/in/robert-kotcher-639105196" aria-label="Robert Kotcher on LinkedIn" title="LinkedIn"><FaLinkedinIn size={14} aria-hidden="true" /><span>linkedin.com/in/robert-kotcher-639105196</span></a>
               </address>
             </section>}
           </aside>
