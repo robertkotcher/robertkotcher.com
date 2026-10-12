@@ -5,7 +5,7 @@ import test from "node:test";
 const root = new URL("../", import.meta.url);
 
 test("publishes the complete résumé content and contact links", async () => {
-  const page = await readFile(new URL("app/page.tsx", root), "utf8");
+  const page = await readFile(new URL("app/Resume.tsx", root), "utf8");
   const header = page.match(
     /<header className="resume-header">([\s\S]*?)<\/header>/,
   )?.[1];
@@ -22,7 +22,7 @@ test("publishes the complete résumé content and contact links", async () => {
 });
 
 test("replaces the QR code and preserves publication links", async () => {
-  const page = await readFile(new URL("app/page.tsx", root), "utf8");
+  const page = await readFile(new URL("app/Resume.tsx", root), "utf8");
 
   assert.match(page, /className="sidebar-link project-title-link"/);
   assert.match(page, /photos\.app\.goo\.gl\/2DL7bfRMNnXi1g3d8/);
