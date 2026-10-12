@@ -43,7 +43,7 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
           <div className="identity">
             <h1>Robert Kotcher</h1>
             <p className="identity-highlights">
-              <span>Y Combinator alumni</span><span>Carnegie Mellon computer science</span><span>viral app founder</span><span>2 exits</span>
+              <span>Y Combinator alumni</span><span>Carnegie Mellon graduate</span><span>viral app founder</span><span>2 exits</span>
             </p>
           </div>
           </div>

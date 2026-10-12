@@ -12,7 +12,7 @@ test("publishes the complete résumé content and contact links", async () => {
 
   assert.match(page, /Robert Kotcher/);
   assert.ok(header);
-  for (const highlight of ["Y Combinator alumni", "Carnegie Mellon computer science", "viral app founder", "2 exits"]) assert.ok(header.includes(highlight));
+  for (const highlight of ["Y Combinator alumni", "Carnegie Mellon graduate", "viral app founder", "2 exits"]) assert.ok(header.includes(highlight));
   assert.match(page, /Founder, engineer @/);
   assert.match(page, /Founding engineer, team lead @/);
   assert.match(page, /Product R&amp;D @ Codecov/);
