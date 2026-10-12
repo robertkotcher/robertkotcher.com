@@ -165,3 +165,10 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
 .print-contact-links svg { flex: 0 0 14px; margin-top: 1px; }
 .print-contact-links span { min-width: 0; overflow-wrap: anywhere; }
 @media print { .print-contact-links a { font-size: 6.5pt; } }
+
+/* Full-bleed PDF header; preserve the existing content inset. */
+@media print {
+  @page { margin: 0; size: A4; }
+  .resume-header { padding: calc(10mm + 18px) calc(10mm + 26px) 18px; }
+  .resume-body { padding: 18px 10mm 10mm; }
+}
