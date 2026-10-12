@@ -190,3 +190,16 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
 .printable-resume .project-title-link { display: inline; }
 .resume-qr { width: 100%; height: auto; }
 .printable-resume .research-item > span { min-width: 0; }
+
+/* Give the identity the full header width; keep actions in their own top row. */
+@media screen {
+  .resume-header { position: relative; display: block; padding-top: 76px; padding-bottom: 40px; }
+  .header-socials { position: absolute; top: 14px; right: 20px; margin: 0; padding: 0; gap: 8px; }
+  .header-socials a { width: 32px; height: 32px; border: 0; border-radius: 5px; }
+  .header-socials svg, .header-socials img { width: 20px; height: 20px; }
+  .header-person { width: 100%; }
+}
+@media screen and (max-width: 760px) {
+  .resume-header { padding-top: 64px; padding-bottom: 30px; }
+  .header-socials { top: 10px; right: 16px; }
+}
