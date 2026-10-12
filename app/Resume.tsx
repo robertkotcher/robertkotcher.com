@@ -265,8 +265,7 @@ export default function Resume({ printable = false, variant }: { printable?: boo
                 <h3>Software Engineer @ <a href="https://www.expii.com" target="_blank" rel="noreferrer">expii.com</a></h3>
                 <p>(2015 – 2017)</p>
               </div>
-              <p data-background="engineering">I worked on Expii’s interactive math and science learning platform, built with a React.js frontend and Python/Flask backend on AWS.</p>
-              {variant && <p data-background="engineering">I built the learning engine’s content editor, enabling moderators to create image, diagram, multiple-choice, text, and video blocks. Using React.js, CSS, and Flexbox, I implemented a professional designer’s specifications with pixel-perfect detail in a responsive, highly interactive interface.</p>}
+              <p data-background="engineering">{variant ? "Built Expii’s responsive learning-content editor in React.js, CSS, and Flexbox, supporting image, diagram, multiple-choice, text, and video blocks with pixel-perfect implementation of professional designs. The platform used a Python/Flask backend on AWS." : "I worked on Expii’s interactive math and science learning platform, built with a React.js frontend and Python/Flask backend on AWS."}</p>
               <div data-background="engineering"><ExpiiGallery /></div>
               <ExperienceTags categories="engineering" />
               {!printable && <EngineeringSkills skills={["React", "Flask", "AWS"]} />}

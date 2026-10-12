@@ -266,20 +266,12 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
 .variant-summary h2 { font-size: 1.2rem; margin: 0 0 10px; }
 .variant-summary p { font-size: .96rem; line-height: 1.5; margin: 0; }
 @media screen and (max-width: 760px) { .variant-summary { padding-inline: 26px; } .print-controls { flex-wrap: wrap; gap: 8px; } }
-@media print {
-  .tailored-resume .resume-header { background: white; color: var(--ink); padding: 10mm 12mm 0; }
-  .tailored-resume .header-portrait, .tailored-resume .identity-highlights, .tailored-resume .experience-tags { display: none; }
-  .tailored-resume .identity h1 { font-size: 26pt; }
-  .tailored-resume .variant-summary { padding: 12px 12mm 0; }
-  .tailored-resume .variant-summary h2 { font-size: 12pt; }
-  .tailored-resume .variant-summary p { font-size: 10pt; }
-  .tailored-resume .resume-body { display: flex; flex-direction: column; padding: 18px 12mm 10mm; }
-  .tailored-resume .experience { order: 0; margin: 0; }
-  .tailored-resume .sidebar { order: 1; float: none; width: 100%; padding: 0; }
-  .tailored-resume .sidebar h2, .tailored-resume .experience > h2 { text-align: left; margin: 14px 0 10px; }
-  .tailored-resume .sidebar section + section { margin-top: 14px; }
-  .tailored-resume .technology-experience-track { display: none; }
-  .tailored-resume .technology-experience-groups { grid-template-columns: 1fr; }
-  .tailored-resume .role > p, .tailored-resume .compact-item p, .tailored-resume .sidebar-link { font-size: 10pt; }
-  .tailored-resume .role { break-inside: avoid; padding-bottom: 12px; }
-}
+@media print { .tailored-resume .variant-summary { display: none; } }
+
+/* Keep the photo square independently of wrapped header highlights. */
+.header-person { align-items: center; }
+.header-portrait { flex: 0 0 96px; width: 96px; height: 96px; aspect-ratio: 1; margin-top: 0; align-self: center; }
+@media screen and (max-width: 760px) { .header-portrait { flex-basis: 72px; width: 72px; height: 72px; } }
+@media screen and (max-width: 600px) { .header-portrait { flex-basis: 64px; width: 64px; height: 64px; margin-top: 0; } }
+@media screen and (max-width: 380px) { .header-portrait { flex-basis: 56px; width: 56px; height: 56px; } }
+@media print { .header-portrait { flex-basis: 68px; width: 68px; height: 68px; margin-top: 0; } }
