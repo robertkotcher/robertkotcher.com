@@ -83,7 +83,9 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
             <section>
               <h2>Projects</h2>
 
-              <div className="compact-item" data-background="engineering">
+              <div className={printable ? "compact-item qr-project" : "compact-item"} data-background="engineering">
+                {printable && <Image className="resume-qr" src="/qr/cat-project.png" alt="QR code for the cat robot project" width={400} height={400} />}
+                <div>
                 <h3>
                   <a
                     className="sidebar-link project-title-link"
@@ -91,7 +93,6 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    {printable && <Image className="resume-qr" src="/qr/cat-project.png" alt="QR code for the cat robot project" width={400} height={400} />}
                     <span>Cat-astrophe prevention unit</span>
                     {!printable && <ArrowUpRight aria-hidden="true" size={14} />}
                   </a>
@@ -99,6 +100,7 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
                 <p>
                   I built a robot to spray my cat when he gets on the counter.
                 </p>
+                </div>
               </div>
               <ExperienceTags categories="engineering" />
             </section>
