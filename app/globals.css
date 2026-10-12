@@ -37,20 +37,22 @@ a { color: var(--link); text-underline-offset: 0.12em; }
 .project-title-link { display: inline-flex; gap: 4px; align-items: center; color: var(--ink); font-weight: 700; }
 .sidebar-link svg { flex: 0 0 auto; }
 .research-list { display: grid; gap: 28px; }
-.technology-experience-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+.technology-experience-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
 .technology-experience-label { display: flex; justify-content: space-between; gap: 12px; font-size: .8rem; line-height: 1.4; }
 .technology-experience-label > span:last-child { white-space: nowrap; font-variant-numeric: tabular-nums; }
-.technology-experience-track { height: 4px; margin-top: 4px; background: #e5eaf3; border-radius: 2px; overflow: hidden; }
+.technology-experience-track { height: 3px; margin-top: 2px; background: #e5eaf3; border-radius: 2px; overflow: hidden; }
 .technology-experience-track > div { height: 100%; background: var(--navy-soft); border-radius: inherit; }
-.technology-experience-groups { display: grid; gap: 22px; }
+.technology-experience-groups { display: grid; gap: 12px; }
+.technology-experience-group + .technology-experience-group { border-top: 1px solid var(--line); padding-top: 12px; }
 .technology-experience-group h3 { margin: 0 0 6px; font-size: .8rem; font-weight: 700; color: var(--navy-soft); }
 .technology-group-extra { font-weight: 400; }
 @media print {
-  .technology-experience-groups { gap: 10px; }
+  .technology-experience-groups { gap: 7px; }
+  .technology-experience-group + .technology-experience-group { padding-top: 7px; }
   .technology-experience-group h3 { font-size: 8pt; margin-bottom: 4px; }
-  .technology-experience-list { gap: 5px; }
+  .technology-experience-list { gap: 3px; }
   .technology-experience-label { font-size: 8pt; line-height: 1.2; }
-  .technology-experience-track { height: 3px; margin-top: 2px; }
+  .technology-experience-track { height: 2px; margin-top: 1px; }
 }
 .research-item { display: block; }
 .research-item small { color: var(--ink); font-size: .96rem; grid-column: 1; font-weight: 400; }
