@@ -37,6 +37,16 @@ a { color: var(--link); text-underline-offset: 0.12em; }
 .project-title-link { display: inline-flex; gap: 4px; align-items: center; color: var(--ink); font-weight: 700; }
 .sidebar-link svg { flex: 0 0 auto; }
 .research-list { display: grid; gap: 26px; }
+.technology-experience-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+.technology-experience-label { display: flex; justify-content: space-between; gap: 12px; font-size: .8rem; line-height: 1.4; }
+.technology-experience-label > span:last-child { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.technology-experience-track { height: 4px; margin-top: 4px; background: #e5eaf3; border-radius: 2px; overflow: hidden; }
+.technology-experience-track > div { height: 100%; background: var(--navy-soft); border-radius: inherit; }
+@media print {
+  .technology-experience-list { gap: 6px; }
+  .technology-experience-label { font-size: 8pt; }
+  .technology-experience-track { height: 3px; margin-top: 2px; }
+}
 .research-item { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 3px 4px; }
 .research-item small { color: var(--ink); font-size: .96rem; grid-column: 1; font-weight: 400; }
 .research-item svg { grid-column: 2; grid-row: 1; margin-top: 3px; }
@@ -124,7 +134,10 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
   .sidebar { float: left; width: 29%; padding: 0 20px 0 0; border: 0; margin: 0; }
   .experience { margin-left: 29%; }
   .sidebar h2, .experience > h2 { font-size: 12pt; margin-bottom: 18px; }
-  .sidebar section + section { margin-top: 30px; }
+  .sidebar h2 { margin-bottom: 12px; }
+  .sidebar section + section { margin-top: 18px; }
+  .sidebar .research-list { gap: 14px; }
+  .sidebar .print-contact-links { gap: 5px; }
   .role { padding-bottom: 22px; break-inside: avoid; }
   .role-heading h3 { font-size: 12pt; }
   .role-heading > p, .role > p, .compact-item h3, .compact-item p, .sidebar-link, .research-item small { font-size: 9pt; line-height: 1.4; }

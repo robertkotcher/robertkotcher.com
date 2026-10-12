@@ -12,6 +12,17 @@ import ResumeFocus from "./ResumeFocus";
 
 const projectUrl = "https://photos.app.goo.gl/2DL7bfRMNnXi1g3d8";
 
+const technologyExperience = [
+  { technology: "Python", years: 10 },
+  { technology: "Node.js", years: 10 },
+  { technology: "Java", years: 6 },
+  { technology: "TypeScript", years: 8 },
+  { technology: "CSS", years: 10 },
+  { technology: "AWS", years: 8 },
+  { technology: "Docker", years: 7 },
+  { technology: "Kubernetes", years: 3 },
+].sort((a, b) => b.years - a.years);
+
 const research = [
   {
     title: "Timing attacks using CSS filters",
@@ -124,6 +135,17 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
                   </a>
                 ))}
               </div>
+            </section>
+            <section className="technology-experience" data-background="engineering" aria-labelledby="technology-experience-title">
+              <h2 id="technology-experience-title">Experience</h2>
+              <ul className="technology-experience-list">
+                {technologyExperience.map(({ technology, years }) => (
+                  <li key={technology}>
+                    <div className="technology-experience-label"><span>{technology}</span><span>{years} years</span></div>
+                    <div className="technology-experience-track" aria-hidden="true"><div style={{ width: `${years / 10 * 100}%` }} /></div>
+                  </li>
+                ))}
+              </ul>
             </section>
             {printable && <section className="print-contact-section">
               <h2>Contact</h2>
