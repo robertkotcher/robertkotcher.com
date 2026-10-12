@@ -142,10 +142,11 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
 @media print { .contact-bar { padding: 8px 18px; gap: 4px 18px; } .contact-bar a { font-size: 8pt; } }
 
 
-/* Spacing follows visible paragraphs after the focus animation completes. */
+/* Keep the first surviving paragraph flush with the heading during collapse. */
 @media screen {
   .role > p + p { margin-top: 0; }
   .role > p:not([data-focus-hidden]) ~ p:not([data-focus-hidden]) { margin-top: 22px; }
+  .role > p[data-focus-first-paragraph] { margin-top: 0; }
 }
 .engineering-skills { display: none; flex-wrap: wrap; gap: 6px; list-style: none; margin: 14px 0 0; padding: 0; }
 .focus-view[data-focus="engineering"] .engineering-skills { display: flex; }

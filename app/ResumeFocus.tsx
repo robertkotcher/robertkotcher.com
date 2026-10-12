@@ -27,6 +27,7 @@ export default function ResumeFocus({ children }: { children: ReactNode }) {
     const container = root.current;
     if (!container) return;
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    container.querySelectorAll("[data-focus-first-paragraph]").forEach(element => element.removeAttribute("data-focus-first-paragraph"));
     const previouslyHidden = Array.from(container.querySelectorAll<HTMLElement>("[data-focus-hidden]"));
     previouslyHidden.forEach((element) => element.removeAttribute("data-focus-hidden"));
 
@@ -56,6 +57,17 @@ export default function ResumeFocus({ children }: { children: ReactNode }) {
     targets.forEach((element) => {
       if (reducedMotion) element.setAttribute("data-focus-hidden", "");
       else animate(element, true);
+    });
+    // Animate the surviving paragraph's spacing alongside the removed paragraphs.
+    // Otherwise its old sibling margin disappears only after display:none is set.
+    container.querySelectorAll<HTMLElement>(".role").forEach((role) => {
+      const first = Array.from(role.children).find((element): element is HTMLElement => element instanceof HTMLElement && element.tagName === "P" && !unrelated(element));
+      if (!first || targets.some(target => target === role)) return;
+      const marginTop = getComputedStyle(first).marginTop;
+      first.setAttribute("data-focus-first-paragraph", "");
+      if (!reducedMotion && parseFloat(marginTop)) {
+        animations.push(first.animate([{ marginTop }, { marginTop: "0px" }], { duration: 420, delay: 260, easing: "cubic-bezier(.22,1,.36,1)", fill: "backwards" }));
+      }
     });
     if (!reducedMotion) previouslyHidden.filter((element) => !targets.some((target) => target === element || target.contains(element))).forEach((element) => animate(element, false));
 
