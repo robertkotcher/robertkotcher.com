@@ -243,3 +243,5 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
 .header-portrait img { position: absolute; top: 0; left: 0; height: 108%; width: 155%; object-fit: cover; object-position: center top; transform: translate(-17%, -4%); }
 @media screen and (max-width: 600px) { .header-portrait { height: auto; margin-top: 6px; } }
 @media print { .header-portrait { height: auto; margin-top: 8px; } }
+
+@media screen { .research-item { display: block; } .printable-resume .research-item { display: grid; } .research-title svg { display: inline-block; vertical-align: baseline; margin: 0; } }

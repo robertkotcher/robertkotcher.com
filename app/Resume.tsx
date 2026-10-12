@@ -120,8 +120,7 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
                     rel="noreferrer"
                   >
                     {printable && <Image className="resume-qr" src={`/qr/paper-${research.indexOf(publication)}.png`} alt={`QR code for ${publication.title}`} width={400} height={400} />}
-                    <span>{publication.title}<small>{publication.citations}</small><ExperienceTags categories="engineering" /></span>
-                    {!printable && <ArrowUpRight aria-hidden="true" size={14} />}
+                    <span><span className="research-title">{publication.title}{!printable && <> <ArrowUpRight aria-hidden="true" size={14} /></>}</span><small>{publication.citations}</small><ExperienceTags categories="engineering" /></span>
                   </a>
                 ))}
               </div>
