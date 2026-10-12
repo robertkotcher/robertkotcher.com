@@ -334,3 +334,65 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
 .role-last { padding-bottom: 0; }
 
 .project-title-link { color: var(--link); font-weight: 400; }
+
+/* Local iteration: quiet hashtags directly beneath each role heading. */
+.experience-tags { display: flex; gap: 9px; margin: 0 0 10px; }
+.experience-tags span { border: 0; padding: 0; border-radius: 0; color: #7b8089; font-size: .75rem; }
+.engineering-skills { gap: 9px; margin: -4px 0 10px; }
+.engineering-skills li { border: 0; padding: 0; border-radius: 0; color: #7b8089; font-size: .75rem; }
+
+/* Equal inner gutters on both sides of each column. */
+@media screen and (min-width: 761px) {
+  .focus-view { grid-template-columns: 31.8% minmax(0, 68.2%); padding-inline: 0; background: linear-gradient(to right, #f3f4f6 31.8%, white 31.8%); }
+  .focus-view .sidebar, .focus-view .experience { padding-inline: 54px; }
+  .focus-view .focus-controls { padding-inline: 54px; }
+}
+@media screen and (max-width: 760px) {
+  .experience { padding-inline: 0; }
+}
+@media print {
+  .resume-body { padding-inline: 0; background: linear-gradient(to right, #f3f4f6 31.8%, white 31.8%); }
+  .sidebar { width: 31.8%; padding-inline: 10mm; }
+  .experience { margin-left: 31.8%; padding-inline: 10mm; }
+}
+
+@media print {
+  .resume-header { padding-block: 24px; }
+  .experience-tags { margin: 0 0 6px; gap: 7px; }
+  .experience-tags span { font-size: 7pt; }
+  .role > p + p { margin-top: 6px; }
+  .role { padding-bottom: 10px; }
+  .role-last { padding-bottom: 0; }
+}
+
+/* Relaxed two-page PDF; the sidebar remains on the first page only. */
+@media print {
+  @page { margin: 10mm 0; }
+  @page :first { margin-top: 0; }
+  .resume-header { padding-block: 32px; }
+  .resume-body { display: block; background: white; padding-top: 24px; padding-bottom: 0; }
+  .sidebar { position: absolute; top: 0; left: 0; width: 31.8%; padding: 24px 10mm 28px; background: #f3f4f6; }
+  .resume-body { position: relative; }
+  .experience { margin-left: 31.8%; padding-inline: 10mm; }
+  .role > p, .role-heading > p { font-size: 9pt; line-height: 1.5; }
+  .role > p + p { margin-top: 10px; }
+  .experience-tags { margin-bottom: 10px; }
+  .role { padding-bottom: 22px; }
+  .role-last { padding-bottom: 0; }
+  .role:nth-of-type(6) { break-before: page; margin-left: calc(-46.6276% - 20mm); padding-left: 10mm; }
+  .role:nth-of-type(6) ~ .role { margin-left: calc(-46.6276% - 20mm); padding-left: 10mm; }
+}
+
+@media print {
+  @page :first { margin-bottom: 0; }
+  .sidebar { min-height: calc(297mm - 148px); }
+  .role { padding-bottom: 28px; }
+  .role-last { padding-bottom: 0; }
+}
+
+.experience-tags { margin: 12px 0 0; }
+.engineering-skills { margin: 6px 0 0; }
+@media print { .experience-tags { margin: 10px 0 0; } }
+
+.experience-tags { flex-wrap: wrap; row-gap: 4px; }
+.experience-tags span { white-space: nowrap; }

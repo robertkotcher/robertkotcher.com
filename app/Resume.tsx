@@ -32,12 +32,9 @@ const research = [
 ] as const;
 
 function ExperienceTags({ categories }: { categories: string }) {
-  return <span className="experience-tags" aria-label="Experience areas">{categories.split(" ").map(category => <span key={category}>{category}</span>)}</span>;
+  return <span className="experience-tags" aria-label="Experience areas">{categories.split(" ").map(category => <span key={category}>#{category}</span>)}</span>;
 }
 
-function EngineeringSkills({ skills }: { skills: string[] }) {
-  return <ul className="engineering-skills" aria-label="Engineering skills used">{skills.map(skill => <li key={skill}>{skill}</li>)}</ul>;
-}
 
 export default function Resume({ printable = false }: { printable?: boolean }) {
   const pdfUrl = resumePdfUrl;
@@ -176,7 +173,6 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
                 </h3>
                 <p>(August 2026 – present)</p>
               </div>
-
               <p data-background="growth">
                 Inflight Simulator went viral, reaching 60,000 flights within days
                 of release.
@@ -190,8 +186,9 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
                 Technical skills required included Three.js, Node.js, shadow mapping, geometry
                 reduction, scene culling, frustum streaming, and character rigging.
               </p>
-              <ExperienceTags categories="engineering product growth" />
-              {!printable && <EngineeringSkills skills={["Three.js", "character rigging", "Node.js"]} />}
+
+              <ExperienceTags categories="Three.js Node.js 3DGraphics PerformanceOptimization CharacterRigging" />
+
             </div>
 
             <div className="role">
@@ -208,7 +205,6 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
                 </h3>
                 <p>(2024 – present)</p>
               </div>
-
               <p data-background="engineering">
                 As a founding engineer at SoloSuit (Y Combinator, W21), I helped
                 build a debt resolution platform serving 200,000+ Americans and
@@ -227,8 +223,9 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
                 and maintain core features in TypeScript, Ruby on Rails, and
                 PostgreSQL, supporting a 12,000+ spec test suite.
               </p>
-              <ExperienceTags categories="engineering product growth" />
-              {!printable && <EngineeringSkills skills={["TypeScript", "Ruby on Rails", "Postgres"]} />}
+
+              <ExperienceTags categories="TypeScript RubyOnRails PostgreSQL ABTesting TechnicalLeadership" />
+
             </div>
 
             <div className="role">
@@ -236,57 +233,57 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
                 <h3>Product R&amp;D @ Codecov</h3>
                 <p>(2020 – 2022)</p>
               </div>
-
               <p data-background="engineering product">
                 Codecov was acquired by Sentry in 2022. I researched and built
                 new products in JavaScript and Jest that were later handed off to the engineering team.
                 My testing tool was one of the reasons for the acquisition.
               </p>
-              <ExperienceTags categories="engineering product" />
-              {!printable && <EngineeringSkills skills={["JavaScript", "Jest"]} />}
+
+              <ExperienceTags categories="JavaScript Jest ProductResearch TestAutomation" />
+
             </div>
             <div className="role">
               <div className="role-heading" data-background="engineering">
                 <h3>Lead Software Engineer @ Synthesis AI</h3>
                 <p>(2020 – 2023)</p>
-              </div>
-              <p data-background="engineering">
+              </div>              <p data-background="engineering">
                 As a founding engineer, I built most of Synthesis AI’s data pipelines from the ground up using Go (Golang) and Kubernetes. I maintained AWS infrastructure, Docker containers, and a Go API.
               </p>
-              <ExperienceTags categories="engineering" />
-              {!printable && <EngineeringSkills skills={["Kubernetes", "Docker", "Go", "AWS"]} />}
+
+              <ExperienceTags categories="Go Kubernetes Docker AWS DataPipelines" />
+
             </div>
 
             <div className="role">
               <div className="role-heading" data-background="engineering">
                 <h3>Software Engineer @ <a href="https://www.expii.com" target="_blank" rel="noreferrer">expii.com</a></h3>
                 <p>(2015 – 2017)</p>
-              </div>
-              <p data-background="engineering">Built Expii’s responsive learning-content editor in React.js, CSS, and Flexbox, supporting image, diagram, multiple-choice, text, and video blocks with pixel-perfect implementation of professional designs. The platform used a Python/Flask backend on AWS.</p>
-              <ExperienceTags categories="engineering" />
-              {!printable && <EngineeringSkills skills={["React", "Flask", "AWS"]} />}
+              </div>              <p data-background="engineering">Built Expii’s responsive learning-content editor in React.js, CSS, and Flexbox, supporting image, diagram, multiple-choice, text, and video blocks with pixel-perfect implementation of professional designs. The platform used a Python/Flask backend on AWS.</p>
+
+              <ExperienceTags categories="React CSS Flexbox Flask ResponsiveDesign" />
+
             </div>
 
             <div className="role">
               <div className="role-heading" data-background="engineering">
                 <h3>Software Engineer @ NASA</h3>
                 <p>(2013 – 2015)</p>
-              </div>
-              <p data-background="engineering">
+              </div>              <p data-background="engineering">
                 I developed Java software for an ADS-B sense-and-avoid system that
                 was licensed to Vigilant Aerospace.
               </p>
-              <ExperienceTags categories="engineering" />
-              {!printable && <EngineeringSkills skills={["Java"]} />}
+
+              <ExperienceTags categories="Java ADSB CollisionAvoidance" />
+
             </div>
             <div className="role role-last">
               <div className="role-heading" data-background="engineering">
                 <h3>Full Stack Engineer @ Tunessence</h3>
                 <p>(April 2012 – June 2014)</p>
-              </div>
-              <p data-background="engineering">I was the first hire at Tunessence, a guitar-teaching startup acquired by music publisher Hal Leonard. I worked across the stack using Python and JavaScript.</p>
-              <ExperienceTags categories="engineering" />
-              {!printable && <EngineeringSkills skills={["Python", "JavaScript"]} />}
+              </div>              <p data-background="engineering">I was the first hire at Tunessence, a guitar-teaching startup acquired by music publisher Hal Leonard. I worked across the stack using Python and JavaScript.</p>
+
+              <ExperienceTags categories="Python JavaScript FullStackDevelopment" />
+
             </div>
           </section>
         </div>
