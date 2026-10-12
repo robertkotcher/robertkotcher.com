@@ -141,14 +141,14 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
                 <p>(August 2026 – present)</p>
               </div>
 
+              <p data-background="growth">
+                Inflight Simulator went viral, reaching 60,000 flights within days
+                of release.
+              </p>
               <p data-background="product">
                 Inflight Simulator lets people explore the world as an airline
                 passenger, choosing destinations and collecting country flags
                 as they complete virtual flights.
-              </p>
-              <p data-background="growth">
-                Inflight Simulator went viral, reaching 60,000 flights within days
-                of release.
               </p>
               <p className="technical-skills" data-background="engineering">
                 Technical skills required included shadow mapping, geometry
