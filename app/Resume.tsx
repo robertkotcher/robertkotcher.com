@@ -204,16 +204,19 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
                 protecting $2.7 billion in claimed debt.
               </p>
               <p data-background="growth">
-                I grew SoloSettle’s monthly settlement volume 20x in 20 months,
-                leading dozens of A/B tests across the settlement funnel.
+                I identified growth opportunities across SoloSettle’s settlement funnel
+                and led dozens of A/B tests, growing monthly settlement volume
+                20x in 20 months.
               </p>
               <p data-background="product">
-                I shipped a product experiment that increased the settlement-offer
-                send rate from 8% to 37%.
+                I identified friction in the settlement-offer workflow, chose what to
+                build, and shipped an experiment that increased the offer send
+                rate from 8% to 37%.
               </p>
               <p data-background="engineering">
-                I lead a pod of 3–6 engineers and own the team’s delivery. I build
-                and maintain core features in TypeScript, Ruby on Rails, and
+                I lead a pod of 3–6 engineers and own delivery from technical planning
+                through production. I build and maintain core features in
+                TypeScript, Ruby on Rails, and
                 PostgreSQL, supporting a 12,000+ spec test suite.
               </p>
 
