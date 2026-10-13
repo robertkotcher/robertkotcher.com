@@ -88,6 +88,17 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
             <section>
               <h2>Projects</h2>
 
+
+              <div className="compact-item" data-background="engineering product">
+                <h3>
+                  <a className="sidebar-link project-title-link" href="https://codesurf.io" target="_blank" rel="noreferrer">
+                    <span>codesurf.io</span>
+                    {!printable && <ArrowUpRight aria-hidden="true" size={14} />}
+                  </a>
+                </h3>
+                <p>Review tool helped team 2x review velocity and 3.5x understanding</p>
+              </div>
+
               <div className="compact-item" data-background="engineering">
                 <div>
                 <h3>
