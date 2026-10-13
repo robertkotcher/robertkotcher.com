@@ -138,24 +138,6 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
                 ))}
               </div>
             </section>
-            <section className="technology-experience" data-background="engineering" aria-labelledby="technology-experience-title">
-              <h2 id="technology-experience-title">Experience</h2>
-              <div className="technology-experience-groups">
-                {technologyExperience.map(({ category, skills, additional }) => (
-                  <div className="technology-experience-group" key={category}>
-                    <h3>{category}{additional && <span className="technology-group-extra"> · {additional}</span>}</h3>
-                    <ul className="technology-experience-list">
-                      {skills.map(({ technology, years }) => (
-                        <li key={technology}>
-                          <div className="technology-experience-label"><span>{technology}</span><span>{years} years</span></div>
-                          <div className="technology-experience-track" aria-hidden="true"><div style={{ width: `${years / 10 * 100}%` }} /></div>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            </section>
             {printable && <section className="print-contact-section">
               <h2>Contact</h2>
               <address className="print-contact-links">
@@ -296,6 +278,24 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
               <ExperienceTags categories="Python JavaScript FullStackDevelopment" />
 
             </div>
+            <section className="technology-experience" data-background="engineering" aria-labelledby="technology-experience-title">
+              <h2 id="technology-experience-title">Technical experience</h2>
+              <div className="technology-experience-groups">
+                {technologyExperience.map(({ category, skills, additional }) => (
+                  <div className="technology-experience-group" key={category}>
+                    <h3>{category}{additional && <span className="technology-group-extra"> · {additional}</span>}</h3>
+                    <ul className="technology-experience-list">
+                      {skills.map(({ technology, years }) => (
+                        <li key={technology}>
+                          <div className="technology-experience-label"><span>{technology}</span><span>{years} years</span></div>
+                          <div className="technology-experience-track" aria-hidden="true"><div style={{ width: `${years / 10 * 100}%` }} /></div>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </section>
           </section>
         </div>
         </Content>
