@@ -88,15 +88,6 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
             <section>
               <h2>Projects</h2>
 
-              <div className="compact-item" data-background="engineering">
-                <h3>
-                  <a className="sidebar-link project-title-link" href="https://github.com/robertkotcher/mysterygpt" target="_blank" rel="noreferrer">
-                    <span>MysteryGPT</span>
-                    {!printable && <ArrowUpRight aria-hidden="true" size={14} />}
-                  </a>
-                </h3>
-                <p>Trained and deployed a custom transformer to solve procedurally generated mysteries.</p>
-              </div>
 
 
               <div className="compact-item" data-background="engineering product">
