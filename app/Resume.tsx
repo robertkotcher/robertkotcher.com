@@ -12,8 +12,8 @@ import ResumeFocus from "./ResumeFocus";
 const projectUrl = "https://photos.app.goo.gl/2DL7bfRMNnXi1g3d8";
 
 const technologyExperience = [
-  { category: "Frontend", skills: [{ technology: "React.js / CSS", years: 10 }, { technology: "TypeScript", years: 8 }], additional: "HTML5" },
-  { category: "Backend", skills: [{ technology: "Python / Node.js", years: 10 }, { technology: "Java", years: 6 }], additional: "Microservices" },
+  { category: "Frontend", skills: [{ technology: "React.js", years: 10 }, { technology: "CSS", years: 10 }, { technology: "HTML5", years: 10 }, { technology: "TypeScript", years: 8 }] },
+  { category: "Backend", skills: [{ technology: "Python", years: 10 }, { technology: "Node.js", years: 10 }, { technology: "Java", years: 6 }] },
   { category: "Infrastructure", skills: [{ technology: "AWS", years: 8 }, { technology: "Docker", years: 7 }, { technology: "Kubernetes", years: 3 }] },
   { category: "Machine learning", skills: [{ technology: "Deep learning", years: 6 }] },
 ];
@@ -35,6 +35,29 @@ function ExperienceTags({ categories }: { categories: string }) {
   return <span className="experience-tags" aria-label="Experience areas">{categories.split(" ").map(category => <span key={category}>#{category}</span>)}</span>;
 }
 
+
+function TechnicalExperience() {
+  return (
+            <section className="technology-experience" data-background="engineering" aria-labelledby="technology-experience-title">
+              <h2 id="technology-experience-title">Technical experience</h2>
+              <div className="technology-experience-groups">
+                {technologyExperience.map(({ category, skills }) => (
+                  <div className="technology-experience-group" key={category}>
+                    <h3>{category}</h3>
+                    <ul className="technology-experience-list">
+                      {skills.map(({ technology, years }) => (
+                        <li key={technology}>
+                          <div className="technology-experience-label"><span>{technology}</span><span>{years} years</span></div>
+                          <div className="technology-experience-track" aria-hidden="true"><div style={{ width: `${years / 10 * 100}%` }} /></div>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </section>
+  );
+}
 
 export default function Resume({ printable = false }: { printable?: boolean }) {
   const pdfUrl = resumePdfUrl;
@@ -139,6 +162,7 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
                 ))}
               </div>
             </section>
+            {!printable && <TechnicalExperience />}
             {printable && <section className="print-contact-section">
               <h2>Contact</h2>
               <address className="print-contact-links">
@@ -266,7 +290,7 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
                 <p>(2015 – 2017)</p>
               </div>              <p data-background="engineering">Built Expii’s responsive learning-content editor in React.js, CSS, and Flexbox, supporting image, diagram, multiple-choice, text, and video blocks with pixel-perfect implementation of professional designs. The platform used a Python/Flask backend on AWS.</p>
 
-              <ExperienceTags categories="React CSS Flexbox Flask ResponsiveDesign" />
+              <ExperienceTags categories="React Python CSS Flexbox Flask ResponsiveDesign" />
 
             </div>
 
@@ -291,24 +315,7 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
               <ExperienceTags categories="Python JavaScript FullStackDevelopment" />
 
             </div>
-            <section className="technology-experience" data-background="engineering" aria-labelledby="technology-experience-title">
-              <h2 id="technology-experience-title">Technical experience</h2>
-              <div className="technology-experience-groups">
-                {technologyExperience.map(({ category, skills, additional }) => (
-                  <div className="technology-experience-group" key={category}>
-                    <h3>{category}{additional && <span className="technology-group-extra"> · {additional}</span>}</h3>
-                    <ul className="technology-experience-list">
-                      {skills.map(({ technology, years }) => (
-                        <li key={technology}>
-                          <div className="technology-experience-label"><span>{technology}</span><span>{years} years</span></div>
-                          <div className="technology-experience-track" aria-hidden="true"><div style={{ width: `${years / 10 * 100}%` }} /></div>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            </section>
+            {printable && <TechnicalExperience />}
           </section>
         </div>
         </Content>
