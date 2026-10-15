@@ -116,7 +116,7 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
 
 
               <div className="compact-item" data-background="engineering">
-                <p><a href={projectUrl} target="_blank" rel="noreferrer">Catastrophe Prevention Unit</a> is a robot I built to spray my cat when he gets on the counter.</p>
+                <p><a href={projectUrl} target="_blank" rel="noreferrer">Cat-astrophe Prevention Unit</a> is a robot I built to spray my cat when he gets on the counter.</p>
               </div>
             </section>
 
