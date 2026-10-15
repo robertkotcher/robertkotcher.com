@@ -15,7 +15,6 @@ const technologyExperience = [
   { category: "Frontend", skills: [{ technology: "React.js", years: 10 }, { technology: "CSS", years: 10 }, { technology: "HTML5", years: 10 }, { technology: "TypeScript", years: 8 }] },
   { category: "Backend", skills: [{ technology: "Python", years: 10 }, { technology: "Node.js", years: 10 }, { technology: "Java", years: 6 }] },
   { category: "Infrastructure", skills: [{ technology: "AWS", years: 8 }, { technology: "Docker", years: 7 }, { technology: "Kubernetes", years: 3 }] },
-  { category: "Machine learning", skills: [{ technology: "Deep learning", years: 6 }] },
 ];
 
 const research = [
