@@ -108,7 +108,7 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
             </section>
 
             <section>
-              <h2>Projects</h2>
+              <h2>Personal projects</h2>
 
               <div className="compact-item" data-background="engineering product growth">
                 <p><a href="https://inflightsimulator.com" target="_blank" rel="noreferrer">InFlightSimulator.com</a> lets you explore the world as an airline passenger. It reached 60,000 users within the first week of release.</p>
