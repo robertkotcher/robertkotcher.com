@@ -113,9 +113,7 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
                 <p><a href="https://inflightsimulator.com" target="_blank" rel="noreferrer">InFlightSimulator.com</a> lets you explore the world as an airline passenger. It reached 60,000 users within the first week of release.</p>
               </div>
 
-              <div className="compact-item" data-background="engineering product">
-                <p><a href="https://codesurf.io" target="_blank" rel="noreferrer">CodeSurf.io</a> is a code review tool for overworked engineers. Helped team 2x review velocity and 3.5x understanding.</p>
-              </div>
+
 
               <div className="compact-item" data-background="engineering">
                 <p><a href={projectUrl} target="_blank" rel="noreferrer">Catastrophe Prevention Unit</a> is a robot I built to spray my cat when he gets on the counter.</p>
