@@ -124,7 +124,7 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
                     {!printable && <ArrowUpRight aria-hidden="true" size={14} />}
                   </a>
                 </h3>
-                <p>Review tool helped team 2x review velocity and 3.5x understanding</p>
+                <p>Code review tool for overworked engineers. Helped team 2x review velocity and 3.5x understanding.</p>
               </div>
 
               <div className="compact-item" data-background="engineering">
