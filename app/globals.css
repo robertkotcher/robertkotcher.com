@@ -144,7 +144,7 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
   .sidebar h2 { margin-bottom: 12px; }
   .sidebar section + section { margin-top: 20px; }
   .sidebar .research-list { gap: 16px; }
-  .sidebar .print-contact-links { gap: 7px; }
+  .sidebar .print-contact-links { gap: 11px; }
   .role { padding-bottom: 22px; break-inside: avoid; }
   .role-heading h3 { font-size: 12pt; }
   .role-heading > p, .role > p, .compact-item h3, .compact-item p, .sidebar-link, .research-item small { font-size: 8.5pt; line-height: 1.4; }
@@ -180,7 +180,7 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
 @media (max-width: 760px) { .identity-highlights span + span::before { margin-inline: 8px; } }
 @media print { .identity-highlights span + span::before { margin-inline: 8px; } }
 
-.print-contact-links { display: grid; gap: 10px; font-style: normal; }
+.print-contact-links { display: grid; gap: 14px; font-style: normal; }
 .print-contact-links a { display: flex; align-items: flex-start; gap: 6px; color: var(--navy-soft); font-size: .96rem; line-height: 1.4; text-decoration: none; }
 .print-contact-links svg { flex: 0 0 14px; margin-top: 1px; }
 .print-contact-links span { min-width: 0; overflow-wrap: anywhere; }
