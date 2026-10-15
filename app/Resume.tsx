@@ -111,40 +111,15 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
               <h2>Projects</h2>
 
               <div className="compact-item" data-background="engineering product growth">
-                <h3><a className="sidebar-link project-title-link" href="https://inflightsimulator.com" target="_blank" rel="noreferrer"><span>InFlightSimulator.com</span>{!printable && <ArrowUpRight aria-hidden="true" size={14} />}</a></h3>
-                <p>InFlight Simulator lets you explore the world as an airline passenger. It reached 60,000 users within the first week of release.</p>
+                <p><a href="https://inflightsimulator.com" target="_blank" rel="noreferrer">InFlightSimulator.com</a> lets you explore the world as an airline passenger. It reached 60,000 users within the first week of release.</p>
               </div>
 
-
-
               <div className="compact-item" data-background="engineering product">
-                <h3>
-                  <a className="sidebar-link project-title-link" href="https://codesurf.io" target="_blank" rel="noreferrer">
-                    <span>codesurf.io</span>
-                    {!printable && <ArrowUpRight aria-hidden="true" size={14} />}
-                  </a>
-                </h3>
-                <p>Code review tool for overworked engineers. Helped team 2x review velocity and 3.5x understanding.</p>
+                <p><a href="https://codesurf.io" target="_blank" rel="noreferrer">CodeSurf.io</a> is a code review tool for overworked engineers. Helped team 2x review velocity and 3.5x understanding.</p>
               </div>
 
               <div className="compact-item" data-background="engineering">
-                <div>
-                <h3>
-                  <a
-                    className="sidebar-link project-title-link"
-                    href={projectUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    <span>Cat-astrophe prevention unit</span>
-                    {!printable && <ArrowUpRight aria-hidden="true" size={14} />}
-                  </a>
-                </h3>
-                <p>
-                  I built a robot to spray my cat when he gets on the counter.
-                </p>
-
-                </div>
+                <p><a href={projectUrl} target="_blank" rel="noreferrer">Catastrophe Prevention Unit</a> is a robot I built to spray my cat when he gets on the counter.</p>
               </div>
             </section>
 
