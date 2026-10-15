@@ -110,6 +110,11 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
             <section>
               <h2>Projects</h2>
 
+              <div className="compact-item" data-background="engineering product growth">
+                <h3><a className="sidebar-link project-title-link" href="https://inflightsimulator.com" target="_blank" rel="noreferrer"><span>InFlightSimulator.com</span>{!printable && <ArrowUpRight aria-hidden="true" size={14} />}</a></h3>
+                <p>InFlight Simulator lets you explore the world as an airline passenger. It reached 60,000 users within the first week of release.</p>
+              </div>
+
 
 
               <div className="compact-item" data-background="engineering product">
@@ -175,38 +180,6 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
 
           <section className="experience" aria-labelledby="experience-title">
             <h2 id="experience-title">Professional experience</h2>
-
-            <div className="role">
-              <div className="role-heading" data-background="engineering product growth">
-                <h3>
-                  Founder, engineer @{" "}
-                  <a
-                    href="https://inflightsimulator.com"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    inflightsimulator.com
-                  </a>
-                </h3>
-                <p>(August 2026 – present)</p>
-              </div>
-              <p data-background="growth">
-                Inflight Simulator went viral, reaching 60,000 flights within days
-                of release.
-              </p>
-              <p data-background="product">
-                Inflight Simulator lets people explore the world as an airline
-                passenger, choosing destinations and collecting country flags
-                as they complete virtual flights.
-              </p>
-              <p className="technical-skills" data-background="engineering">
-                Technical skills required included Three.js, Node.js, shadow mapping, geometry
-                reduction, scene culling, frustum streaming, and character rigging.
-              </p>
-
-              <ExperienceTags categories="Three.js Node.js 3DGraphics PerformanceOptimization CharacterRigging" />
-
-            </div>
 
             <div className="role">
               <div className="role-heading" data-background="engineering product growth">
