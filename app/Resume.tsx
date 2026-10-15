@@ -256,8 +256,8 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
                 <h3>Software Engineer @ Hippo Education</h3>
                 <p>(2017 – 2019)</p>
               </div>
-              <p data-background="engineering">Built an educational dashboard and content management system for doctors using React.js and a Python backend. Worked on internal tooling for podcast processing and automated editing, and a mobile app.</p>
-              <ExperienceTags categories="React Python ContentManagement InternalTools MobileDevelopment" />
+              <p data-background="engineering">Built an educational dashboard and content management system for doctors using React.js and a Python backend. Worked on internal tooling and an ETL pipeline for podcast processing.</p>
+              <ExperienceTags categories="React Python ContentManagement InternalTools ETL" />
             </div>
 
             <div className="role">
