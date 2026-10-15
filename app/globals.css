@@ -275,10 +275,10 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
 
 /* Align the first entries' visible text across the two columns. */
 @media screen and (min-width: 761px) {
-  .sidebar section:first-child > h2 { margin-bottom: 31px; }
+  .sidebar section:first-child > h2 { margin-bottom: 29.46px; }
 }
 @media print {
-  .sidebar section:first-child > h2 { margin-bottom: 19.5px; }
+  .sidebar section:first-child > h2 { margin-bottom: 18.42px; }
 }
 
 /* A full-bleed, quiet background distinguishes the narrower column. */
