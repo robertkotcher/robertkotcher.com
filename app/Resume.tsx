@@ -2,7 +2,6 @@ import Image from "next/image";
 import { resumePdfUrl } from "./resumePdf";
 import { FaGithub, FaLinkedinIn } from "react-icons/fa6";
 import {
-  ArrowUpRight,
   Mail,
   Phone,
   FileDown,
@@ -136,7 +135,7 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    <span><span className="research-title">{publication.title}{!printable && <> <ArrowUpRight aria-hidden="true" size={14} /></>}</span><small>{publication.citations}</small></span>
+                    <span><span className="research-title">{publication.title}</span><small>{publication.citations}</small></span>
                   </a>
                 ))}
               </div>
