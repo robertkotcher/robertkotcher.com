@@ -379,8 +379,8 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
   .experience-tags { margin-bottom: 10px; }
   .role { padding-bottom: 22px; }
   .role-last { padding-bottom: 0; }
-  .role:nth-of-type(5) { break-before: page; margin-left: calc(-46.6276% - 20mm); padding-left: 10mm; }
-  .role:nth-of-type(5) ~ .role { margin-left: calc(-46.6276% - 20mm); padding-left: 10mm; }
+  .role:nth-of-type(6) { break-before: page; margin-left: calc(-46.6276% - 20mm); padding-left: 10mm; }
+  .role:nth-of-type(6) ~ .role { margin-left: calc(-46.6276% - 20mm); padding-left: 10mm; }
 }
 
 @media print {
