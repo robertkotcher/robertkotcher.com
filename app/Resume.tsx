@@ -221,16 +221,7 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
 
             <div className="role">
               <div className="role-heading" data-background="engineering">
-                <h3>Software Engineer @ Hippo Education</h3>
-                <p>(2017 – 2019)</p>
-              </div>
-              <p data-background="engineering">Built an educational dashboard and content management system for doctors using React.js and a Python backend. Worked on internal tooling and an ETL pipeline for podcast processing.</p>
-              <ExperienceTags categories="React Python ContentManagement InternalTools ETL" />
-            </div>
-
-            <div className="role">
-              <div className="role-heading" data-background="engineering">
-                <h3>Software Engineer @ <a href="https://www.expii.com" target="_blank" rel="noreferrer">expii.com</a></h3>
+                <h3>Software Engineer, 2nd hire @ <a href="https://www.expii.com" target="_blank" rel="noreferrer">expii.com</a></h3>
                 <p>(2015 – 2017)</p>
               </div>              <p data-background="engineering">Built Expii’s responsive learning-content editor in React.js, CSS, and Flexbox, supporting image, diagram, multiple-choice, text, and video blocks with pixel-perfect implementation of professional designs. The platform used a Python/Flask backend on AWS.</p>
 
@@ -252,7 +243,7 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
             </div>
             <div className="role role-last">
               <div className="role-heading" data-background="engineering">
-                <h3>Full Stack Engineer @ Tunessence</h3>
+                <h3>Full Stack Engineer, 1st hire @ Tunessence</h3>
                 <p>(April 2012 – June 2014)</p>
               </div>              <p data-background="engineering">I was the first hire at Tunessence, a guitar-teaching startup acquired by music publisher Hal Leonard. I worked across the stack using Python and JavaScript.</p>
 
