@@ -412,3 +412,17 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
   .technology-experience-list { gap: 8px; }
   .technology-experience-label { font-size: 9pt; }
 }
+
+/* A restrained availability note. */
+.availability-banner {
+  padding: 13px 26px;
+  background: #f3e4c9;
+  color: #554125;
+  font-size: .85rem;
+  font-weight: 600;
+  line-height: 1.5;
+  text-align: center;
+}
+@media print {
+  .availability-banner { display: none; }
+}

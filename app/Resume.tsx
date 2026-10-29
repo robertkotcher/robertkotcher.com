@@ -87,6 +87,7 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
             {!printable && <a href={pdfUrl} target="_blank" rel="noreferrer" aria-label="Open résumé PDF in a new tab" title="Open PDF"><FileDown aria-hidden="true" size={24} strokeWidth={1.8} /></a>}
           </nav>}
         </header>
+        {!printable && <div className="availability-banner">Currently open to engineering and product roles</div>}
 
 
         <Content>
