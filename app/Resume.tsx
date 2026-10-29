@@ -65,7 +65,7 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
       <article className="resume" aria-label="Robert Kotcher résumé">
         <header className="resume-header">
           <div className="header-person">
-            <div className="header-portrait"><Image src="/robert-kotcher-portrait.png" alt="Robert Kotcher" width={998} height={1004} priority /></div>
+            <div className="header-portrait"><Image src="/robert-kotcher-portrait.webp" alt="Robert Kotcher" width={480} height={483} priority /></div>
           <div className="identity">
             <h1>Robert Kotcher</h1>
             <p className="identity-highlights">
