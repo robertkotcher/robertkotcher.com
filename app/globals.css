@@ -437,3 +437,7 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
   transform: none;
 }
 @media screen and (min-width: 761px) { .header-person { gap: 26px; } }
+
+/* Align the portrait with the visible name and highlight text. */
+.header-portrait { transform: translateY(4px); }
+@media print { .header-portrait { transform: translateY(3px); } }
