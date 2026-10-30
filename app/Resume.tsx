@@ -168,6 +168,7 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
                 </h3>
                 <p>(2024 – present)</p>
               </div>
+              <p data-background="engineering">Built AI agentic workflows using LangGraph that cut pull request review wait times by 75% and reduced monthly support tickets.</p>
               <p data-background="engineering">
                 As a founding engineer at SoloSuit (Y Combinator, W21), I helped
                 build a debt resolution platform serving 200,000+ Americans and
