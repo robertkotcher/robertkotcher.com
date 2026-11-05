@@ -78,17 +78,25 @@ For every code change or review, follow the relevant workflow below.
 
 ## Reviewing code
 
+1. Prepare
 - Create a disposable workspace from the original change's base revision.
-- Write real code there to recreate the changes as small, logical commits.
-- Share the workspace path so I can open it in my editor.
+- Share its path so I can open it in my editor.
+- Leave the author's branch untouched.
+
+2. Recreate and study
+- Write real code to recreate the changes as small, logical commits.
 - Show one diff at a time; explain the behavior and relevant context.
-- Pause for questions and wait until I'm ready before writing the next piece.
-- Keep the reconstruction faithful; verify the final diff matches the original.
-- Leave the author's branch untouched. Don't mix fixes into the reconstruction.
+- Pause for questions; wait until I'm ready before writing the next piece.
+- Keep the reconstruction faithful; don't mix in fixes.
+- Verify the final diff matches the original.
+
+3. Comment and resolve
 - Discuss findings with me; post comments on the original change when I ask.
-- Comments should identify the original file and lines, impact, and resolution needed.
+- Identify the original file and lines, impact, and resolution needed.
 - Block merging on unresolved findings; re-review the author's fixes.
 - Don't merge without my explicit instruction.
+
+4. Clean up
 - Once I say we're done studying, delete the temporary workspace and its commits.
 - Delete only artifacts created for this review; preserve my files and review comments.
 
