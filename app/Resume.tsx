@@ -87,7 +87,7 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
             {!printable && <a href={pdfUrl} target="_blank" rel="noreferrer" aria-label="Open résumé PDF in a new tab" title="Open PDF"><FileDown aria-hidden="true" size={24} strokeWidth={1.8} /></a>}
           </nav>}
         </header>
-        {!printable && <div className="availability-banner">Currently open to engineering and product roles</div>}
+        {!printable && <div className="availability-banner"><a href="/thoughts/understanding-large-codebases-with-ai">My AI coding philosophy</a></div>}
 
 
         <Content>
@@ -112,6 +112,10 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
 
               <div className="compact-item" data-background="engineering product growth">
                 <p><a href="https://inflightsimulator.com" target="_blank" rel="noreferrer">InFlightSimulator.com</a> lets you explore the world as an airline passenger. It reached 60,000 users within the first week of release.</p>
+              </div>
+
+              <div className="compact-item" data-background="engineering product">
+                <p><a href="https://hired.robertkotcher.com" target="_blank" rel="noreferrer">Hired!</a> is an exploration of the Vercel AI SDK that lets users run agentic interview screens.</p>
               </div>
 
 

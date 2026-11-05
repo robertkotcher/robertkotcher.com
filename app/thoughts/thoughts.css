@@ -1,0 +1,42 @@
+.thoughts-shell { min-height: 100vh; background: #faf9f6; padding: 48px 24px 100px; font-family: Arial, Helvetica, sans-serif; color: #292824; }
+.thoughts-container { max-width: 760px; margin: 0 auto; }
+.thoughts-header { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding-bottom: 18px; border-bottom: 2px solid #c46a3b; }
+.thoughts-header a { text-decoration: none; color: inherit; }
+.thoughts-wordmark { font-weight: 700; font-size: 21px; letter-spacing: -.6px; }
+.thoughts-author { font-size: 13px; color: #746f67; white-space: nowrap; }
+.thoughts-author a { text-decoration: underline; }
+.thoughts-author { flex-shrink: 0; }
+@media (max-width: 520px) { .thoughts-header { flex-wrap: wrap; gap: 8px; } .thoughts-wordmark { font-size: 19px; } }
+.thought-meta { display: flex; flex-wrap: wrap; gap: 8px 18px; color: #746f67; font-size: 12px; line-height: 1.6; }
+.thought-tags { display: inline-flex; flex-wrap: wrap; gap: 10px; }
+.thought-article { max-width: 660px; }
+.thought-article h1 { font-size: clamp(26px, 5vw, 34px); line-height: 1.25; letter-spacing: -.8px; font-weight: 600; margin: 0 0 14px; }
+.thought-content { margin-top: 32px; font-size: 16px; line-height: 1.8; overflow-wrap: anywhere; }
+.thought-content p, .thought-content ul, .thought-content ol, .thought-content blockquote, .thought-content pre { margin: 0 0 22px; }
+.thought-content h2, .thought-content h3 { font-weight: 600; line-height: 1.35; margin: 32px 0 14px; }
+.thought-content h2 { font-size: 22px; }
+.thought-content h3 { font-size: 18px; }
+.thought-content ul, .thought-content ol { padding-left: 24px; }
+.thought-content ul { list-style: disc; }
+.thought-content ol { list-style: decimal; }
+.thought-content li + li { margin-top: 8px; }
+.thought-content a { color: #a34d24; text-decoration: underline; }
+.thought-content img { display: block; max-width: 100%; height: auto; margin: 24px 0; }
+.thought-content blockquote { padding-left: 18px; border-left: 2px solid #c46a3b; color: #746f67; }
+.thought-content code { font-size: .88em; background: #eeece6; padding: 2px 5px; border-radius: 3px; }
+.thought-content pre { padding: 16px; background: #eeece6; overflow-x: auto; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.6; }
+.thought-content pre code { padding: 0; }
+.thought-content table { display: block; overflow-x: auto; border-collapse: collapse; margin-bottom: 22px; }
+.thought-content th, .thought-content td { border: 1px solid #ded9d0; padding: 6px 12px; }
+.thought-content hr { border: 0; border-top: 1px solid #e5e1d9; margin: 32px 0; }
+
+@media (max-width: 520px) { .thoughts-shell { padding: 28px 20px 64px; } }
+
+.thought-article { margin-top: 30px; }
+.thought-code-block { margin-bottom: 22px; background: #eeece6; }
+.thought-code-toolbar { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-bottom: 1px solid #ded9d0; font-size: 12px; color: #746f67; }
+.thought-code-toolbar > span:first-child { margin-right: auto; }
+.thought-code-toolbar button { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; width: 32px; height: 32px; border: 1px solid #ded9d0; border-radius: 4px; background: transparent; color: #746f67; cursor: pointer; }
+.thought-code-toolbar button:hover { color: #a34d24; border-color: #c46a3b; }
+.thought-code-toolbar button:focus-visible { outline: 2px solid #c46a3b; outline-offset: 3px; }
+.thought-code-block pre { margin-bottom: 0; }

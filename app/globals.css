@@ -441,3 +441,7 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
 /* Align the portrait with the visible name and highlight text. */
 .header-portrait { transform: translateY(4px); }
 @media print { .header-portrait { transform: translateY(3px); } }
+
+
+.availability-banner a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+.availability-banner a:hover { text-decoration-thickness: 2px; }
