@@ -27,15 +27,17 @@ Then we agree on a small set of changes, each scoped like an independent commit.
 
 ## Reviewing code
 
-When I'm reviewing someone else's changes, I'm not rewriting their code or reorganizing their commits. I'm asking the agent to present the existing diff as smaller, logical units so I can understand one behavior change at a time.
+When I'm reviewing someone else's changes, I want to recreate them piece by piece. I ask the agent to start from the original base in a temporary workspace and actually write the code, building our own series of small commits that reconstructs the change under review.
 
-For each unit, I want a short explanation of what changed, the relevant context, and the files involved. We can zoom into the code together before I decide whether there's an issue. That makes a large review manageable without changing the work under review.
+I can open that workspace in my editor and study each diff as we go. We pause so I can ask questions, trace the surrounding code, and understand why each piece exists. Writing the change again gives me a way to learn it actively instead of trying to absorb the whole diff at once.
 
-If we find a problem, the output is a review comment explaining the issue and what needs to be resolved. The author makes the changes. Unresolved findings block merging; once they're addressed, we review the updated code and check that the pieces still work together.
+The reconstruction should arrive at the same changes as the original. It's a throwaway learning tool; the author's branch stays untouched. If I spot a problem, we leave a review comment on the original change, with the location and context the author needs to address it. Unresolved findings still block merging.
+
+When we're done studying the changes, the agent deletes the temporary code and commits it created. The understanding and review comments are what we keep.
 
 ## The instructions I use
 
-I put this in `AGENTS.md` to make that workflow explicit. The pauses are intentional: they give me a chance to build context and make decisions before more code arrives.
+I put this in `AGENTS.md` to make that workflow explicit. The pauses are intentional: they give me a chance to build context and make decisions as each piece of code arrives.
 
 ```text
 # AGENTS.md
@@ -76,30 +78,19 @@ For every code change or review, follow the relevant workflow below.
 
 ## Reviewing code
 
-1. Learning
-- Summarize the relevant code and concepts in at most 3 sentences.
-- Ask: "would you like me to zoom into any of the code or explain relevant concepts?"
-- If yes, teach with short, real snippets and filenames; assume no prior knowledge.
-- Continue when I ask you to proceed with the review.
-
-2. Planning
-- Present the existing diff as small, logical review units.
-- Outline those units and wait for approval.
-- Don't edit code, rewrite commits, or implement fixes.
-
-3. Reviewing
-- Explain each unit's behavior changes, context, and file locations.
-- Show short snippets when useful.
-- Check correctness, regressions, and relevant tests.
-- Discuss findings with me before posting comments.
-- Each comment should identify the location, impact, and resolution needed.
-- Wait for my approval before advancing to the next unit.
-
-4. Resolution
-- Block merging while findings remain unresolved.
-- After the author updates the code, re-review affected units and combined behavior.
-- Recommend approval only when all blocking findings are resolved.
+- Create a disposable workspace from the original change's base revision.
+- Write real code there to recreate the changes as small, logical commits.
+- Share the workspace path so I can open it in my editor.
+- Show one diff at a time; explain the behavior and relevant context.
+- Pause for questions and wait until I'm ready before writing the next piece.
+- Keep the reconstruction faithful; verify the final diff matches the original.
+- Leave the author's branch untouched. Don't mix fixes into the reconstruction.
+- Discuss findings with me; post comments on the original change when I ask.
+- Comments should identify the original file and lines, impact, and resolution needed.
+- Block merging on unresolved findings; re-review the author's fixes.
 - Don't merge without my explicit instruction.
+- Once I say we're done studying, delete the temporary workspace and its commits.
+- Delete only artifacts created for this review; preserve my files and review comments.
 
 ```
 
