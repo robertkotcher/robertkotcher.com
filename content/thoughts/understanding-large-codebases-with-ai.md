@@ -27,13 +27,13 @@ Then we agree on a small set of changes, each scoped like an independent commit.
 
 ## Reviewing code
 
-When I'm reviewing someone else's changes, I want to recreate them piece by piece. I ask the agent to start from the original base in a temporary workspace and actually write the code, building our own series of small commits that reconstructs the change under review.
+When I'm reviewing someone else's changes, I ask the agent to recreate them in a temporary workspace, one small change at a time. It starts from the original base and actually writes the first piece of code. I open the Codex diff viewer to study just that latest change.
 
-I can open that workspace in my editor and study each diff as we go. We pause so I can ask questions, trace the surrounding code, and understand why each piece exists. Writing the change again gives me a way to learn it actively instead of trying to absorb the whole diff at once.
+Then we stop and talk about what was applied. I can ask questions, trace the surrounding code, and leave review comments for the original GitHub change. The agent waits until I say to advance before applying the next piece.
 
-The reconstruction should arrive at the same changes as the original. It's a throwaway learning tool; the author's branch stays untouched. If I spot a problem, we leave a review comment on the original change, with the location and context the author needs to address it. Unresolved findings still block merging.
+Each new piece gets its own turn in the diff viewer. I want to see only what the agent just added or changed, without the earlier reconstruction accumulating in the diff. We repeat that loop—apply, study, discuss, comment, advance—until we've recreated the original change.
 
-When we're done studying the changes, the agent deletes the temporary code and commits it created. The understanding and review comments are what we keep.
+The temporary workspace is a learning tool; the author's branch stays untouched. Comments are mapped back to the original files and lines and posted to GitHub when I ask. Unresolved findings block merging. When we're done studying, the agent deletes the reconstruction; the review comments are what we keep.
 
 ## The instructions I use
 
@@ -80,25 +80,28 @@ For every code change or review, follow the relevant workflow below.
 
 1. Prepare
 - Create a disposable workspace from the original change's base revision.
-- Share its path so I can open it in my editor.
-- Leave the author's branch untouched.
+- Share its path so I can open it in Codex and my editor.
+- Leave the author's branch untouched; don't mix fixes into the reconstruction.
 
-2. Recreate and study
-- Write real code to recreate the changes as small, logical commits.
-- Show one diff at a time; explain the behavior and relevant context.
-- Pause for questions; wait until I'm ready before writing the next piece.
-- Keep the reconstruction faithful; don't mix in fixes.
-- Verify the final diff matches the original.
+2. Apply, study, and discuss
+- Write one small, logical piece of the original change in the temporary workspace.
+- Present only that latest change in the Codex diff viewer.
+- Explain what was applied and the relevant context; pause for questions.
+- Discuss any review comments I want to leave.
+- Map comments to the original GitHub files and lines, not the temporary code.
+- Post comments to GitHub when I ask; include impact and resolution needed.
+- Wait until I explicitly say to advance. Don't apply the next piece yet.
+- When I advance, checkpoint the studied change locally so it leaves the active diff.
+- Apply the next piece, showing only its new changes, and repeat this loop.
 
-3. Comment and resolve
-- Discuss findings with me; post comments on the original change when I ask.
-- Identify the original file and lines, impact, and resolution needed.
+3. Finish the review
+- Verify the full reconstruction matches the original change.
 - Block merging on unresolved findings; re-review the author's fixes.
-- Don't merge without my explicit instruction.
+- Don't push the reconstruction or merge without my explicit instruction.
 
 4. Clean up
-- Once I say we're done studying, delete the temporary workspace and its commits.
-- Delete only artifacts created for this review; preserve my files and review comments.
+- Once I say we're done studying, delete the temporary workspace and its checkpoints.
+- Delete only artifacts created for this review; preserve my files and GitHub comments.
 
 ```
 
