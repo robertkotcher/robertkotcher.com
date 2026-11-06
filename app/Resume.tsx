@@ -87,7 +87,6 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
             {!printable && <a href={pdfUrl} target="_blank" rel="noreferrer" aria-label="Open résumé PDF in a new tab" title="Open PDF"><FileDown aria-hidden="true" size={24} strokeWidth={1.8} /></a>}
           </nav>}
         </header>
-        {!printable && <div className="availability-banner"><a href="/thoughts/understanding-large-codebases-with-ai">My AI coding philosophy</a></div>}
 
 
         <Content>
