@@ -114,7 +114,7 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
               </div>
 
               <div className="compact-item" data-background="engineering product">
-                <p><a href="https://codesurf.io" target="_blank" rel="noreferrer">CodeSurf</a> is a visual tool for agents to help humans understand their work 10x faster. <a href="https://github.com/robertkotcher/codesurf" target="_blank" rel="noreferrer">GitHub</a></p>
+                <p><a href="https://codesurf.io" target="_blank" rel="noreferrer">CodeSurf</a> is a visual tool for agents to help humans understand their work 10x faster.</p>
               </div>
 
               <div className="compact-item" data-background="engineering product">
