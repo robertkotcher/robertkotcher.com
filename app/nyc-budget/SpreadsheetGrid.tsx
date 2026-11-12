@@ -69,13 +69,13 @@ export default function SpreadsheetGrid({
     .filter((row) => taxesExpanded || !isTaxDetail(row));
   const [selected, setSelected] = useState(`B${taxRowCount}`);
   const [previousRowIds, setPreviousRowIds] = useState(rowIds);
-  const [promptExpanded, setPromptExpanded] = useState(false);
+  const [cellExpanded, setCellExpanded] = useState(false);
   const sheet = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function collapseOnOutsideClick(event: PointerEvent) {
       if (event.target instanceof Node && !sheet.current?.contains(event.target)) {
-        setPromptExpanded(false);
+        setCellExpanded(false);
       }
     }
 
@@ -83,9 +83,9 @@ export default function SpreadsheetGrid({
     return () => document.removeEventListener("pointerdown", collapseOnOutsideClick);
   }, []);
 
-  function selectPrompt(address: string) {
+  function expandCell(address: string) {
     setSelected(address);
-    setPromptExpanded(true);
+    setCellExpanded(true);
   }
   const undo = useRef({ rowIds, cells: new Map<string, CellUndo>() });
   const [editing, setEditing] = useState<string>();
@@ -99,7 +99,7 @@ export default function SpreadsheetGrid({
     setPreviousRowIds(rowIds);
     setSelected(selected[0] + (visibleRows.includes(nextRow) ? nextRow : visibleRows[0]));
     setEditing(undefined);
-    setPromptExpanded(false);
+    setCellExpanded(false);
   }
 
   async function saveRowChange(change: RowChange, menu: HTMLElement) {
@@ -220,7 +220,7 @@ export default function SpreadsheetGrid({
     const selectedRow = Number(selected.slice(1));
     if (taxesExpanded && isTaxDetail(selectedRow)) {
       setSelected(selected[0] + (taxSummary <= rowCount ? taxSummary : firstTaxDetail - 1));
-      setPromptExpanded(false);
+      setCellExpanded(false);
     }
     setTaxesExpanded(!taxesExpanded);
   }
@@ -343,23 +343,25 @@ export default function SpreadsheetGrid({
                       const value = read(address);
                       const isSelected = selected === address;
                       const isEditing = isSelected && editing === address;
+                      const isNote = column === "C" || column === "D";
+                      const CellEditor = isNote ? "textarea" : "input";
                       const display = typeof value === "number" && column === "B" && id !== effectiveTaxRateRow ? currency.format(value) : String(value);
                       return (
                         <td key={address} className={isSelected ? "selected-cell" : undefined}
                           onClick={(event) => {
                             if (event.target === event.currentTarget) {
-                              event.currentTarget.querySelector<HTMLElement>(".prompt-result, input")?.focus();
+                              event.currentTarget.querySelector<HTMLElement>(".prompt-result, input, textarea")?.focus();
                             }
                           }}>
                           {job ? (
                             <div className="prompt-result" id={`budget-cell-${address}`} tabIndex={0}
-                              aria-label={`Prompt cell ${address}`} onFocus={() => selectPrompt(address)}
-                              onClick={() => selectPrompt(address)}
+                              aria-label={`Prompt cell ${address}`} onFocus={() => expandCell(address)}
+                              onClick={() => expandCell(address)}
                               onKeyDown={(event) => cellKey(event, address, false)}>
                               <div className="prompt-result-line">
                                 <PromptScheduleEditor key={job.version} cell={address} schedule={job.schedule}
                                   researchPrompt={job.research_prompt} loading={loading} update={update} />
-                                {job.result && (isSelected && promptExpanded ? (
+                                {job.result && (isSelected && cellExpanded ? (
                                   <div className="prompt-result-markdown">
                                     <ReactMarkdown remarkPlugins={[remarkGfm]} skipHtml
                                       allowedElements={["a", "p", "ul", "ol", "li", "strong", "em", "code", "pre", "br", "del",
@@ -377,11 +379,18 @@ export default function SpreadsheetGrid({
                               )}
                               {!loading && job.status !== "complete" && <small>{job.error ?? job.status}</small>}
                             </div>
-                          ) : <input id={`budget-cell-${address}` } aria-label={`Cell ${address}`} maxLength={4096} readOnly={readOnly || !isEditing}
-                            className={typeof value === "number" ? "numeric-cell" : undefined}
+                          ) : <CellEditor id={`budget-cell-${address}`} aria-label={`Cell ${address}`} maxLength={4096} readOnly={readOnly || !isEditing}
+                            className={isNote && isSelected && cellExpanded ? "expanded-note" : typeof value === "number" ? "numeric-cell" : undefined}
+                            rows={isNote ? 1 : undefined}
                             value={isEditing ? draft : display}
-                            onFocus={() => setSelected(address)}
-                            onClick={() => { if (!readOnly && !isEditing) begin(address); }}
+                            onFocus={() => {
+                              setSelected(address);
+                              setCellExpanded(isNote);
+                            }}
+                            onClick={() => {
+                              if (isNote) expandCell(address);
+                              if (!readOnly && !isEditing) begin(address);
+                            }}
                             onPaste={(event) => {
                               if (readOnly || isEditing) return;
                               event.preventDefault();

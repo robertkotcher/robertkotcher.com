@@ -132,12 +132,25 @@
 .cash-grid thead th, .cash-grid thead th:nth-child(n+2), .cash-grid tbody th { text-align: center; }
 .cash-grid tbody th { padding-inline: 2px; background: #f1f3f4; color: #5f6368; font-size: .75rem; }
 .cash-grid td { padding: 0; }
-.cash-grid td input { display: block; width: 100%; min-width: 0; height: 27px; padding: 3px 8px; font: inherit; text-overflow: ellipsis; }
+.cash-grid td :is(input, textarea) { display: block; width: 100%; min-width: 0; height: 27px; padding: 3px 8px; font: inherit; text-overflow: ellipsis; }
 .cash-grid .sheet-title-row td { background: #f1f3f4; font-weight: 700; }
 .cash-grid .numeric-cell { text-align: right; }
 .cash-grid .selected-header { background: #d2e3fc; color: #174ea6; }
 .cash-grid .selected-cell { box-shadow: inset 0 0 0 2px #1a73e8; }
-.cash-grid input:focus { outline: 0; }
+.cash-grid :is(input, textarea):focus { outline: 0; }
+.cash-grid td textarea {
+  resize: none;
+  overflow: hidden;
+  white-space: pre;
+  text-align: left;
+}
+.cash-grid td textarea.expanded-note {
+  field-sizing: content;
+  height: auto;
+  min-height: 27px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
 
 .cash-grid td:has(.prompt-result) { white-space: normal; vertical-align: top; }
 .prompt-result { position: relative; padding: 5px 8px; text-align: left; overflow-wrap: anywhere; }
