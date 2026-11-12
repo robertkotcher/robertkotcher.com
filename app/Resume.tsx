@@ -114,10 +114,6 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
               </div>
 
               <div className="compact-item" data-background="engineering product">
-                <p><a href="https://codesurf.io" target="_blank" rel="noreferrer">CodeSurf.io</a> is a visual tool to help humans read and write code in the AI era.</p>
-              </div>
-
-              <div className="compact-item" data-background="engineering product">
                 <p><a href="https://hired.robertkotcher.com" target="_blank" rel="noreferrer">Hired!</a> is an exploration of the Vercel AI SDK that lets users run agentic interview screens.</p>
               </div>
 
