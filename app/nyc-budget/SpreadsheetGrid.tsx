@@ -14,6 +14,12 @@ import { budgetTotals, expenseHeaderRow, maxBudgetRows, type RowChange } from ".
 const rowIndexPercent = 6;
 const currency = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
 
+type CellUndo = {
+  previous: string;
+  next: string;
+  schedule?: ScheduleSettings | null;
+};
+
 export default function SpreadsheetGrid({
   cells, update, inputs, readOnlyCells, label, help, promptJobs, columnShares, onColumnResize,
   rowIds, rowsReady, changeRow,
@@ -82,6 +88,7 @@ export default function SpreadsheetGrid({
     setSelected(address);
     setPromptExpanded(true);
   }
+  const undo = useRef({ rowIds, cells: new Map<string, CellUndo>() });
   const [editing, setEditing] = useState<string>();
   const [draft, setDraft] = useState("");
   const read = useMemo(() => evaluateSheet(cells, rowCount, inputs), [cells, inputs, rowCount]);
@@ -108,6 +115,45 @@ export default function SpreadsheetGrid({
     return job?.formula ?? cells[address] ?? "";
   }
 
+  function undoHistory() {
+    // Saved formula text can change when rows move, so start a fresh history.
+    if (undo.current.rowIds !== rowIds) undo.current = { rowIds, cells: new Map() };
+    return undo.current.cells;
+  }
+
+  function saveCell(address: string, value: string) {
+    const history = undoHistory();
+    const previous = raw(address);
+    if (value === previous) return;
+    const job = promptJobs[address];
+    const schedule = job?.schedule;
+    let previousSchedule: ScheduleSettings | null | undefined;
+    if (schedule) {
+      const [minute, hour, day, , weekday] = schedule.cron.split(" ");
+      previousSchedule = {
+        cadence: schedule.cadence,
+        timezone: schedule.timezone,
+        time: [hour, minute].map((part) => part.padStart(2, "0")).join(":"),
+        day: schedule.cadence === "weekly" ? weekday : day,
+      };
+    } else if (job) {
+      previousSchedule = null;
+    }
+    history.set(address, { previous, next: value, schedule: previousSchedule });
+    update(address, value);
+  }
+
+  function undoCell(address: string) {
+    const history = undoHistory();
+    const change = history.get(address);
+    if (!change) return;
+    history.delete(address);
+    const current = raw(address);
+    if (current === change.next || current === change.previous) {
+      update(address, change.previous, change.schedule);
+    }
+  }
+
   function begin(address: string, value = raw(address)) {
     setSelected(address);
     setEditing(address);
@@ -115,7 +161,7 @@ export default function SpreadsheetGrid({
   }
 
   function commit(address: string) {
-    if (editing === address && draft !== raw(address)) update(address, draft);
+    if (editing === address) saveCell(address, draft);
     setEditing(undefined);
   }
 
@@ -123,6 +169,12 @@ export default function SpreadsheetGrid({
     const { key } = event;
     if (event.target !== event.currentTarget) return;
     const isEditing = editing === address;
+    if (!isEditing && !readOnlyCells.has(address) && (event.ctrlKey || event.metaKey)
+      && !event.shiftKey && !event.altKey && key.toLowerCase() === "z") {
+      event.preventDefault();
+      undoCell(address);
+      return;
+    }
     if (key === "Escape" && isEditing) {
       event.preventDefault();
       setEditing(undefined);
@@ -152,7 +204,7 @@ export default function SpreadsheetGrid({
         begin(address, key);
       } else if (editable && (key === "Backspace" || key === "Delete")) {
         event.preventDefault();
-        update(address, "");
+        saveCell(address, "");
       }
     }
     if (nextAddress) {
@@ -198,9 +250,13 @@ export default function SpreadsheetGrid({
             if (!formulaReadOnly) { setEditing("formula"); setDraft(raw(selected)); }
           }}
           onChange={(event) => setDraft(event.target.value)}
-          onBlur={() => { if (editing === "formula" && draft !== raw(selected)) update(selected, draft); setEditing(undefined); }}
+          onBlur={() => { if (editing === "formula") saveCell(selected, draft); setEditing(undefined); }}
           onKeyDown={(event) => {
-            if (event.key === "Enter") event.currentTarget.blur();
+            if (event.key === "Enter") {
+              const cell = document.getElementById(`budget-cell-${selected}`);
+              if (cell) cell.focus();
+              else event.currentTarget.blur();
+            }
             if (event.key === "Escape") setDraft(raw(selected));
           }} />
       </div>
@@ -334,7 +390,7 @@ export default function SpreadsheetGrid({
                             onPaste={(event) => {
                               if (readOnly || isEditing) return;
                               event.preventDefault();
-                              update(address, event.clipboardData.getData("text/plain"));
+                              saveCell(address, event.clipboardData.getData("text/plain"));
                             }}
                             onChange={(event) => setDraft(event.target.value)}
                             onBlur={() => commit(address)}
