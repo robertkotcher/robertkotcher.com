@@ -19,6 +19,7 @@ const keyFor = (sheet: string, cell: string) => `${sheet}:${cell}`;
 export function usePromptCells(endpoint: string) {
   const [records, setRecords] = useState<Record<string, StoredCell>>({});
   const [loaded, setLoaded] = useState(false);
+  const [loadFailed, setLoadFailed] = useState(false);
   const [toast, setToast] = useState<{ text: string; error: boolean }>();
   const writes = useRef(Promise.resolve());
   const pending = useRef(0);
@@ -30,14 +31,15 @@ export function usePromptCells(endpoint: string) {
       const observedRevision = revision.current;
       try {
         const response = await fetch(endpoint, { signal: abort.signal, cache: "no-store" });
-        if (!response.ok) return;
+        if (!response.ok) throw new Error("Could not load the budget.");
         const rows: StoredCell[] = await response.json();
         if (!abort.signal.aborted && observedRevision === revision.current && pending.current === 0) {
           replaceRecords(rows);
           setLoaded(true);
+          setLoadFailed(false);
         }
       } catch {
-        // A temporary connection failure leaves the previous values visible.
+        if (!abort.signal.aborted) setLoadFailed(true);
       }
     }
     void refresh();
@@ -61,7 +63,7 @@ export function usePromptCells(endpoint: string) {
     ));
   }
 
-  function valuesFor(sheet: string) {
+  function valuesFor(sheet: string): Record<string, string> {
     return Object.fromEntries(Object.values(records).flatMap((record) =>
       record.sheet === sheet && record.formula === null ? [[record.cell, record.cell_value]] : [],
     ));
@@ -123,5 +125,5 @@ export function usePromptCells(endpoint: string) {
     });
   }
 
-  return { jobsFor, valuesFor, edit, changeRow, loaded, toast };
+  return { jobsFor, valuesFor, edit, changeRow, loaded, loadFailed, toast };
 }

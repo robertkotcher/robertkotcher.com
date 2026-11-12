@@ -52,7 +52,7 @@ export default function BudgetSheet({ initialPlan, endpoint }: { initialPlan: Re
     minSalary + Math.round((savedSalary - minSalary) / salaryStep) * salaryStep));
   const savedCells = prompts.valuesFor("budget");
   const savedJobs = prompts.jobsFor("budget");
-  const layout = settings[budgetLayoutKey];
+  const layout = String(settings[budgetLayoutKey] ?? "");
   const { changes, rowIds } = useMemo(() => {
     const changes = readRowChanges(layout);
     return { changes, rowIds: budgetRowIds(changes) };
@@ -101,8 +101,8 @@ export default function BudgetSheet({ initialPlan, endpoint }: { initialPlan: Re
             </div>
             <div className="budget-setting">
               <span>Annual base salary</span>
-              <button type="button" className="budget-setting-link" popoverTarget="budget-salary-editor">
-                {dollars(savedSalary)}
+              <button type="button" className="budget-setting-link" popoverTarget="budget-salary-editor" disabled={!prompts.loaded}>
+                {prompts.loaded ? dollars(savedSalary) : "Loading…"}
               </button>
               <form id="budget-salary-editor" className="budget-setting-popover budget-salary-editor" popover="auto"
                 onToggle={(event) => { if (event.newState === "closed") setSalaryDraft(undefined); }}
@@ -131,14 +131,43 @@ export default function BudgetSheet({ initialPlan, endpoint }: { initialPlan: Re
           </div>
         </header>
 
-        <section aria-label="Cash flow">
-          <SpreadsheetGrid {...gridSizing} label="Income, taxes, and expenses"
+        <section aria-label="Cash flow" aria-busy={!prompts.loaded}>
+          {!prompts.loaded ? (
+            <>
+              <span className="sr-only" role="status">Loading saved budget</span>
+              <div className="budget-loading" aria-hidden="true">
+                <div className="formula-bar">
+                  <span /><span>ƒx</span><i />
+                </div>
+                <div className="sheet-scroll">
+                  <table className="sheet-table cash-grid">
+                    <colgroup>
+                      <col style={{ width: "6%" }} />
+                      {gridSizing.columnShares.map((share, index) => (
+                        <col key={index} style={{ width: `${share * .0094}%` }} />
+                      ))}
+                    </colgroup>
+                    <thead><tr><th />{columns.map((column) => <th key={column}>{column}</th>)}</tr></thead>
+                    <tbody>
+                      {Array.from({ length: 10 }, (_, index) => (
+                        <tr key={index}>
+                          <th />
+                          {columns.map((column) => <td key={column}><i /></td>)}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              {prompts.loadFailed && <p role="status">Couldn’t load the budget. Retrying…</p>}
+            </>
+          ) : <SpreadsheetGrid {...gridSizing} label="Income, taxes, and expenses"
             cells={cells} readOnlyCells={readOnlyCells} promptJobs={jobs} rowIds={rowIds}
             rowsReady={prompts.loaded} changeRow={(change) => prompts.changeRow(change, changes.length)}
             inputs={{ SALARY: salary, RETIREMENT: contribution, NYC_FIXED_CREDIT: salary <= 250_000 ? 125 : 0 }}
             update={(address, value, schedule) => prompts.edit("budget", address, value, schedule, {
               revision: changes.length, storageCell: address[0] + rowIds[Number(address.slice(1)) - 1],
-            })} />
+            })} />}
         </section>
       </div>
       {prompts.toast && <div className="prompt-toast" role={prompts.toast.error ? "alert" : "status"}>

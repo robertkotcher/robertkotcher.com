@@ -339,3 +339,20 @@
 
 .budget-row-menu button:disabled { opacity: .5; cursor: default; }
 .budget-row-menu button:enabled:is(:hover, :focus-visible) { background: #e8f0fe; }
+
+.budget-loading .formula-bar { min-height: 32px; align-items: center; }
+.budget-loading .cash-grid td { height: 28px; padding-inline: 8px; }
+.budget-loading i {
+  display: block;
+  width: 64%;
+  height: 9px;
+  border-radius: 4px;
+  background: #e8eaed;
+}
+.budget-loading .formula-bar i { width: min(110px, 45%); margin-inline: 9px; }
+.budget-loading td:nth-child(3) i { width: 46%; margin-inline-start: auto; }
+.budget-loading tr:nth-child(even) td:not(:nth-child(3)) i { width: 46%; }
+@media (prefers-reduced-motion: no-preference) {
+  .budget-loading i { animation: budget-loading-pulse 1.4s ease-in-out infinite alternate; }
+}
+@keyframes budget-loading-pulse { to { opacity: .45; } }
