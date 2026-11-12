@@ -6,7 +6,7 @@ import { budgetDefaults, budgetLayoutKey, budgetRowIds, readRowChanges } from ".
 import { columnLayoutKey, columns, sheetColumnShares, type ColumnShares } from "./column-widths";
 import { usePromptCells } from "./usePromptCells";
 import { evaluateSheet, type SheetCells } from "./formulas";
-import { brooklynTaxCells, taxRowCount } from "./taxes";
+import { taxRowCount } from "./taxes";
 import type { RetirementPlan } from "./retirement";
 
 const currency = new Intl.NumberFormat("en-US", {
@@ -17,7 +17,6 @@ const defaultSalary = 250_000;
 const minSalary = 220_000;
 const maxSalary = 320_000;
 const salaryStep = 10_000;
-const places = ["NJ towns", "Brooklyn"] as const;
 const salaryNotches = Array.from({ length: (maxSalary - minSalary) / salaryStep + 1 },
   (_, index) => minSalary + index * salaryStep);
 
@@ -43,8 +42,6 @@ export default function BudgetSheet({ initialPlan, endpoint }: { initialPlan: Re
     onColumnResize: (shares: ColumnShares) =>
       prompts.edit("settings", columnLayoutKey("cash-flow"), shares.join(",")),
   };
-  const [place, setPlace] = useState<(typeof places)[number]>("NJ towns");
-  const brooklyn = place === "Brooklyn";
   const [salaryDraft, setSalaryDraft] = useState<number>();
   const savedSalary = Number(settings.salary ?? defaultSalary);
   const salary = salaryDraft ?? savedSalary;
@@ -57,7 +54,7 @@ export default function BudgetSheet({ initialPlan, endpoint }: { initialPlan: Re
     const changes = readRowChanges(layout);
     return { changes, rowIds: budgetRowIds(changes) };
   }, [layout]);
-  const defaults = useMemo(() => budgetDefaults(changes, brooklyn), [changes, brooklyn]);
+  const defaults = useMemo(() => budgetDefaults(changes, false), [changes]);
   const cells = { ...defaults };
   const jobs: typeof savedJobs = {};
   const readOnlyCells = new Set<string>();
@@ -65,7 +62,7 @@ export default function BudgetSheet({ initialPlan, endpoint }: { initialPlan: Re
     for (const column of columns) {
       const storageCell = column + id;
       const address = column + (index + 1);
-      if (calculatedTaxCells.has(storageCell) || (brooklyn && Object.hasOwn(brooklynTaxCells, storageCell))) readOnlyCells.add(address);
+      if (calculatedTaxCells.has(storageCell)) readOnlyCells.add(address);
       else if (Object.hasOwn(savedCells, storageCell)) cells[address] = savedCells[storageCell];
       else if (savedJobs[storageCell]) jobs[address] = savedJobs[storageCell];
     }
@@ -85,19 +82,7 @@ export default function BudgetSheet({ initialPlan, endpoint }: { initialPlan: Re
           <h1 className="budget-title">NYC area cost of living</h1>
           <div className="budget-header-controls">
             <div className="budget-setting">
-              <span>Places to live</span>
-              <button type="button" className="budget-place-trigger" popoverTarget="budget-place-picker">
-                {place}
-              </button>
-              <div id="budget-place-picker" className="budget-setting-popover budget-place-picker" popover="auto">
-                {places.map((option) => (
-                  <button key={option} type="button" className="budget-place-option" popoverTarget="budget-place-picker"
-                    popoverTargetAction="hide" aria-pressed={place === option} autoFocus={place === option}
-                    onClick={() => setPlace(option)}>
-                    {option} {place === option && <span aria-hidden="true">✓</span>}
-                  </button>
-                ))}
-              </div>
+              <strong>NJ towns</strong>
             </div>
             <div className="budget-setting">
               <span>Annual base salary</span>
@@ -164,7 +149,7 @@ export default function BudgetSheet({ initialPlan, endpoint }: { initialPlan: Re
           ) : <SpreadsheetGrid {...gridSizing} label="Income, taxes, and expenses"
             cells={cells} readOnlyCells={readOnlyCells} promptJobs={jobs} rowIds={rowIds}
             rowsReady={prompts.loaded} changeRow={(change) => prompts.changeRow(change, changes.length)}
-            inputs={{ SALARY: salary, RETIREMENT: contribution, NYC_FIXED_CREDIT: salary <= 250_000 ? 125 : 0 }}
+            inputs={{ SALARY: salary, RETIREMENT: contribution }}
             update={(address, value, schedule) => prompts.edit("budget", address, value, schedule, {
               revision: changes.length, storageCell: address[0] + rowIds[Number(address.slice(1)) - 1],
             })} />}
