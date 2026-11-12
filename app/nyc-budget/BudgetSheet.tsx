@@ -82,7 +82,7 @@ export default function BudgetSheet({ initialPlan, endpoint }: { initialPlan: Re
           <h1 className="budget-title">NYC area cost of living</h1>
           <div className="budget-header-controls">
             <div className="budget-setting">
-              <strong>NJ towns</strong>
+              <strong>Millburn, NJ</strong>
             </div>
             <div className="budget-setting">
               <span>Annual base salary</span>
