@@ -1,6 +1,6 @@
 import expenses from "./expenses.json";
 import { type SheetCells, shiftRowReferences } from "./formulas";
-import { annualTaxTotalRow, defaultTaxCells, taxRowCount } from "./taxes";
+import { annualTaxTotalRow, brooklynTaxCells, defaultTaxCells, taxRowCount } from "./taxes";
 
 export const expenseHeaderRow = taxRowCount + 2;
 const firstExpenseRow = expenseHeaderRow + 1;
@@ -51,7 +51,7 @@ export function budgetRowIds(changes: RowChange[]): number[] {
   return ids;
 }
 
-export function budgetDefaults(changes: RowChange[]): SheetCells {
+export function budgetDefaults(changes: RowChange[], brooklyn: boolean): SheetCells {
   return changes.reduce((cells, { row, insert }) => Object.fromEntries(
     Object.entries(cells).flatMap(([address, value]) => {
       const index = Number(address.slice(1));
@@ -59,5 +59,5 @@ export function budgetDefaults(changes: RowChange[]): SheetCells {
       const next = index + (insert ? Number(index >= row) : -Number(index > row));
       return [[address[0] + next, shiftRowReferences(value, row, insert)]];
     }),
-  ), defaultBudgetCells);
+  ), brooklyn ? { ...defaultBudgetCells, ...brooklynTaxCells } : defaultBudgetCells);
 }

@@ -36,7 +36,7 @@ export const defaultTaxCells: SheetCells = {
   A15: "New York bracket benefit recapture", B15: "=333+807*MIN(50000,MAX(0,B2-161550))/50000",
   C15: "Worksheet 2 adds $333 plus up to $807 as lower-bracket savings phase out.",
   A16: "New York State income tax", B16: "=B14+B15",
-  C16: "Adds bracket tax and recapture. The sheet assumes full-year NJ residency.",
+  C16: "Adds the New York State bracket tax and recapture.",
   A17: "New Jersey tax before credit", B17: "=(B2-2000)*0.0637-4042.50",
   C17: "Subtracts $2,000 in joint exemptions, then applies the NJ tax schedule.",
   A18: "New Jersey credit for New York tax", B18: "=MIN(B17,B16)",
@@ -44,11 +44,25 @@ export const defaultTaxCells: SheetCells = {
   A19: "New Jersey income tax after credit", B19: "=B17-B18",
   C19: "NJ tax before credit minus the credit. Any difference is still due to NJ.",
   A20: "Estimated annual taxes", B20: "=SUM(B9:B11)+B16+B19",
-  C20: "Adds federal, payroll, and net state taxes.",
+  C20: "Adds federal, payroll, and net state or city taxes.",
   A21: "Effective tax rate (%)", B21: "=B20/B2*100",
   C21: "Total taxes as a percentage of gross income.",
   A22: "Estimated annual take-home", B22: "=B2-B20",
   C22: "Gross income minus estimated annual taxes.",
   A23: "Estimated monthly take-home", B23: "=B22/12",
   C23: "Annual take-home divided by 12. Feeds the expense summary.",
+};
+
+
+// 2026 IT-2105-I, pages 8 and 10. Full-year NYC residents, filing jointly.
+export const brooklynTaxCells: SheetCells = {
+  A17: "New York City resident income tax",
+  B17: "=3264+(B13-90000)*0.03876",
+  C17: "Uses NY taxable income. The joint rate is 3.876% on income above $90,000.",
+  A18: "New York City school tax credits",
+  B18: "=37+(B13-21600)*0.00228+NYC_FIXED_CREDIT",
+  C18: "Includes the rate reduction and a $125 fixed credit through $250,000 of income.",
+  A19: "New York City income tax after credits",
+  B19: "=B17-B18",
+  C19: "Full-year Brooklyn residency and New York wages. No New Jersey income tax in this scenario.",
 };
