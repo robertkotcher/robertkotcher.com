@@ -190,7 +190,7 @@
 }
 @keyframes prompt-spin { to { transform: rotate(360deg); } }
 .prompt-result > * + * { margin-top: .45em; }
-.prompt-result-line { display: flex; align-items: baseline; gap: 8px; }
+.prompt-result-line { display: flex; align-items: center; gap: 8px; }
 .prompt-result-line .prompt-schedule { flex-shrink: 0; max-width: 50%; }
 .prompt-result-preview { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .prompt-result-markdown { min-width: 0; }
@@ -237,7 +237,6 @@
 
 .cash-grid .tax-breakdown-row td {
   background: #e8eaed;
-  border-block: 1px dashed #c4c7c9;
 }
 
 .cash-grid .tax-breakdown-row button {
