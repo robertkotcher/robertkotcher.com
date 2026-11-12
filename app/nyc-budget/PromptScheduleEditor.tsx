@@ -21,7 +21,10 @@ export default function PromptScheduleEditor({ cell, schedule, researchPrompt, l
   const editorId = useId();
 
   return (
-    <div className="prompt-schedule" onDoubleClick={(event) => event.stopPropagation()}>
+    <div className="prompt-schedule"
+      onClick={(event) => event.stopPropagation()}
+      onDoubleClick={(event) => event.stopPropagation()}
+      onFocus={(event) => event.stopPropagation()}>
       <button type="button" className="prompt-schedule-button" popoverTarget={editorId}
         aria-label={`Edit schedule for ${cell}${loading ? " (waiting for prompt results)" : ""}`} title="Edit schedule">
         <AlarmClock size={13} aria-hidden="true" />

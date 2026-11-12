@@ -9,7 +9,7 @@ import "./budget.css";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Budget",
+  title: "NYC area cost of living",
   robots: { index: false, follow: false },
 };
 
