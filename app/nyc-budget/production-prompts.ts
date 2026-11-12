@@ -1,3 +1,4 @@
+import { getVercelOidcToken } from "@vercel/oidc";
 import { CronExpressionParser } from "cron-parser";
 import { promptDb } from "./prompt-db";
 
@@ -49,8 +50,7 @@ async function finish(run: Run, result: string | null, error: string | null) {
 }
 
 async function research(prompt: string) {
-  const token = process.env.AI_GATEWAY_API_KEY ?? process.env.VERCEL_OIDC_TOKEN;
-  if (!token) throw new Error("Missing AI Gateway credentials.");
+  const token = process.env.AI_GATEWAY_API_KEY ?? await getVercelOidcToken();
   const response = await fetch("https://ai-gateway.vercel.sh/v1/responses", {
     method: "POST",
     headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
