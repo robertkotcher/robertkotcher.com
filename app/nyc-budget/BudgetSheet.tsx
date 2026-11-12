@@ -86,10 +86,10 @@ export default function BudgetSheet({ initialPlan, endpoint }: { initialPlan: Re
           <div className="budget-header-controls">
             <div className="budget-setting">
               <span>Places to live</span>
-              <button type="button" className="budget-setting-link" popoverTarget="budget-place-picker">
+              <button type="button" className="budget-place-trigger" popoverTarget="budget-place-picker">
                 {place}
               </button>
-              <div id="budget-place-picker" className="budget-setting-popover" popover="auto">
+              <div id="budget-place-picker" className="budget-setting-popover budget-place-picker" popover="auto">
                 {places.map((option) => (
                   <button key={option} type="button" className="budget-place-option" popoverTarget="budget-place-picker"
                     popoverTargetAction="hide" aria-pressed={place === option} autoFocus={place === option}
