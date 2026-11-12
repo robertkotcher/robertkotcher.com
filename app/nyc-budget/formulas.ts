@@ -70,6 +70,17 @@ export function evaluateSheet(cells: SheetCells, rowCount: number, inputs: Recor
         expect(")");
         return value;
       }
+      if (token === "MIN" || token === "MAX") {
+        expect("(");
+        const compare = token === "MIN" ? Math.min : Math.max;
+        let value = expression();
+        while (tokens[index] === ",") {
+          take();
+          value = compare(value, expression());
+        }
+        expect(")");
+        return value;
+      }
       if (token === "SUM") {
         expect("(");
         const first = take();

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { EB_Garamond, Open_Sans } from "next/font/google";
+import { EB_Garamond } from "next/font/google";
+import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
@@ -9,10 +10,10 @@ const garamond = EB_Garamond({
   display: "swap",
 });
 
-const openSans = Open_Sans({
+const openSans = localFont({
+  src: "../node_modules/@fontsource-variable/open-sans/files/open-sans-latin-wght-normal.woff2",
   variable: "--font-open-sans",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "700"],
+  weight: "300 800",
   display: "swap",
 });
 

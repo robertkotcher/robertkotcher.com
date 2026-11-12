@@ -18,6 +18,7 @@
     "export:resume": "node scripts/export-resume.mjs"
   },
   "dependencies": {
+    "@fontsource-variable/open-sans": "^5.3.0",
     "@vercel/analytics": "^2.0.1",
     "chart.js": "^4.6.1",
     "cron-parser": "^5.10.4",

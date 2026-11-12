@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import { AlarmClock } from "lucide-react";
 import type { PromptJob } from "./prompt-formula";
 
@@ -17,7 +17,7 @@ export default function PromptScheduleEditor({ cell, schedule, researchPrompt, u
   const [cadence, setCadence] = useState<Schedule["cadence"] | "once">(schedule?.cadence ?? "once");
   const [minute, hour, day, , weekday] = (schedule?.cron ?? "00 09 * * *").split(" ");
   const time = [hour, minute].map((part) => part.padStart(2, "0")).join(":");
-  const editorId = `budget-prompt-schedule-${cell}`;
+  const editorId = useId();
 
   return (
     <div className="prompt-schedule" onDoubleClick={(event) => event.stopPropagation()}>

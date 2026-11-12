@@ -5,16 +5,28 @@ import { buildPromptSchedule } from "../../../nyc-budget/prompt-schedule";
 
 import { isColumnLayoutKey, readColumnShares } from "../../../nyc-budget/column-widths";
 
+import { budgetAuthChallenge, budgetAuthorized } from "../../../nyc-budget/budget-auth";
+import { dispatchProductionPrompt } from "../../../nyc-budget/production-prompts";
+
+export const maxDuration = 120;
 export const runtime = "nodejs";
 
-function local(request: Request, write = false) {
+function deny(request: Request, write = false) {
   const host = request.headers.get("host") ?? "";
-  if (process.env.NODE_ENV !== "development" || !/^(localhost|127\.0\.0\.1)(:\d+)?$/.test(host)) return false;
-  return !write || request.headers.get("origin") === `http://${host}`;
+  const production = process.env.VERCEL_ENV === "production";
+  if (production) {
+    if (!budgetAuthorized(request.headers)) return budgetAuthChallenge();
+  } else if (process.env.NODE_ENV !== "development" || !/^(localhost|127\.0\.0\.1)(:\d+)?$/.test(host)) {
+    return new Response(null, { status: 404 });
+  }
+  if (write && request.headers.get("origin") !== `${production ? "https" : "http"}://${host}`) {
+    return new Response(null, { status: 403 });
+  }
 }
 
 export async function GET(request: Request) {
-  if (!local(request)) return new Response(null, { status: 404 });
+  const denied = deny(request);
+  if (denied) return denied;
   try {
     const { rows } = await promptDb().query("SELECT * FROM budget_prompt_cells WHERE formula IS NOT NULL OR cell_value IS NOT NULL");
     return NextResponse.json(rows, { headers: { "Cache-Control": "no-store" } });
@@ -24,7 +36,8 @@ export async function GET(request: Request) {
 }
 
 export async function PUT(request: Request) {
-  if (!local(request, true)) return new Response(null, { status: 404 });
+  const denied = deny(request, true);
+  if (denied) return denied;
 
   let sheet: string;
   let cell: string;
@@ -38,7 +51,7 @@ export async function PUT(request: Request) {
     ({ sheet, cell, formula } = body);
     const isSalary = sheet === "settings" && cell === "salary" && formula === null;
     const isColumnWidth = sheet === "settings" && formula === null && isColumnLayoutKey(cell);
-    if (!isSalary && !isColumnWidth && (!["cash-flow", "tax", "retirement"].includes(sheet) || !/^[A-D](?:[1-9]|[12]\d|3[0-4])$/.test(cell))) {
+    if (!isSalary && !isColumnWidth && (!["budget", "retirement"].includes(sheet) || !/^[A-D](?:[1-9]|[1-4]\d|5[0-8])$/.test(cell))) {
       throw new Error("Invalid sheet or cell.");
     }
     if (formula !== null && (typeof formula !== "string" || formula.length > 4096)) throw new Error("Invalid formula.");
@@ -79,6 +92,10 @@ export async function PUT(request: Request) {
         formula ? "queued" : "saved", value, replaceSchedule],
     );
     if (formula) after(async () => {
+      if (process.env.VERCEL_ENV === "production") {
+        await dispatchProductionPrompt();
+        return;
+      }
       const origin = process.env.NYC_BUDGET_EVE_URL ?? "http://127.0.0.1:2034";
       await fetch(`${origin}/eve/v1/dev/schedules/dispatch`, {
         method: "POST", signal: AbortSignal.timeout(310_000),
@@ -92,7 +109,8 @@ export async function PUT(request: Request) {
 
 
 export async function DELETE(request: Request) {
-  if (!local(request, true)) return new Response(null, { status: 404 });
+  const denied = deny(request, true);
+  if (denied) return denied;
   try {
     // Keep the version counters so retired runs can never match a future formula.
     await promptDb().query("UPDATE budget_prompt_cells SET cell_value = NULL WHERE formula IS NULL AND NOT (sheet = 'settings' AND cell LIKE 'width:%')");

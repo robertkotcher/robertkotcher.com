@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState, type KeyboardEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import type { ScheduleSettings } from "./prompt-schedule";
@@ -10,25 +10,28 @@ import expenses from "./expenses.json";
 import { evaluateSheet, type SheetCells } from "./formulas";
 
 import { columns, minShare, totalShare, type ColumnShares } from "./column-widths";
+import { annualTaxTotalRow, effectiveTaxRateRow, taxRowCount } from "./taxes";
 const rowIndexPercent = 6;
-const takeHomeRow = expenses.length + 13;
+const expenseHeaderRow = taxRowCount + 2;
+const firstExpenseRow = expenseHeaderRow + 1;
+const takeHomeRow = expenseHeaderRow + expenses.length + 12;
 const totalRow = takeHomeRow + 1;
-export const cashFlowRowCount = totalRow + 8;
-export const cashFlowTotals = new Set([takeHomeRow, totalRow, totalRow + 3]);
+export const budgetRowCount = totalRow + 8;
+export const budgetTotals = new Set([annualTaxTotalRow, taxRowCount, takeHomeRow, totalRow, totalRow + 3]);
 const currency = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
 
-export const defaultCashFlowCells: SheetCells = {
-  A1: "Item",
-  B1: "Monthly amount",
-  C1: "Notes",
+export const defaultExpenseCells: SheetCells = {
+  [`A${expenseHeaderRow}`]: "Expenses",
+  [`B${expenseHeaderRow}`]: "Monthly amount",
+  [`C${expenseHeaderRow}`]: "Notes",
   [`A${takeHomeRow}`]: "Estimated monthly take-home",
-  [`B${takeHomeRow}`]: "=TAKE_HOME",
+  [`B${takeHomeRow}`]: `=B${taxRowCount}`,
   ...Object.fromEntries(expenses.flatMap(({ label, center }, index) => [
-    [`A${index + 2}`, label],
-    [`B${index + 2}`, String(center)],
+    [`A${index + firstExpenseRow}`, label],
+    [`B${index + firstExpenseRow}`, String(center)],
   ])),
   [`A${totalRow}`]: "Total monthly expenses",
-  [`B${totalRow}`]: `=SUM(B2:B${takeHomeRow - 1})`,
+  [`B${totalRow}`]: `=SUM(B${firstExpenseRow}:B${takeHomeRow - 1})`,
   [`A${totalRow + 1}`]: "Available to save",
   [`B${totalRow + 1}`]: `=B${takeHomeRow}-B${totalRow}`,
   [`A${totalRow + 2}`]: "Planned retirement contributions",
@@ -37,20 +40,18 @@ export const defaultCashFlowCells: SheetCells = {
   [`B${totalRow + 3}`]: `=B${totalRow + 1}-B${totalRow + 2}`,
 };
 
-export default function SpreadsheetGrid({ cells, update, inputs, rowCount, totals, label, currencyColumns = "B", plainRows, help, titleRow, promptJobs, columnShares, onColumnResize }: {
+export default function SpreadsheetGrid({
+  cells, update, inputs, readOnlyCells, label, help, promptJobs, columnShares, onColumnResize,
+}: {
   cells: SheetCells;
+  update: (address: string, value: string, schedule?: ScheduleSettings | null) => void;
+  inputs: Record<string, number>;
+  readOnlyCells: ReadonlySet<string>;
+  label: string;
+  help?: string;
+  promptJobs: Record<string, PromptJob>;
   columnShares: ColumnShares;
   onColumnResize: (shares: ColumnShares) => void;
-  update: (address: string, value: string, schedule?: ScheduleSettings | null) => void;
-  inputs?: Record<string, number>;
-  rowCount: number;
-  totals?: ReadonlySet<number>;
-  label: string;
-  currencyColumns?: string;
-  plainRows?: ReadonlySet<number>;
-  help?: string;
-  promptJobs?: Record<string, PromptJob>;
-  titleRow?: boolean;
 }) {
   const [preview, setPreview] = useState<ColumnShares>();
   const shares = preview ?? columnShares;
@@ -72,15 +73,37 @@ export default function SpreadsheetGrid({ cells, update, inputs, rowCount, total
   }
 
   const [selected, setSelected] = useState("B2");
+  const [promptExpanded, setPromptExpanded] = useState(false);
+  const sheet = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function collapseOnOutsideClick(event: PointerEvent) {
+      if (event.target instanceof Node && !sheet.current?.contains(event.target)) {
+        setPromptExpanded(false);
+      }
+    }
+
+    document.addEventListener("pointerdown", collapseOnOutsideClick);
+    return () => document.removeEventListener("pointerdown", collapseOnOutsideClick);
+  }, []);
+
+  function selectPrompt(address: string) {
+    setSelected(address);
+    setPromptExpanded(true);
+  }
   const [editing, setEditing] = useState<string>();
   const [draft, setDraft] = useState("");
-  const read = useMemo(() => evaluateSheet(cells, rowCount, inputs ?? {}), [cells, rowCount, inputs]);
-  const raw = (address: string) => promptJobs?.[address]?.formula ?? cells[address] ?? "";
+  const read = useMemo(() => evaluateSheet(cells, budgetRowCount, inputs), [cells, inputs]);
 
-  function begin(address: string) {
+  function raw(address: string) {
+    const job = readOnlyCells.has(address) ? undefined : promptJobs[address];
+    return job?.formula ?? cells[address] ?? "";
+  }
+
+  function begin(address: string, value = raw(address)) {
     setSelected(address);
     setEditing(address);
-    setDraft(raw(address));
+    setDraft(value);
   }
 
   function commit(address: string) {
@@ -88,29 +111,59 @@ export default function SpreadsheetGrid({ cells, update, inputs, rowCount, total
     setEditing(undefined);
   }
 
-  function cellKey(event: KeyboardEvent<HTMLInputElement>, address: string) {
-    if (event.key === "Escape") {
+  function cellKey(event: KeyboardEvent<HTMLElement>, address: string, editable: boolean) {
+    const { key } = event;
+    if (event.target !== event.currentTarget) return;
+    const isEditing = editing === address;
+    if (key === "Escape" && isEditing) {
       event.preventDefault();
-      setDraft(raw(address));
+      setEditing(undefined);
       return;
     }
-    if (event.key === "Enter") {
+
+    const row = Number(address.slice(1));
+    const column = columns.findIndex((letter) => letter === address[0]);
+    const direction = event.shiftKey ? -1 : 1;
+    let nextAddress: string | undefined;
+    if (key === "Enter") nextAddress = address[0] + (row + direction);
+    if (!isEditing) {
+      if (key === "ArrowUp") nextAddress = address[0] + (row - 1);
+      if (key === "ArrowDown") nextAddress = address[0] + (row + 1);
+      if (key === "ArrowLeft" || key === "ArrowRight") {
+        const nextColumn = columns[column + (key === "ArrowLeft" ? -1 : 1)];
+        if (nextColumn) nextAddress = nextColumn + row;
+      }
+      if (editable && key === "F2") {
+        event.preventDefault();
+        begin(address);
+      } else if (editable && key.length === 1 && !event.metaKey && !event.ctrlKey && !event.altKey) {
+        event.preventDefault();
+        begin(address, key);
+      } else if (editable && (key === "Backspace" || key === "Delete")) {
+        event.preventDefault();
+        update(address, "");
+      }
+    }
+    if (nextAddress) {
       event.preventDefault();
-      const nextRow = Number(address.slice(1)) + (event.shiftKey ? -1 : 1);
-      const next = document.getElementById(`budget-cell-${address[0]}${nextRow}`);
+      const next = document.getElementById(`budget-cell-${nextAddress}`);
       if (next) next.focus();
-      else event.currentTarget.blur();
+      else if (key === "Enter" && isEditing) event.currentTarget.blur();
     }
   }
 
+  const formulaReadOnly = readOnlyCells.has(selected);
+
   return (
-    <>
+    <div ref={sheet}>
       <div className="formula-bar">
         <output aria-label="Selected cell">{selected}</output>
         <span aria-hidden="true">ƒx</span>
-        <input aria-label="Formula bar" placeholder="Value or formula" maxLength={4096}
+        <input aria-label="Formula bar" placeholder="Value or formula" maxLength={4096} readOnly={formulaReadOnly}
           value={editing === "formula" ? draft : raw(selected)}
-          onFocus={() => { setEditing("formula"); setDraft(raw(selected)); }}
+          onFocus={() => {
+            if (!formulaReadOnly) { setEditing("formula"); setDraft(raw(selected)); }
+          }}
           onChange={(event) => setDraft(event.target.value)}
           onBlur={() => { if (editing === "formula" && draft !== raw(selected)) update(selected, draft); setEditing(undefined); }}
           onKeyDown={(event) => {
@@ -158,42 +211,46 @@ export default function SpreadsheetGrid({ cells, update, inputs, rowCount, total
             </th>
           ))}</tr></thead>
           <tbody>
-            {Array.from({ length: rowCount }, (_, index) => {
-              const row = index + 1;
+            {Array.from({ length: budgetRowCount }, (_, rowIndex) => {
+              const row = rowIndex + 1;
               return (
-                <tr key={row} className={titleRow && row === 1 ? "sheet-title-row" : totals?.has(row) ? "subtotal" : undefined}>
+                <tr key={row} className={row === 1 || row === expenseHeaderRow ? "sheet-title-row" : budgetTotals.has(row) ? "subtotal" : undefined}>
                   <th scope="row" className={selected.slice(1) === String(row) ? "selected-header" : ""}>{row}</th>
                   {columns.map((column) => {
                     const address = column + row;
-                    const job = promptJobs?.[address];
+                    const readOnly = readOnlyCells.has(address);
+                    const job = readOnly ? undefined : promptJobs[address];
                     const loading = job?.status === "queued" || job?.status === "running";
                     const value = read(address);
-                    const display = typeof value === "number" && currencyColumns.includes(column) && !plainRows?.has(row) ? currency.format(value) : String(value);
+                    const isSelected = selected === address;
+                    const isEditing = isSelected && editing === address;
+                    const display = typeof value === "number" && column === "B" && row !== effectiveTaxRateRow ? currency.format(value) : String(value);
                     return (
-                      <td key={address} className={selected === address ? "selected-cell" : undefined}
+                      <td key={address} className={isSelected ? "selected-cell" : undefined}
                         onClick={(event) => {
                           if (event.target === event.currentTarget) {
-                            event.currentTarget.querySelector("input")?.focus();
+                            event.currentTarget.querySelector<HTMLElement>(".prompt-result, input")?.focus();
                           }
                         }}>
-                        {job && editing !== address ? (
+                        {job ? (
                           <div className="prompt-result" id={`budget-cell-${address}`} tabIndex={0}
-                            aria-label={`Prompt cell ${address}`} onFocus={() => setSelected(address)}
-                            onDoubleClick={(event) => { if (!(event.target as HTMLElement).closest("a")) begin(address); }}
-                            onKeyDown={(event) => {
-                              if (event.target === event.currentTarget && (event.key === "Enter" || event.key === "F2")) {
-                                event.preventDefault();
-                                begin(address);
-                              }
-                            }}>
-                            <PromptScheduleEditor key={job.version} cell={address} schedule={job.schedule}
-                              researchPrompt={job.research_prompt} update={update} />
-                            {job.result && <ReactMarkdown remarkPlugins={[remarkGfm]} skipHtml
-                              allowedElements={["a", "p", "ul", "ol", "li", "strong", "em", "code", "pre", "br", "del",
-                                "h1", "h2", "h3", "h4", "h5", "h6", "blockquote", "table", "thead", "tbody", "tr", "th", "td", "hr"]}
-                              unwrapDisallowed>
-                              {job.result}
-                            </ReactMarkdown>}
+                            aria-label={`Prompt cell ${address}`} onFocus={() => selectPrompt(address)}
+                            onClick={() => selectPrompt(address)}
+                            onKeyDown={(event) => cellKey(event, address, false)}>
+                            <div className="prompt-result-line">
+                              <PromptScheduleEditor key={job.version} cell={address} schedule={job.schedule}
+                                researchPrompt={job.research_prompt} update={update} />
+                              {job.result && (isSelected && promptExpanded ? (
+                                <div className="prompt-result-markdown">
+                                  <ReactMarkdown remarkPlugins={[remarkGfm]} skipHtml
+                                    allowedElements={["a", "p", "ul", "ol", "li", "strong", "em", "code", "pre", "br", "del",
+                                      "h1", "h2", "h3", "h4", "h5", "h6", "blockquote", "table", "thead", "tbody", "tr", "th", "td", "hr"]}
+                                    unwrapDisallowed>
+                                    {job.result}
+                                  </ReactMarkdown>
+                                </div>
+                              ) : <span className="prompt-result-preview">{job.result}</span>)}
+                            </div>
                             {job.schedule && job.next_run_at && job.status !== "queued" && (
                               <small>Next run {new Intl.DateTimeFormat("en-US", {
                                 timeZone: job.schedule.timezone, dateStyle: "medium", timeStyle: "short",
@@ -205,14 +262,19 @@ export default function SpreadsheetGrid({ cells, update, inputs, rowCount, total
                               </small>
                             ) : job.status !== "complete" && <small>{job.error ?? job.status}</small>}
                           </div>
-                        ) : <input id={`budget-cell-${address}` } aria-label={`Cell ${address}`} maxLength={4096}
+                        ) : <input id={`budget-cell-${address}` } aria-label={`Cell ${address}`} maxLength={4096} readOnly={readOnly || !isEditing}
                           className={typeof value === "number" ? "numeric-cell" : undefined}
-                          autoFocus={Boolean(job && editing === address)}
-                          value={editing === address ? draft : display}
-                          onFocus={(event) => { begin(address); event.currentTarget.select(); }}
+                          value={isEditing ? draft : display}
+                          onFocus={() => setSelected(address)}
+                          onDoubleClick={() => { if (!readOnly) begin(address); }}
+                          onPaste={(event) => {
+                            if (readOnly || isEditing) return;
+                            event.preventDefault();
+                            update(address, event.clipboardData.getData("text/plain"));
+                          }}
                           onChange={(event) => setDraft(event.target.value)}
                           onBlur={() => commit(address)}
-                          onKeyDown={(event) => cellKey(event, address)} />}
+                          onKeyDown={(event) => cellKey(event, address, !readOnly)} />}
                       </td>
                     );
                   })}
@@ -223,6 +285,6 @@ export default function SpreadsheetGrid({ cells, update, inputs, rowCount, total
         </table>
       </div>
       {help && <p className="grid-help">{help}</p>}
-    </>
+    </div>
   );
 }

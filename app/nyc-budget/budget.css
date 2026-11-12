@@ -99,8 +99,6 @@
   color: white;
 }
 .budget-salary-editor button[type="submit"]:hover { background: #174ea6; }
-.tax-sheet { margin-top: 12px; }
-.tax-sheet .budget-input { max-width: 140px; }
 
 .two-column-sheet { table-layout: fixed; min-width: 0; }
 .two-column-sheet th:nth-child(2) { width: min(40%, 200px); }
@@ -176,6 +174,11 @@
 }
 @keyframes prompt-spin { to { transform: rotate(360deg); } }
 .prompt-result > * + * { margin-top: .45em; }
+.prompt-result-line { display: flex; align-items: baseline; gap: 8px; }
+.prompt-result-line .prompt-schedule { flex-shrink: 0; max-width: 50%; }
+.prompt-result-preview { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.prompt-result-markdown { min-width: 0; }
+.prompt-result-markdown > * + * { margin-top: .45em; }
 .prompt-result :is(h1, h2, h3, h4, h5, h6) { font-weight: 700; }
 .prompt-result blockquote { padding-inline-start: .65em; border-inline-start: 2px solid #dadce0; }
 .prompt-result pre { white-space: pre-wrap; }

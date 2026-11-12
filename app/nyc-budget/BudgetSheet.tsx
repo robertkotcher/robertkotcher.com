@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import expenses from "./expenses.json";
-import SpreadsheetGrid, { cashFlowRowCount, cashFlowTotals, defaultCashFlowCells } from "./SpreadsheetGrid";
+import SpreadsheetGrid, { defaultExpenseCells } from "./SpreadsheetGrid";
 import { columnLayoutKey, sheetColumnShares, type ColumnShares } from "./column-widths";
 import { usePromptCells } from "./usePromptCells";
 import { evaluateSheet, type SheetCells } from "./formulas";
+import { defaultTaxCells, taxRowCount } from "./taxes";
 import type { RetirementPlan } from "./retirement";
 
 const currency = new Intl.NumberFormat("en-US", {
@@ -18,7 +19,6 @@ const maxSalary = 320_000;
 const salaryStep = 10_000;
 const salaryNotches = Array.from({ length: (maxSalary - minSalary) / salaryStep + 1 },
   (_, index) => minSalary + index * salaryStep);
-const defaultTakeHomeRate = 15_682 * 12 / defaultSalary * 100;
 
 const planCells = [
   ["cash", "Starting savings"], ["stocks", "Starting stocks"], ["bonds", "Starting bonds"],
@@ -27,16 +27,7 @@ const planCells = [
   ["month3", "Month 3 transfer to stocks"], ["month9", "Month 9 transfer to stocks"],
 ] as const;
 
-const defaultNjRate = Number((100 - defaultTakeHomeRate).toFixed(4));
-const defaultTaxCells: SheetCells = {
-  B1: "Millburn, NJ", C1: "Brooklyn, NY",
-  A2: "Gross annual salary", B2: "=SALARY", C2: "=SALARY",
-  A3: "Effective tax rate (%)", B3: String(defaultNjRate),
-  A4: "Estimated annual taxes",
-  A5: "Estimated annual take-home",
-  A6: "Estimated monthly take-home",
-};
-
+const calculatedTaxCells = new Set(Array.from({ length: taxRowCount - 2 }, (_, index) => `B${index + 3}`));
 function planToCells(plan: RetirementPlan): SheetCells {
   return Object.fromEntries(planCells.flatMap(([key, label], index) => [
     [`A${index + 1}`, label], [`B${index + 1}`, String(plan[key])],
@@ -56,21 +47,11 @@ export default function BudgetSheet({ initialPlan }: { initialPlan: RetirementPl
   const salary = salaryDraft ?? savedSalary;
   const sliderSalary = salaryDraft ?? Math.min(maxSalary, Math.max(minSalary,
     minSalary + Math.round((savedSalary - minSalary) / salaryStep) * salaryStep));
-  const cells = { ...defaultCashFlowCells, ...prompts.valuesFor("cash-flow") };
-  const tax = { ...defaultTaxCells, ...prompts.valuesFor("tax") };
+  const savedCells = prompts.valuesFor("budget");
+  const cells = { ...defaultTaxCells, ...defaultExpenseCells, ...Object.fromEntries(
+    Object.entries(savedCells).filter(([address]) => !calculatedTaxCells.has(address)),
+  ) };
   const retirement = { ...planToCells(initialPlan), ...prompts.valuesFor("retirement") };
-  const taxInputs = { SALARY: salary };
-  const taxValues = { ...tax };
-
-  for (const column of ["B", "C"]) {
-    if (!tax[`${column}3`]?.trim()) continue;
-    taxValues[`${column}4`] ??= `=${column}2*${column}3/100`;
-    taxValues[`${column}5`] ??= `=${column}2-${column}4`;
-    taxValues[`${column}6`] ??= `=${column}5/12`;
-  }
-
-  const takeHome = evaluateSheet(taxValues, 16, taxInputs)("B6");
-  const monthlyPay = typeof takeHome === "number" ? takeHome : 0;
   const readPlan = evaluateSheet(retirement, 18, {});
   const plan = Object.fromEntries(planCells.map(([key], index) => {
     const value = readPlan(`B${index + 1}`);
@@ -129,13 +110,21 @@ export default function BudgetSheet({ initialPlan }: { initialPlan: RetirementPl
         </header>
 
         <section aria-label="Cash flow">
-          <SpreadsheetGrid {...gridSizing} key="cash-flow" cells={cells} promptJobs={prompts.jobsFor("cash-flow")} update={(address, value, schedule) => prompts.edit("cash-flow", address, value, schedule)}
-            rowCount={cashFlowRowCount} totals={cashFlowTotals} label="Monthly cash flow sheet" titleRow
-            inputs={{ TAKE_HOME: monthlyPay, RETIREMENT: contribution }}
-            help="Add expenses in the blank rows above Total monthly expenses. Try =B2*2 or =SUM(B2:B5)." />
+          <SpreadsheetGrid {...gridSizing} label="Income, taxes, and expenses"
+            cells={cells} readOnlyCells={calculatedTaxCells} promptJobs={prompts.jobsFor("budget")}
+            inputs={{ SALARY: salary, RETIREMENT: contribution }}
+            update={(address, value, schedule) => prompts.edit("budget", address, value, schedule)}
+            help={`Add expenses in the blank rows above Total monthly expenses. Use B${taxRowCount} to reference monthly take-home.`} />
           <details className="budget-details">
             <summary>Budget assumptions and sources</summary>
-            <p>Monthly take-home uses the estimated New Jersey effective tax rate, before retirement contributions.</p>
+            <p>2026 estimate for one W-2 salary of $220,000–$320,000, married filing jointly, living in Millburn all year and earning all wages in Brooklyn. Uses standard deductions where available and excludes dependents, other income, benefit deductions, and credits apart from the New Jersey credit for New York tax. Monthly take-home averages annual tax liability over 12 months.
+            </p>
+            <p>
+              <a href="https://www.irs.gov/irb/2025-45_IRB">IRS income tax rates</a>
+              <a href="https://www.ssa.gov/cola/factsheets/2026.html">Social Security and Medicare</a>
+              <a href="https://www.tax.ny.gov/pdf/current_forms/it/it2105i.pdf">New York estimated tax instructions</a>
+              <a href="https://www.nj.gov/treasury/taxation/taxtables.shtml">New Jersey tax rates</a>
+              <a href="https://nj.gov/treasury/taxation/pdf/pubs/tgi-ee/git3w.pdf">New Jersey credit for New York tax</a></p>
             <ul>{expenses.map(({ id, label, note, sources }) => (
               <li key={id}><strong>{label}.</strong> {note} {sources?.map(([name, url]) => <a key={url} href={url}>{name}</a>)}</li>
             ))}</ul>

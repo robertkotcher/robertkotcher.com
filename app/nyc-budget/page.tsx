@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
+import { budgetAuthorized } from "./budget-auth";
 import BudgetSheet from "./BudgetSheet";
 import { defaultPlan, type RetirementPlan } from "./retirement";
 import "./budget.css";
@@ -28,6 +30,7 @@ function initialPlan(): RetirementPlan {
   }
 }
 
-export default function BudgetPage() {
+export default async function BudgetPage() {
+  if (process.env.VERCEL_ENV === "production" && !budgetAuthorized(await headers())) return null;
   return <BudgetSheet initialPlan={initialPlan()} />;
 }
