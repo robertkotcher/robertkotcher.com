@@ -21,7 +21,7 @@ type CellUndo = {
 };
 
 export default function SpreadsheetGrid({
-  cells, update, inputs, readOnlyCells, label, help, promptJobs, columnShares, onColumnResize,
+  cells, update, inputs, readOnlyCells, label, promptJobs, columnShares, onColumnResize,
   rowIds, rowsReady, changeRow,
 }: {
   cells: SheetCells;
@@ -32,7 +32,6 @@ export default function SpreadsheetGrid({
   inputs: Record<string, number>;
   readOnlyCells: ReadonlySet<string>;
   label: string;
-  help?: string;
   promptJobs: Record<string, PromptJob>;
   columnShares: ColumnShares;
   onColumnResize: (shares: ColumnShares) => void;
@@ -402,7 +401,6 @@ export default function SpreadsheetGrid({
           </tbody>
         </table>
       </div>
-      {help && <p className="grid-help">{help}</p>}
     </div>
   );
 }

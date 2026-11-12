@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import expenses from "./expenses.json";
 import SpreadsheetGrid from "./SpreadsheetGrid";
 import { budgetDefaults, budgetLayoutKey, budgetRowIds, readRowChanges } from "./budget-rows";
 import { columnLayoutKey, columns, sheetColumnShares, type ColumnShares } from "./column-widths";
@@ -132,22 +131,7 @@ export default function BudgetSheet({ initialPlan, endpoint }: { initialPlan: Re
             inputs={{ SALARY: salary, RETIREMENT: contribution }}
             update={(address, value, schedule) => prompts.edit("budget", address, value, schedule, {
               revision: changes.length, storageCell: address[0] + rowIds[Number(address.slice(1)) - 1],
-            })}
-            help="Use the row menu to add or remove expenses." />
-          <details className="budget-details">
-            <summary>Budget assumptions and sources</summary>
-            <p>2026 estimate for one W-2 salary of $220,000–$320,000, married filing jointly, living in Millburn all year and earning all wages in Brooklyn. Uses standard deductions where available and excludes dependents, other income, benefit deductions, and credits apart from the New Jersey credit for New York tax. Monthly take-home averages annual tax liability over 12 months.
-            </p>
-            <p>
-              <a href="https://www.irs.gov/irb/2025-45_IRB">IRS income tax rates</a>
-              <a href="https://www.ssa.gov/cola/factsheets/2026.html">Social Security and Medicare</a>
-              <a href="https://www.tax.ny.gov/pdf/current_forms/it/it2105i.pdf">New York estimated tax instructions</a>
-              <a href="https://www.nj.gov/treasury/taxation/taxtables.shtml">New Jersey tax rates</a>
-              <a href="https://nj.gov/treasury/taxation/pdf/pubs/tgi-ee/git3w.pdf">New Jersey credit for New York tax</a></p>
-            <ul>{expenses.map(({ id, label, note, sources }) => (
-              <li key={id}><strong>{label}.</strong> {note} {sources?.map(([name, url]) => <a key={url} href={url}>{name}</a>)}</li>
-            ))}</ul>
-          </details>
+            })} />
         </section>
       </div>
       {prompts.toast && <div className="prompt-toast" role={prompts.toast.error ? "alert" : "status"}>
