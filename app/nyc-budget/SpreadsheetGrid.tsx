@@ -381,7 +381,7 @@ export default function SpreadsheetGrid({
                             className={typeof value === "number" ? "numeric-cell" : undefined}
                             value={isEditing ? draft : display}
                             onFocus={() => setSelected(address)}
-                            onDoubleClick={() => { if (!readOnly) begin(address); }}
+                            onClick={() => { if (!readOnly && !isEditing) begin(address); }}
                             onPaste={(event) => {
                               if (readOnly || isEditing) return;
                               event.preventDefault();
