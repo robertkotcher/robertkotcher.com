@@ -1,4 +1,10 @@
 @import "tailwindcss";
+@plugin "daisyui" {
+  themes: light;
+  root: ".budget-sheet";
+  prefix: "dui-";
+  include: button, input, select, table;
+}
 
 :root {
   --navy: #162e66;

@@ -1,0 +1,136 @@
+[
+  {
+    "id": "rent",
+    "label": "Two-bedroom rent",
+    "center": 3400,
+    "note": "Planning midpoint between published Millburn averages of $2,900 and $3,906.",
+    "sources": [
+      [
+        "Zillow",
+        "https://www.zillow.com/rental-manager/market-trends/millburn-nj/"
+      ],
+      [
+        "Apartments.com",
+        "https://www.apartments.com/rent-market-trends/millburn-nj/"
+      ]
+    ]
+  },
+  {
+    "id": "daycare",
+    "label": "Daycare · younger child",
+    "center": 1450,
+    "note": "Rounded Essex County one-child estimate of $17,171/year. Actual full-day tuition varies by age and provider.",
+    "sources": [
+      [
+        "MIT Living Wage",
+        "https://livingwage.mit.edu/counties/34013"
+      ]
+    ]
+  },
+  {
+    "id": "school",
+    "label": "After-school care & camp",
+    "center": 650,
+    "note": "One child now. Annualized estimate using 36 weeks × $147 for aftercare, six weeks × $400 for camp, and $75 registration. Camp is a planning allowance.",
+    "sources": [
+      [
+        "Millburn AlphaBEST rates",
+        "https://www.alphabest.org/millburnnj/"
+      ],
+      [
+        "Town camp example",
+        "https://twp.millburn.nj.us/DocumentCenter/View/9633"
+      ]
+    ]
+  },
+  {
+    "id": "groceries",
+    "label": "Groceries",
+    "center": 1240,
+    "note": "Essex County basic-needs food estimate for two adults and two children, $14,875/year.",
+    "sources": [
+      [
+        "MIT Living Wage",
+        "https://livingwage.mit.edu/counties/34013"
+      ]
+    ]
+  },
+  {
+    "id": "utilities",
+    "label": "Utilities, internet & phones",
+    "center": 325,
+    "note": "County internet and mobile benchmark of about $173, plus about $150 assumed for utilities. Check what rent includes.",
+    "sources": [
+      [
+        "MIT Living Wage",
+        "https://livingwage.mit.edu/counties/34013"
+      ]
+    ]
+  },
+  {
+    "id": "dining",
+    "label": "Restaurants & takeout",
+    "center": 350,
+    "note": "Rounded from the U.S. household average of $329/month for food away from home.",
+    "sources": [
+      [
+        "BLS spending survey",
+        "https://www.bls.gov/opub/reports/consumer-expenditures/2024/home.htm"
+      ]
+    ]
+  },
+  {
+    "id": "car",
+    "label": "One car, all-in",
+    "center": 500,
+    "note": "Planning estimate: $150 insurance plus $350 for fuel, maintenance and payment or replacement savings.",
+    "sources": [
+      [
+        "NJ insurance benchmarks",
+        "https://insurify.com/car-insurance/new-jersey/low-income-car-insurance/"
+      ]
+    ]
+  },
+  {
+    "id": "transit",
+    "label": "Commuter train, subway & parking",
+    "center": 309,
+    "note": "Published Millburn–New York Penn monthly train pass for one adult. Increase for subway or parking.",
+    "sources": [
+      [
+        "NJ Transit fare table",
+        "https://content.njtransit.com/sites/default/files/marketing/website/pdf/Fares/New%20York%20Penn%20Station.pdf"
+      ]
+    ]
+  },
+  {
+    "id": "medical",
+    "label": "Healthcare",
+    "center": 950,
+    "note": "County family estimate of $11,353/year, including worker premiums and out-of-pocket costs.",
+    "sources": [
+      [
+        "MIT Living Wage",
+        "https://livingwage.mit.edu/counties/34013"
+      ]
+    ]
+  },
+  {
+    "id": "kids",
+    "label": "Kids’ clothing & activities",
+    "center": 500,
+    "note": "Illustrative household allowance."
+  },
+  {
+    "id": "travel",
+    "label": "Travel",
+    "center": 600,
+    "note": "Illustrative household allowance."
+  },
+  {
+    "id": "household",
+    "label": "Household & miscellaneous",
+    "center": 400,
+    "note": "Illustrative household allowance. Use for supplies, personal care and other recurring costs."
+  }
+]
