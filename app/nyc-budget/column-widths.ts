@@ -1,5 +1,5 @@
-export const columns = ["A", "B", "C"] as const;
-export type ColumnShares = [number, number, number];
+export const columns = ["A", "B", "C", "D"] as const;
+export type ColumnShares = [number, number, number, number];
 export const totalShare = 10_000;
 export const minShare = 500;
 
@@ -7,10 +7,24 @@ export const columnLayoutKey = (sheet: string) => `width:${sheet}:layout`;
 export const isColumnLayoutKey = (key: string) => /^width:(cash-flow|tax|retirement):layout$/.test(key);
 export const isColumnWidthKey = (key: string) => /^width:(cash-flow|tax|retirement):(?:[A-D]|layout)$/.test(key);
 
+function splitNotes(a: number, b: number, c: number): ColumnShares {
+  const secondNotes = Math.max(minShare, Math.floor(c / 2));
+  const shortfall = Math.max(0, minShare + secondNotes - c);
+  return [
+    a - (a >= b ? shortfall : 0),
+    b - (a < b ? shortfall : 0),
+    c - secondNotes + shortfall,
+    secondNotes,
+  ];
+}
+
 export function readColumnShares(value?: string): ColumnShares | undefined {
-  if (!value || !/^\d+,\d+,\d+$/.test(value)) return;
-  const [a, b, c] = value.split(",").map(Number);
-  if (a >= minShare && b >= minShare && c >= minShare && a + b + c === totalShare) return [a, b, c];
+  if (!value || !/^\d+,\d+,\d+(?:,\d+)?$/.test(value)) return;
+  const shares = value.split(",").map(Number);
+  if (shares.some((share) => share < minShare) || shares.reduce((sum, share) => sum + share, 0) !== totalShare) return;
+
+  const [a, b, c, d] = shares;
+  return d === undefined ? splitNotes(a, b, c) : [a, b, c, d];
 }
 
 export function sheetColumnShares(settings: Record<string, string>, sheet: string): ColumnShares {
@@ -24,5 +38,5 @@ export function sheetColumnShares(settings: Record<string, string>, sheet: strin
   const distribute = totalShare - 3 * minShare;
   const first = minShare + Math.round(a / total * distribute);
   const second = minShare + Math.round(b / total * distribute);
-  return [first, second, totalShare - first - second];
+  return splitNotes(first, second, totalShare - first - second);
 }

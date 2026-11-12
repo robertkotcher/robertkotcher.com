@@ -13,10 +13,9 @@ type StoredCell = (PromptJob & { cell_value: null }) | {
   cell_value: string;
 };
 
-const endpoint = "/api/nyc-budget/prompts";
 const keyFor = (sheet: string, cell: string) => `${sheet}:${cell}`;
 
-export function usePromptCells() {
+export function usePromptCells(endpoint: string) {
   const [records, setRecords] = useState<Record<string, StoredCell>>({});
   const [toast, setToast] = useState<{ text: string; error: boolean }>();
   const writes = useRef(Promise.resolve());
@@ -41,7 +40,7 @@ export function usePromptCells() {
     void refresh();
     const timer = setInterval(refresh, 2500);
     return () => { abort.abort(); clearInterval(timer); };
-  }, []);
+  }, [endpoint]);
 
   useEffect(() => {
     if (!toast) return;

@@ -34,8 +34,8 @@ function planToCells(plan: RetirementPlan): SheetCells {
   ]));
 }
 
-export default function BudgetSheet({ initialPlan }: { initialPlan: RetirementPlan }) {
-  const prompts = usePromptCells();
+export default function BudgetSheet({ initialPlan, endpoint }: { initialPlan: RetirementPlan; endpoint: string }) {
+  const prompts = usePromptCells(endpoint);
   const settings = prompts.valuesFor("settings");
   const gridSizing = {
     columnShares: sheetColumnShares(settings, "cash-flow"),

@@ -6,7 +6,7 @@ export const taxRowCount = 23;
 
 // 2026 joint return estimate for the salary slider's $220k–$320k range.
 export const defaultTaxCells: SheetCells = {
-  A1: "Income and taxes", B1: "Amount", C1: "Notes",
+  A1: "Income and taxes", B1: "Amount", C1: "Notes", D1: "Notes 2",
   A2: "Gross annual income", B2: "=SALARY",
   C2: "Uses the annual salary slider.",
   A3: "Federal standard deduction", B3: "32200",

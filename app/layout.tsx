@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { EB_Garamond } from "next/font/google";
 import localFont from "next/font/local";
-import { Analytics } from "@vercel/analytics/next";
+import { SiteAnalytics } from "./SiteAnalytics";
 import "./globals.css";
 
 const garamond = EB_Garamond({
@@ -49,7 +49,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${garamond.variable} ${openSans.variable}`}>
         {children}
-        <Analytics />
+        <SiteAnalytics />
       </body>
     </html>
   );

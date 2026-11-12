@@ -6,18 +6,13 @@ export function matchesSecret(actual: string | null, expected: string | undefine
   return timingSafeEqual(digest(actual), digest(expected));
 }
 
-export function budgetAuthorized(headers: Headers) {
-  const password = process.env.NYC_BUDGET_PASSWORD;
-  return Boolean(password && matchesSecret(headers.get("authorization"),
-    `Basic ${Buffer.from(`budget:${password}`).toString("base64")}`));
+export const budgetLinkHeader = "x-budget-link";
+
+export function budgetLink() {
+  const slug = process.env.NYC_BUDGET_SLUG;
+  return slug && /^[a-zA-Z0-9_-]{24,}$/.test(slug) ? `/budget/${slug}` : undefined;
 }
 
-export function budgetAuthChallenge() {
-  return new Response("Sign in to view the budget.", {
-    status: 401,
-    headers: {
-      "WWW-Authenticate": 'Basic realm="NYC budget", charset="UTF-8"',
-      "Cache-Control": "private, no-store",
-    },
-  });
+export function budgetAuthorized(headers: Headers) {
+  return matchesSecret(headers.get(budgetLinkHeader), budgetLink());
 }

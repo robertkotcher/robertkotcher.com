@@ -24,6 +24,7 @@ export const defaultExpenseCells: SheetCells = {
   [`A${expenseHeaderRow}`]: "Expenses",
   [`B${expenseHeaderRow}`]: "Monthly amount",
   [`C${expenseHeaderRow}`]: "Notes",
+  [`D${expenseHeaderRow}`]: "Notes 2",
   [`A${takeHomeRow}`]: "Estimated monthly take-home",
   [`B${takeHomeRow}`]: `=B${taxRowCount}`,
   ...Object.fromEntries(expenses.flatMap(({ label, center }, index) => [

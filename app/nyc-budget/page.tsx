@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
-import { budgetAuthorized } from "./budget-auth";
+import { notFound } from "next/navigation";
+import { budgetAuthorized, budgetLink } from "./budget-auth";
 import BudgetSheet from "./BudgetSheet";
 import { defaultPlan, type RetirementPlan } from "./retirement";
 import "./budget.css";
@@ -9,7 +10,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Budget",
-  alternates: { canonical: "/nyc-budget" },
+  robots: { index: false, follow: false },
 };
 
 function initialPlan(): RetirementPlan {
@@ -31,6 +32,8 @@ function initialPlan(): RetirementPlan {
 }
 
 export default async function BudgetPage() {
-  if (process.env.VERCEL_ENV === "production" && !budgetAuthorized(await headers())) return null;
-  return <BudgetSheet initialPlan={initialPlan()} />;
+  const production = process.env.VERCEL_ENV === "production";
+  if (production && !budgetAuthorized(await headers())) notFound();
+  const endpoint = production ? `${budgetLink()}/prompts` : "/api/nyc-budget/prompts";
+  return <BudgetSheet initialPlan={initialPlan()} endpoint={endpoint} />;
 }
