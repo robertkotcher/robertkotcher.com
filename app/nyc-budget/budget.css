@@ -214,7 +214,7 @@
 .prompt-toast[role="alert"] { background: #9c2525; }
 
 .prompt-schedule-button {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 5px;
   max-width: 100%;
