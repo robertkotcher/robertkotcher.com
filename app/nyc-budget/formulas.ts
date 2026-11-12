@@ -1,3 +1,5 @@
+import { isPromptFormula } from "./prompt-formula";
+
 type Value = number | string;
 export type SheetCells = Record<string, string>;
 const reference = /^[A-D][1-9]\d*$/;
@@ -55,6 +57,7 @@ export function evaluateSheet(cells: SheetCells, rowCount: number, inputs: Recor
   }
 
   function parse(source: string) {
+    if (source.includes("#REF!")) throw new Error("#REF!");
     const tokens = source.match(/\d+(?:\.\d*)?|\.\d+|[A-Z_][A-Z_0-9]*|[^\s]/g) ?? [];
     let index = 0;
     const take = () => tokens[index++];
@@ -121,4 +124,25 @@ export function evaluateSheet(cells: SheetCells, rowCount: number, inputs: Recor
   }
 
   return read;
+}
+
+export function shiftRowReferences(value: string, row: number, insert: boolean): string {
+  if (!value.trimStart().startsWith("=") || isPromptFormula(value)) return value;
+
+  const shift = (index: number) => index + (insert ? Number(index >= row) : -Number(index > row));
+  return value.replace(/\b([A-D])([1-9]\d*)(?:\s*:\s*([A-D])([1-9]\d*))?\b/gi,
+    (match, column: string, first: string, endColumn?: string, last?: string) => {
+      const start = Number(first);
+      if (!endColumn || !last) {
+        if (!insert && start === row) return "#REF!";
+        return shift(start) === start ? match : column + shift(start);
+      }
+
+      const end = Number(last);
+      if (!insert && start === row && end === row) return "#REF!";
+      const rangeStart = !insert && start === row && start > end ? start - 1 : shift(start);
+      const rangeEnd = !insert && end === row && end > start ? end - 1 : shift(end);
+      if (rangeStart === start && rangeEnd === end) return match;
+      return `${column}${rangeStart}:${endColumn}${rangeEnd}`;
+    });
 }

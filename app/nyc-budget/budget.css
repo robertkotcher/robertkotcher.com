@@ -158,8 +158,24 @@
 .grid-help { margin-top: 8px; color: #5f6368; font-size: .8rem; }
 
 .cash-grid td:has(.prompt-result) { white-space: normal; vertical-align: top; }
-.prompt-result { padding: 5px 8px; text-align: left; overflow-wrap: anywhere; }
+.prompt-result { position: relative; padding: 5px 8px; text-align: left; overflow-wrap: anywhere; }
 .prompt-result small { display: block; color: #5f6368; font-size: .72rem; }
+.prompt-result .prompt-next-run {
+  display: none;
+  position: absolute;
+  z-index: 2;
+  top: 100%;
+  left: 8px;
+  max-width: calc(100% - 16px);
+  margin: 0;
+  padding: 4px 8px;
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: 0 2px 8px #20212426;
+  pointer-events: none;
+}
+.prompt-result:hover .prompt-next-run { display: block; }
 .prompt-spinner {
   display: inline-block;
   width: 12px;
@@ -240,3 +256,56 @@
   background: #dce0e4;
   color: #202124;
 }
+
+.budget-row-heading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding-left: 14px;
+}
+
+.budget-row-options {
+  position: absolute;
+  left: 0;
+  width: 16px;
+  border-radius: 3px;
+  opacity: 0;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.cash-grid tr:hover .budget-row-options,
+.budget-row-options:is(:focus-visible, :has(+ span + :popover-open)) {
+  opacity: 1;
+}
+
+.budget-row-options:is(:hover, :focus-visible) { background: #d2e3fc; }
+
+@media (hover: none) {
+  .budget-row-options { opacity: 1; }
+}
+
+.budget-row-menu {
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  padding: 4px;
+  border: 1px solid #dadce0;
+  border-radius: 5px;
+  background: #fff;
+  color: #202124;
+  box-shadow: 0 2px 8px #20212426;
+}
+
+.budget-row-menu button {
+  display: block;
+  width: 100%;
+  padding: 6px 12px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.budget-row-menu button:disabled { opacity: .5; cursor: default; }
+.budget-row-menu button:enabled:is(:hover, :focus-visible) { background: #e8f0fe; }

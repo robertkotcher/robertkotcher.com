@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import expenses from "./expenses.json";
-import SpreadsheetGrid, { defaultExpenseCells } from "./SpreadsheetGrid";
-import { columnLayoutKey, sheetColumnShares, type ColumnShares } from "./column-widths";
+import SpreadsheetGrid from "./SpreadsheetGrid";
+import { budgetDefaults, budgetLayoutKey, budgetRowIds, readRowChanges } from "./budget-rows";
+import { columnLayoutKey, columns, sheetColumnShares, type ColumnShares } from "./column-widths";
 import { usePromptCells } from "./usePromptCells";
 import { evaluateSheet, type SheetCells } from "./formulas";
-import { defaultTaxCells, taxRowCount } from "./taxes";
+import { taxRowCount } from "./taxes";
 import type { RetirementPlan } from "./retirement";
 
 const currency = new Intl.NumberFormat("en-US", {
@@ -48,9 +49,24 @@ export default function BudgetSheet({ initialPlan, endpoint }: { initialPlan: Re
   const sliderSalary = salaryDraft ?? Math.min(maxSalary, Math.max(minSalary,
     minSalary + Math.round((savedSalary - minSalary) / salaryStep) * salaryStep));
   const savedCells = prompts.valuesFor("budget");
-  const cells = { ...defaultTaxCells, ...defaultExpenseCells, ...Object.fromEntries(
-    Object.entries(savedCells).filter(([address]) => !calculatedTaxCells.has(address)),
-  ) };
+  const savedJobs = prompts.jobsFor("budget");
+  const layout = settings[budgetLayoutKey];
+  const { changes, rowIds, defaults } = useMemo(() => {
+    const changes = readRowChanges(layout);
+    return { changes, rowIds: budgetRowIds(changes), defaults: budgetDefaults(changes) };
+  }, [layout]);
+  const cells = { ...defaults };
+  const jobs: typeof savedJobs = {};
+  const readOnlyCells = new Set<string>();
+  rowIds.forEach((id, index) => {
+    for (const column of columns) {
+      const storageCell = column + id;
+      const address = column + (index + 1);
+      if (calculatedTaxCells.has(storageCell)) readOnlyCells.add(address);
+      else if (Object.hasOwn(savedCells, storageCell)) cells[address] = savedCells[storageCell];
+      else if (savedJobs[storageCell]) jobs[address] = savedJobs[storageCell];
+    }
+  });
   const retirement = { ...planToCells(initialPlan), ...prompts.valuesFor("retirement") };
   const readPlan = evaluateSheet(retirement, 18, {});
   const plan = Object.fromEntries(planCells.map(([key], index) => {
@@ -111,10 +127,13 @@ export default function BudgetSheet({ initialPlan, endpoint }: { initialPlan: Re
 
         <section aria-label="Cash flow">
           <SpreadsheetGrid {...gridSizing} label="Income, taxes, and expenses"
-            cells={cells} readOnlyCells={calculatedTaxCells} promptJobs={prompts.jobsFor("budget")}
+            cells={cells} readOnlyCells={readOnlyCells} promptJobs={jobs} rowIds={rowIds}
+            rowsReady={prompts.loaded} changeRow={(change) => prompts.changeRow(change, changes.length)}
             inputs={{ SALARY: salary, RETIREMENT: contribution }}
-            update={(address, value, schedule) => prompts.edit("budget", address, value, schedule)}
-            help={`Add expenses in the blank rows above Total monthly expenses. Use B${taxRowCount} to reference monthly take-home.`} />
+            update={(address, value, schedule) => prompts.edit("budget", address, value, schedule, {
+              revision: changes.length, storageCell: address[0] + rowIds[Number(address.slice(1)) - 1],
+            })}
+            help="Use the row menu to add or remove expenses." />
           <details className="budget-details">
             <summary>Budget assumptions and sources</summary>
             <p>2026 estimate for one W-2 salary of $220,000–$320,000, married filing jointly, living in Millburn all year and earning all wages in Brooklyn. Uses standard deductions where available and excludes dependents, other income, benefit deductions, and credits apart from the New Jersey credit for New York tax. Monthly take-home averages annual tax liability over 12 months.

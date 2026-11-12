@@ -6,45 +6,22 @@ import remarkGfm from "remark-gfm";
 import type { ScheduleSettings } from "./prompt-schedule";
 import PromptScheduleEditor from "./PromptScheduleEditor";
 import { type PromptJob } from "./prompt-formula";
-import expenses from "./expenses.json";
 import { evaluateSheet, type SheetCells } from "./formulas";
 
 import { columns, minShare, totalShare, type ColumnShares } from "./column-widths";
-import { annualTaxTotalRow, effectiveTaxRateRow, taxRowCount } from "./taxes";
+import { effectiveTaxRateRow, taxRowCount } from "./taxes";
+import { budgetTotals, expenseHeaderRow, maxBudgetRows, type RowChange } from "./budget-rows";
 const rowIndexPercent = 6;
-const expenseHeaderRow = taxRowCount + 2;
-const firstExpenseRow = expenseHeaderRow + 1;
-const takeHomeRow = expenseHeaderRow + expenses.length + 12;
-const totalRow = takeHomeRow + 1;
-export const budgetRowCount = totalRow + 8;
-export const budgetTotals = new Set([annualTaxTotalRow, taxRowCount, takeHomeRow, totalRow, totalRow + 3]);
 const currency = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
-
-export const defaultExpenseCells: SheetCells = {
-  [`A${expenseHeaderRow}`]: "Expenses",
-  [`B${expenseHeaderRow}`]: "Monthly amount",
-  [`C${expenseHeaderRow}`]: "Notes",
-  [`D${expenseHeaderRow}`]: "Notes 2",
-  [`A${takeHomeRow}`]: "Estimated monthly take-home",
-  [`B${takeHomeRow}`]: `=B${taxRowCount}`,
-  ...Object.fromEntries(expenses.flatMap(({ label, center }, index) => [
-    [`A${index + firstExpenseRow}`, label],
-    [`B${index + firstExpenseRow}`, String(center)],
-  ])),
-  [`A${totalRow}`]: "Total monthly expenses",
-  [`B${totalRow}`]: `=SUM(B${firstExpenseRow}:B${takeHomeRow - 1})`,
-  [`A${totalRow + 1}`]: "Available to save",
-  [`B${totalRow + 1}`]: `=B${takeHomeRow}-B${totalRow}`,
-  [`A${totalRow + 2}`]: "Planned retirement contributions",
-  [`B${totalRow + 2}`]: "=RETIREMENT",
-  [`A${totalRow + 3}`]: "Cash remaining after contributions",
-  [`B${totalRow + 3}`]: `=B${totalRow + 1}-B${totalRow + 2}`,
-};
 
 export default function SpreadsheetGrid({
   cells, update, inputs, readOnlyCells, label, help, promptJobs, columnShares, onColumnResize,
+  rowIds, rowsReady, changeRow,
 }: {
   cells: SheetCells;
+  rowIds: number[];
+  rowsReady: boolean;
+  changeRow: (change: RowChange) => Promise<void>;
   update: (address: string, value: string, schedule?: ScheduleSettings | null) => void;
   inputs: Record<string, number>;
   readOnlyCells: ReadonlySet<string>;
@@ -74,9 +51,19 @@ export default function SpreadsheetGrid({
   }
 
   const [taxesExpanded, setTaxesExpanded] = useState(false);
-  const visibleRows = Array.from({ length: budgetRowCount }, (_, index) => index + 1)
-    .filter((row) => taxesExpanded || row === 1 || row >= taxRowCount);
+  const [savingRows, setSavingRows] = useState(false);
+  const rowCount = rowIds.length;
+  const firstTaxDetail = rowIds.includes(1) ? rowIds.indexOf(1) + 2
+    : rowIds.findIndex((id) => id > 1 && id < taxRowCount) + 1;
+  const taxSummary = rowIds.includes(taxRowCount) ? rowIds.indexOf(taxRowCount) + 1
+    : rowIds.findLastIndex((id) => id > 1 && id < taxRowCount) + 2;
+  const hasTaxDetails = firstTaxDetail > 0 && firstTaxDetail < taxSummary
+    && (firstTaxDetail > 1 || taxSummary <= rowCount);
+  const isTaxDetail = (row: number) => hasTaxDetails && row >= firstTaxDetail && row < taxSummary;
+  const visibleRows = rowIds.map((_, index) => index + 1)
+    .filter((row) => taxesExpanded || !isTaxDetail(row));
   const [selected, setSelected] = useState(`B${taxRowCount}`);
+  const [previousRowIds, setPreviousRowIds] = useState(rowIds);
   const [promptExpanded, setPromptExpanded] = useState(false);
   const sheet = useRef<HTMLDivElement>(null);
 
@@ -97,7 +84,24 @@ export default function SpreadsheetGrid({
   }
   const [editing, setEditing] = useState<string>();
   const [draft, setDraft] = useState("");
-  const read = useMemo(() => evaluateSheet(cells, budgetRowCount, inputs), [cells, inputs]);
+  const read = useMemo(() => evaluateSheet(cells, rowCount, inputs), [cells, inputs, rowCount]);
+
+  if (previousRowIds !== rowIds) {
+    const previousIndex = Number(selected.slice(1)) - 1;
+    const newIndex = rowIds.indexOf(previousRowIds[previousIndex]);
+    const nextRow = newIndex === -1 ? Math.min(previousIndex + 1, rowCount) : newIndex + 1;
+    setPreviousRowIds(rowIds);
+    setSelected(selected[0] + (visibleRows.includes(nextRow) ? nextRow : visibleRows[0]));
+    setEditing(undefined);
+    setPromptExpanded(false);
+  }
+
+  async function saveRowChange(change: RowChange, menu: HTMLElement) {
+    menu.hidePopover();
+    setSavingRows(true);
+    await changeRow(change);
+    setSavingRows(false);
+  }
 
   function raw(address: string) {
     const job = readOnlyCells.has(address) ? undefined : promptJobs[address];
@@ -163,17 +167,28 @@ export default function SpreadsheetGrid({
 
   function toggleTaxes() {
     const selectedRow = Number(selected.slice(1));
-    if (taxesExpanded && selectedRow > 1 && selectedRow < taxRowCount) {
-      setSelected(selected[0] + taxRowCount);
+    if (taxesExpanded && isTaxDetail(selectedRow)) {
+      setSelected(selected[0] + (taxSummary <= rowCount ? taxSummary : firstTaxDetail - 1));
       setPromptExpanded(false);
     }
     setTaxesExpanded(!taxesExpanded);
   }
 
+  const taxToggle = (
+    <tr className="tax-breakdown-row">
+      <td colSpan={columns.length + 1}>
+        <button type="button" aria-expanded={taxesExpanded} onClick={toggleTaxes}>
+          <span aria-hidden="true">{taxesExpanded ? "▾" : "▸"}</span>
+          {taxesExpanded ? "Collapse tax rows" : "expand tax rows"}
+        </button>
+      </td>
+    </tr>
+  );
+
   const formulaReadOnly = readOnlyCells.has(selected);
 
   return (
-    <div ref={sheet}>
+    <div ref={sheet} inert={savingRows} aria-busy={savingRows}>
       <div className="formula-bar">
         <output aria-label="Selected cell">{selected}</output>
         <span aria-hidden="true">ƒx</span>
@@ -230,11 +245,40 @@ export default function SpreadsheetGrid({
           ))}</tr></thead>
           <tbody>
             {visibleRows.map((row) => {
+              const id = rowIds[row - 1];
+              const menuId = `budget-row-menu-${id}`;
               return (
-                <Fragment key={row}>
-                  <tr className={row === 1 || row === expenseHeaderRow ? "sheet-title-row" : budgetTotals.has(row) ? "subtotal" : undefined}>
+                <Fragment key={id}>
+                  {hasTaxDetails && row === (taxesExpanded ? firstTaxDetail : taxSummary) && taxToggle}
+                  <tr className={id === 1 || id === expenseHeaderRow ? "sheet-title-row" : budgetTotals.has(id) ? "subtotal" : undefined}>
                     <th scope="row" className={selected.slice(1) === String(row) ? "selected-header" : ""}>
-                      {row}
+                      <div className="budget-row-heading">
+                        <button type="button" className="budget-row-options" aria-label={`Options for row ${row}`}
+                          disabled={!rowsReady} popoverTarget={menuId}
+                          onClick={(event) => {
+                            const bounds = event.currentTarget.getBoundingClientRect();
+                            const menu = document.getElementById(menuId);
+                            if (menu) {
+                              menu.style.left = `${bounds.left}px`;
+                              menu.style.top = `${Math.min(bounds.bottom, window.innerHeight - 116)}px`;
+                            }
+                          }}>⋯</button>
+                        <span>{row}</span>
+                        <div id={menuId} className="budget-row-menu" popover="auto">
+                          <button type="button" disabled={rowCount >= maxBudgetRows}
+                            onClick={(event) => void saveRowChange({ row, insert: true }, event.currentTarget.parentElement!)}>
+                            Insert row above
+                          </button>
+                          <button type="button" disabled={rowCount >= maxBudgetRows}
+                            onClick={(event) => void saveRowChange({ row: row + 1, insert: true }, event.currentTarget.parentElement!)}>
+                            Insert row below
+                          </button>
+                          <button type="button" disabled={rowCount <= 1}
+                            onClick={(event) => void saveRowChange({ row, insert: false }, event.currentTarget.parentElement!)}>
+                            Delete row
+                          </button>
+                        </div>
+                      </div>
                     </th>
                     {columns.map((column) => {
                       const address = column + row;
@@ -244,7 +288,7 @@ export default function SpreadsheetGrid({
                       const value = read(address);
                       const isSelected = selected === address;
                       const isEditing = isSelected && editing === address;
-                      const display = typeof value === "number" && column === "B" && row !== effectiveTaxRateRow ? currency.format(value) : String(value);
+                      const display = typeof value === "number" && column === "B" && id !== effectiveTaxRateRow ? currency.format(value) : String(value);
                       return (
                         <td key={address} className={isSelected ? "selected-cell" : undefined}
                           onClick={(event) => {
@@ -272,7 +316,7 @@ export default function SpreadsheetGrid({
                                 ) : <span className="prompt-result-preview">{job.result}</span>)}
                               </div>
                               {job.schedule && job.next_run_at && job.status !== "queued" && (
-                                <small>Next run {new Intl.DateTimeFormat("en-US", {
+                                <small className="prompt-next-run">Next run {new Intl.DateTimeFormat("en-US", {
                                   timeZone: job.schedule.timezone, dateStyle: "medium", timeStyle: "short",
                                 }).format(new Date(job.next_run_at))}</small>
                               )}
@@ -299,19 +343,10 @@ export default function SpreadsheetGrid({
                       );
                     })}
                   </tr>
-                  {row === 1 && (
-                    <tr className="tax-breakdown-row">
-                      <td colSpan={columns.length + 1}>
-                        <button type="button" aria-expanded={taxesExpanded} onClick={toggleTaxes}>
-                          <span aria-hidden="true">{taxesExpanded ? "▾" : "▸"}</span>
-                          {taxesExpanded ? "Collapse tax rows" : "expand tax rows"}
-                        </button>
-                      </td>
-                    </tr>
-                  )}
                 </Fragment>
               );
             })}
+            {hasTaxDetails && !taxesExpanded && taxSummary > rowCount && taxToggle}
           </tbody>
         </table>
       </div>

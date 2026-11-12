@@ -24,7 +24,7 @@ export default function PromptScheduleEditor({ cell, schedule, researchPrompt, u
       <button type="button" className="prompt-schedule-button" popoverTarget={editorId}
         aria-label={`Edit schedule for ${cell}`} title="Edit schedule">
         <AlarmClock size={13} aria-hidden="true" />
-        <span>{schedule ? `${schedule.cadence} · ${schedule.timezone}` : "Run once"}</span>
+        <span>{schedule?.cadence ?? "Run once"}</span>
       </button>
       <form id={editorId} className="budget-setting-popover prompt-schedule-editor" popover="auto"
         onToggle={(event) => {
