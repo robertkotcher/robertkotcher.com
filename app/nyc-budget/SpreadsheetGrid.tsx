@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import type { ScheduleSettings } from "./prompt-schedule";
@@ -73,7 +73,10 @@ export default function SpreadsheetGrid({
     return Math.max(1, (table.current?.clientWidth ?? 0) * (1 - rowIndexPercent / 100));
   }
 
-  const [selected, setSelected] = useState("B2");
+  const [taxesExpanded, setTaxesExpanded] = useState(false);
+  const visibleRows = Array.from({ length: budgetRowCount }, (_, index) => index + 1)
+    .filter((row) => taxesExpanded || row === 1 || row >= taxRowCount);
+  const [selected, setSelected] = useState(`B${taxRowCount}`);
   const [promptExpanded, setPromptExpanded] = useState(false);
   const sheet = useRef<HTMLDivElement>(null);
 
@@ -124,12 +127,15 @@ export default function SpreadsheetGrid({
 
     const row = Number(address.slice(1));
     const column = columns.findIndex((letter) => letter === address[0]);
+    const rowIndex = visibleRows.indexOf(row);
     const direction = event.shiftKey ? -1 : 1;
     let nextAddress: string | undefined;
-    if (key === "Enter") nextAddress = address[0] + (row + direction);
+    const nextRow = key === "Enter" ? visibleRows[rowIndex + direction]
+      : !isEditing && key === "ArrowUp" ? visibleRows[rowIndex - 1]
+      : !isEditing && key === "ArrowDown" ? visibleRows[rowIndex + 1]
+      : undefined;
+    if (nextRow !== undefined) nextAddress = address[0] + nextRow;
     if (!isEditing) {
-      if (key === "ArrowUp") nextAddress = address[0] + (row - 1);
-      if (key === "ArrowDown") nextAddress = address[0] + (row + 1);
       if (key === "ArrowLeft" || key === "ArrowRight") {
         const nextColumn = columns[column + (key === "ArrowLeft" ? -1 : 1)];
         if (nextColumn) nextAddress = nextColumn + row;
@@ -149,8 +155,19 @@ export default function SpreadsheetGrid({
       event.preventDefault();
       const next = document.getElementById(`budget-cell-${nextAddress}`);
       if (next) next.focus();
-      else if (key === "Enter" && isEditing) event.currentTarget.blur();
+    } else if (key === "Enter" && isEditing) {
+      event.preventDefault();
+      event.currentTarget.blur();
     }
+  }
+
+  function toggleTaxes() {
+    const selectedRow = Number(selected.slice(1));
+    if (taxesExpanded && selectedRow > 1 && selectedRow < taxRowCount) {
+      setSelected(selected[0] + taxRowCount);
+      setPromptExpanded(false);
+    }
+    setTaxesExpanded(!taxesExpanded);
   }
 
   const formulaReadOnly = readOnlyCells.has(selected);
@@ -212,74 +229,87 @@ export default function SpreadsheetGrid({
             </th>
           ))}</tr></thead>
           <tbody>
-            {Array.from({ length: budgetRowCount }, (_, rowIndex) => {
-              const row = rowIndex + 1;
+            {visibleRows.map((row) => {
               return (
-                <tr key={row} className={row === 1 || row === expenseHeaderRow ? "sheet-title-row" : budgetTotals.has(row) ? "subtotal" : undefined}>
-                  <th scope="row" className={selected.slice(1) === String(row) ? "selected-header" : ""}>{row}</th>
-                  {columns.map((column) => {
-                    const address = column + row;
-                    const readOnly = readOnlyCells.has(address);
-                    const job = readOnly ? undefined : promptJobs[address];
-                    const loading = job?.status === "queued" || job?.status === "running";
-                    const value = read(address);
-                    const isSelected = selected === address;
-                    const isEditing = isSelected && editing === address;
-                    const display = typeof value === "number" && column === "B" && row !== effectiveTaxRateRow ? currency.format(value) : String(value);
-                    return (
-                      <td key={address} className={isSelected ? "selected-cell" : undefined}
-                        onClick={(event) => {
-                          if (event.target === event.currentTarget) {
-                            event.currentTarget.querySelector<HTMLElement>(".prompt-result, input")?.focus();
-                          }
-                        }}>
-                        {job ? (
-                          <div className="prompt-result" id={`budget-cell-${address}`} tabIndex={0}
-                            aria-label={`Prompt cell ${address}`} onFocus={() => selectPrompt(address)}
-                            onClick={() => selectPrompt(address)}
-                            onKeyDown={(event) => cellKey(event, address, false)}>
-                            <div className="prompt-result-line">
-                              <PromptScheduleEditor key={job.version} cell={address} schedule={job.schedule}
-                                researchPrompt={job.research_prompt} update={update} />
-                              {job.result && (isSelected && promptExpanded ? (
-                                <div className="prompt-result-markdown">
-                                  <ReactMarkdown remarkPlugins={[remarkGfm]} skipHtml
-                                    allowedElements={["a", "p", "ul", "ol", "li", "strong", "em", "code", "pre", "br", "del",
-                                      "h1", "h2", "h3", "h4", "h5", "h6", "blockquote", "table", "thead", "tbody", "tr", "th", "td", "hr"]}
-                                    unwrapDisallowed>
-                                    {job.result}
-                                  </ReactMarkdown>
-                                </div>
-                              ) : <span className="prompt-result-preview">{job.result}</span>)}
+                <Fragment key={row}>
+                  <tr className={row === 1 || row === expenseHeaderRow ? "sheet-title-row" : budgetTotals.has(row) ? "subtotal" : undefined}>
+                    <th scope="row" className={selected.slice(1) === String(row) ? "selected-header" : ""}>
+                      {row}
+                    </th>
+                    {columns.map((column) => {
+                      const address = column + row;
+                      const readOnly = readOnlyCells.has(address);
+                      const job = readOnly ? undefined : promptJobs[address];
+                      const loading = job?.status === "queued" || job?.status === "running";
+                      const value = read(address);
+                      const isSelected = selected === address;
+                      const isEditing = isSelected && editing === address;
+                      const display = typeof value === "number" && column === "B" && row !== effectiveTaxRateRow ? currency.format(value) : String(value);
+                      return (
+                        <td key={address} className={isSelected ? "selected-cell" : undefined}
+                          onClick={(event) => {
+                            if (event.target === event.currentTarget) {
+                              event.currentTarget.querySelector<HTMLElement>(".prompt-result, input")?.focus();
+                            }
+                          }}>
+                          {job ? (
+                            <div className="prompt-result" id={`budget-cell-${address}`} tabIndex={0}
+                              aria-label={`Prompt cell ${address}`} onFocus={() => selectPrompt(address)}
+                              onClick={() => selectPrompt(address)}
+                              onKeyDown={(event) => cellKey(event, address, false)}>
+                              <div className="prompt-result-line">
+                                <PromptScheduleEditor key={job.version} cell={address} schedule={job.schedule}
+                                  researchPrompt={job.research_prompt} update={update} />
+                                {job.result && (isSelected && promptExpanded ? (
+                                  <div className="prompt-result-markdown">
+                                    <ReactMarkdown remarkPlugins={[remarkGfm]} skipHtml
+                                      allowedElements={["a", "p", "ul", "ol", "li", "strong", "em", "code", "pre", "br", "del",
+                                        "h1", "h2", "h3", "h4", "h5", "h6", "blockquote", "table", "thead", "tbody", "tr", "th", "td", "hr"]}
+                                      unwrapDisallowed>
+                                      {job.result}
+                                    </ReactMarkdown>
+                                  </div>
+                                ) : <span className="prompt-result-preview">{job.result}</span>)}
+                              </div>
+                              {job.schedule && job.next_run_at && job.status !== "queued" && (
+                                <small>Next run {new Intl.DateTimeFormat("en-US", {
+                                  timeZone: job.schedule.timezone, dateStyle: "medium", timeStyle: "short",
+                                }).format(new Date(job.next_run_at))}</small>
+                              )}
+                              {loading ? (
+                                <small role="status" aria-label="Waiting for prompt results">
+                                  <span className="prompt-spinner" aria-hidden="true" />
+                                </small>
+                              ) : job.status !== "complete" && <small>{job.error ?? job.status}</small>}
                             </div>
-                            {job.schedule && job.next_run_at && job.status !== "queued" && (
-                              <small>Next run {new Intl.DateTimeFormat("en-US", {
-                                timeZone: job.schedule.timezone, dateStyle: "medium", timeStyle: "short",
-                              }).format(new Date(job.next_run_at))}</small>
-                            )}
-                            {loading ? (
-                              <small role="status" aria-label="Waiting for prompt results">
-                                <span className="prompt-spinner" aria-hidden="true" />
-                              </small>
-                            ) : job.status !== "complete" && <small>{job.error ?? job.status}</small>}
-                          </div>
-                        ) : <input id={`budget-cell-${address}` } aria-label={`Cell ${address}`} maxLength={4096} readOnly={readOnly || !isEditing}
-                          className={typeof value === "number" ? "numeric-cell" : undefined}
-                          value={isEditing ? draft : display}
-                          onFocus={() => setSelected(address)}
-                          onDoubleClick={() => { if (!readOnly) begin(address); }}
-                          onPaste={(event) => {
-                            if (readOnly || isEditing) return;
-                            event.preventDefault();
-                            update(address, event.clipboardData.getData("text/plain"));
-                          }}
-                          onChange={(event) => setDraft(event.target.value)}
-                          onBlur={() => commit(address)}
-                          onKeyDown={(event) => cellKey(event, address, !readOnly)} />}
+                          ) : <input id={`budget-cell-${address}` } aria-label={`Cell ${address}`} maxLength={4096} readOnly={readOnly || !isEditing}
+                            className={typeof value === "number" ? "numeric-cell" : undefined}
+                            value={isEditing ? draft : display}
+                            onFocus={() => setSelected(address)}
+                            onDoubleClick={() => { if (!readOnly) begin(address); }}
+                            onPaste={(event) => {
+                              if (readOnly || isEditing) return;
+                              event.preventDefault();
+                              update(address, event.clipboardData.getData("text/plain"));
+                            }}
+                            onChange={(event) => setDraft(event.target.value)}
+                            onBlur={() => commit(address)}
+                            onKeyDown={(event) => cellKey(event, address, !readOnly)} />}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                  {row === 1 && (
+                    <tr className="tax-breakdown-row">
+                      <td colSpan={columns.length + 1}>
+                        <button type="button" aria-expanded={taxesExpanded} onClick={toggleTaxes}>
+                          <span aria-hidden="true">{taxesExpanded ? "▾" : "▸"}</span>
+                          {taxesExpanded ? "Collapse tax rows" : "expand tax rows"}
+                        </button>
                       </td>
-                    );
-                  })}
-                </tr>
+                    </tr>
+                  )}
+                </Fragment>
               );
             })}
           </tbody>

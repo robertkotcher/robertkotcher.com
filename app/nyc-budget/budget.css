@@ -218,3 +218,25 @@
 .prompt-schedule-editor:popover-open { display: grid; gap: 8px; }
 .prompt-schedule-editor label { display: grid; gap: 3px; }
 .prompt-schedule-editor :is(input, select) { width: 100%; min-width: 0; }
+
+.cash-grid .tax-breakdown-row td {
+  background: #e8eaed;
+  border-block: 1px dashed #c4c7c9;
+}
+
+.cash-grid .tax-breakdown-row button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 5px 12px;
+  color: #4b5054;
+  font-size: .78rem;
+  cursor: pointer;
+}
+
+.cash-grid .tax-breakdown-row button:is(:hover, :focus-visible) {
+  background: #dce0e4;
+  color: #202124;
+}
