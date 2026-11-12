@@ -226,6 +226,7 @@
   cursor: pointer;
 }
 .prompt-schedule-button svg { flex-shrink: 0; }
+.prompt-schedule-label { transform: translateY(1px); }
 .prompt-schedule-button:hover { background: #f3e8ff; }
 .prompt-schedule-editor { padding: 10px; max-width: calc(100vw - 24px); }
 .prompt-schedule-editor:popover-open { display: grid; gap: 8px; }

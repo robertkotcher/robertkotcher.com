@@ -28,7 +28,7 @@ export default function PromptScheduleEditor({ cell, schedule, researchPrompt, l
       <button type="button" className="prompt-schedule-button" popoverTarget={editorId}
         aria-label={`Edit schedule for ${cell}${loading ? " (waiting for prompt results)" : ""}`} title="Edit schedule">
         <AlarmClock size={13} aria-hidden="true" />
-        <span>{schedule?.cadence ?? "Run Once"}</span>
+        <span className="prompt-schedule-label">{schedule?.cadence ?? "Run Once"}</span>
         {loading && <span className="prompt-spinner" aria-hidden="true" />}
       </button>
       <form id={editorId} className="budget-setting-popover prompt-schedule-editor" popover="auto"
