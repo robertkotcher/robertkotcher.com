@@ -8,10 +8,11 @@ import { weekdays, type ScheduleSettings } from "./prompt-schedule";
 
 type Schedule = NonNullable<PromptJob["schedule"]>;
 
-export default function PromptScheduleEditor({ cell, schedule, researchPrompt, update }: {
+export default function PromptScheduleEditor({ cell, schedule, researchPrompt, loading, update }: {
   cell: string;
   schedule: Schedule | null;
   researchPrompt: string;
+  loading: boolean;
   update: (cell: string, formula: string, schedule: ScheduleSettings | null) => void;
 }) {
   const [cadence, setCadence] = useState<Schedule["cadence"] | "once">(schedule?.cadence ?? "once");
@@ -22,9 +23,10 @@ export default function PromptScheduleEditor({ cell, schedule, researchPrompt, u
   return (
     <div className="prompt-schedule" onDoubleClick={(event) => event.stopPropagation()}>
       <button type="button" className="prompt-schedule-button" popoverTarget={editorId}
-        aria-label={`Edit schedule for ${cell}`} title="Edit schedule">
+        aria-label={`Edit schedule for ${cell}${loading ? " (waiting for prompt results)" : ""}`} title="Edit schedule">
         <AlarmClock size={13} aria-hidden="true" />
-        <span>{schedule?.cadence ?? "Run once"}</span>
+        <span>{schedule?.cadence ?? "Run Once"}</span>
+        {loading && <span className="prompt-spinner" aria-hidden="true" />}
       </button>
       <form id={editorId} className="budget-setting-popover prompt-schedule-editor" popover="auto"
         onToggle={(event) => {

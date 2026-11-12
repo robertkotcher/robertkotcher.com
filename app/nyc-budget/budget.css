@@ -177,11 +177,12 @@
 }
 .prompt-result:hover .prompt-next-run { display: block; }
 .prompt-spinner {
+  flex-shrink: 0;
   display: inline-block;
   width: 12px;
   height: 12px;
-  border: 2px solid #dadce0;
-  border-top-color: #1a73e8;
+  border: 2px solid #e9d5ff;
+  border-top-color: currentColor;
   border-radius: 50%;
   vertical-align: middle;
 }
@@ -226,6 +227,7 @@
   font-size: .72rem;
   line-height: 1.2;
   text-align: left;
+  text-transform: capitalize;
   cursor: pointer;
 }
 .prompt-schedule-button svg { flex-shrink: 0; }

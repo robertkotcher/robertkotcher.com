@@ -359,7 +359,7 @@ export default function SpreadsheetGrid({
                               onKeyDown={(event) => cellKey(event, address, false)}>
                               <div className="prompt-result-line">
                                 <PromptScheduleEditor key={job.version} cell={address} schedule={job.schedule}
-                                  researchPrompt={job.research_prompt} update={update} />
+                                  researchPrompt={job.research_prompt} loading={loading} update={update} />
                                 {job.result && (isSelected && promptExpanded ? (
                                   <div className="prompt-result-markdown">
                                     <ReactMarkdown remarkPlugins={[remarkGfm]} skipHtml
@@ -376,11 +376,7 @@ export default function SpreadsheetGrid({
                                   timeZone: job.schedule.timezone, dateStyle: "medium", timeStyle: "short",
                                 }).format(new Date(job.next_run_at))}</small>
                               )}
-                              {loading ? (
-                                <small role="status" aria-label="Waiting for prompt results">
-                                  <span className="prompt-spinner" aria-hidden="true" />
-                                </small>
-                              ) : job.status !== "complete" && <small>{job.error ?? job.status}</small>}
+                              {!loading && job.status !== "complete" && <small>{job.error ?? job.status}</small>}
                             </div>
                           ) : <input id={`budget-cell-${address}` } aria-label={`Cell ${address}`} maxLength={4096} readOnly={readOnly || !isEditing}
                             className={typeof value === "number" ? "numeric-cell" : undefined}
