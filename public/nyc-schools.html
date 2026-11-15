@@ -664,10 +664,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
 		}
 	}
 
-*{box-sizing:border-box}body{margin:0;background:#fff;color:#182337;font:14px system-ui,sans-serif}header{padding:18px 24px;border-bottom:1px solid #dce2ea}h1{font-size:24px;margin:0 0 4px;letter-spacing:-.03em}p{margin:0;line-height:1.5;color:#47566a}main{display:grid;grid-template-columns:minmax(235px,310px) 1fr;height:calc(100dvh - 92px);min-height:460px}aside{display:flex;flex-direction:column;min-height:0;border-right:1px solid #dce2ea;z-index:2}.controls{padding:14px;display:grid;gap:9px;border-bottom:1px solid #dce2ea}input[type=search],select{width:100%;padding:8px;border:1px solid #bfcbd9;border-radius:6px;background:white;color:inherit;font:inherit}label{font-size:13px}.filters{display:flex;gap:8px}.filters select{width:auto;flex:1}#list{overflow:auto;flex:1;min-height:0}.item{border:0;border-bottom:1px solid #eef0f3;background:white;color:inherit;width:100%;text-align:left;padding:10px 14px;cursor:pointer;display:grid;gap:3px;font:inherit}.item:hover,.item[aria-current=true]{background:#f1f5fa}.item small{color:#47566a}.badge{font-weight:650;color:#5a35a0}.badge.nj{color:#087565}#map{height:100%;background:#e8eef4}.legend{background:white;padding:9px 11px;border-radius:6px;box-shadow:0 1px 7px #17314833;line-height:1.65}.swatch{display:inline-block;width:10px;height:10px;margin-right:6px;border-radius:2px}details{padding:10px 14px;border-top:1px solid #dce2ea;max-height:45%;overflow:auto}summary{cursor:pointer;font-weight:600}details p{margin:6px 0}a{color:#214fa2}.pop b{font-size:15px}.pop p{margin:4px 0}.hub{background:#15304f;border:2px solid white;border-radius:50%;box-shadow:0 1px 4px #0006}@media(max-width:650px){header{padding:12px 14px}h1{font-size:20px}main{grid-template-columns:1fr;grid-template-rows:minmax(310px,55dvh) minmax(280px,1fr);height:auto}aside{grid-row:2;border-right:0;border-top:1px solid #dce2ea;max-height:430px}#map{grid-row:1}}
+*{box-sizing:border-box}body{margin:0;background:#fff;color:#182337;font:14px system-ui,sans-serif}header{padding:18px 24px;border-bottom:1px solid #dce2ea}h1{font-size:24px;margin:0 0 4px;letter-spacing:-.03em}p{margin:0;line-height:1.5;color:#47566a}main{display:grid;grid-template-columns:minmax(235px,310px) 1fr;height:calc(100dvh - 92px);min-height:460px}aside{display:flex;flex-direction:column;min-height:0;border-right:1px solid #dce2ea;z-index:2}.controls{padding:14px;display:grid;gap:9px;border-bottom:1px solid #dce2ea}input[type=search],select{width:100%;padding:8px;border:1px solid #bfcbd9;border-radius:6px;background:white;color:inherit;font:inherit}label{font-size:13px}.rank-filter{display:grid;gap:4px}.rank-filter label{display:flex;justify-content:space-between}.rank-filter output{font-weight:650}.rank-filter input{width:100%;margin:0;accent-color:#5a35a0}.filters{display:flex;gap:8px}.filters select{width:auto;flex:1}#list{overflow:auto;flex:1;min-height:0}.item{border:0;border-bottom:1px solid #eef0f3;background:white;color:inherit;width:100%;text-align:left;padding:10px 14px;cursor:pointer;display:grid;gap:3px;font:inherit}.item:hover,.item[aria-current=true]{background:#f1f5fa}.item small{color:#47566a}.badge{font-weight:650;color:#5a35a0}.badge.nj{color:#087565}#map{height:100%;background:#e8eef4}.legend{background:white;padding:9px 11px;border-radius:6px;box-shadow:0 1px 7px #17314833;line-height:1.65}.swatch{display:inline-block;width:10px;height:10px;margin-right:6px;border-radius:2px}details{padding:10px 14px;border-top:1px solid #dce2ea;max-height:45%;overflow:auto}summary{cursor:pointer;font-weight:600}details p{margin:6px 0}a{color:#214fa2}.pop b{font-size:15px}.pop p{margin:4px 0}.hub{background:#15304f;border:2px solid white;border-radius:50%;box-shadow:0 1px 4px #0006}@media(max-width:650px){header{padding:12px 14px}h1{font-size:20px}main{grid-template-columns:1fr;grid-template-rows:minmax(310px,55dvh) minmax(280px,1fr);height:auto}aside{grid-row:2;border-right:0;border-top:1px solid #dce2ea;max-height:430px}#map{grid-row:1}}
 </style>
 <header><h1>NYC school districts by commute</h1><p>Public school districts with an estimated weekday transit trip of 45 minutes or less to Manhattan.</p></header>
-<main><aside><div class="controls"><strong id="count" aria-live="polite"></strong><input id="search" type="search" aria-label="Search districts" placeholder="Search districts"><div class="filters"><select id="state" aria-label="State"><option value="">All states</option><option value="NJ">New Jersey</option><option value="NY">New York</option></select><select id="scope" aria-label="District filter"><option value="near">Within 45 min</option><option value="top">Top 100 within 45 min</option><option value="all">All statewide top 100</option></select></div></div><div id="list"></div>
+<main><aside><div class="controls"><strong id="count" aria-live="polite"></strong><input id="search" type="search" aria-label="Search districts" placeholder="Search districts"><div class="filters"><select id="state" aria-label="State"><option value="">All states</option><option value="NJ">New Jersey</option><option value="NY">New York</option></select><select id="scope" aria-label="District filter"><option value="near">Within 45 min</option><option value="top">Top 100 within 45 min</option><option value="all">All statewide top 100</option></select></div><div class="rank-filter"><label for="max-rank"><span>Statewide rank cutoff</span><output id="rank-limit" for="max-rank">Any rank</output></label><input id="max-rank" type="range" min="1" max="101" value="101" aria-valuetext="Any rank"></div></div><div id="list"></div>
 <details><summary>Method and sources</summary><p>Estimates use the fastest modeled train, subway, bus or walking trip from any part of a district to Penn Station, Grand Central, Port Authority or World Trade Center. The screen uses scheduled weekday arrivals from 7:30 to 9:35 a.m. It includes transfer waits and estimated walks, with up to 12 minutes of walking to the first stop. It excludes driving, ferries and delays.</p><p>District outlines show the full district. Coverage estimates the share of its mapped area within reach and can include nonresidential land or water. Check your exact address and departure time before relying on a result.</p><p>Schedules use November 17, 2026, except PATH, which uses a November 2025 weekday schedule as a proxy. A district outside the cutoff has no qualifying trip in this model.</p><p>Schedules: <a href="https://www.mta.info/developers">MTA</a>, <a href="https://developer.njtransit.com/">NJ Transit</a>, <a href="https://www.transit.land/data/feeds/f-dr5r-path~nj~us">PATH feed</a>. Boundaries: <a href="https://www.census.gov/geographies/mapping-files/time-series/geo/cartographic-boundary.html">2025 Census</a>, <a href="https://data.cityofnewyork.us/City-Government/School-Districts/8ugf-3d8u">NYC Open Data</a>. Ranks: 2027 Niche statewide rankings for <a href="https://www.niche.com/k12/search/best-school-districts/s/new-jersey/">NJ</a> and <a href="https://www.niche.com/k12/search/best-school-districts/s/new-york/">NY</a>.</p></details></aside><div id="map" aria-label="Interactive map of school districts"></div></main>
 <script>/* @preserve
  * Leaflet 1.9.4, a JS library for interactive maps. https://leafletjs.com
@@ -685,7 +685,7 @@ const colors = {NJ:'#087565',NY:'#6c43b5'};
 const legend=L.control({position:'bottomright'});
 legend.onAdd=()=>{const el=L.DomUtil.create('div','legend');el.innerHTML='<div><i class="swatch" style="background:#087565"></i>NJ top 100</div><div><i class="swatch" style="background:#6c43b5"></i>NY top 100</div><div><i class="swatch" style="background:#76869a"></i>Other qualifying district</div><div>Dashed · Outside cutoff</div>';return el};
 legend.addTo(map);
-const ui=Object.fromEntries(['list','count','search','state','scope'].map(id=>[id,document.getElementById(id)]));
+const ui=Object.fromEntries(['list','count','search','state','scope','max-rank','rank-limit'].map(id=>[id,document.getElementById(id)]));
 const escape = text => String(text).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const coverage = p => p.coverage ? p.coverage+'%' : '<1%';
 const sort = (a,b)=>(a.properties.rank??99)-(b.properties.rank??99) || a.properties.state.localeCompare(b.properties.state) || a.properties.name.localeCompare(b.properties.name);
@@ -701,10 +701,17 @@ function select(layer,button,fit){
 function render(fit=true){
   shapes?.remove();
   const {value:scope}=ui.scope;
+  const rankSlider=ui['max-rank'];
+  const rankLimit=Number(rankSlider.value);
+  const anyRank=rankLimit===Number(rankSlider.max);
+  const rankLabel=anyRank ? 'Any rank' : 'Top '+rankLimit;
+  ui['rank-limit'].value=rankLabel;
+  rankSlider.setAttribute('aria-valuetext',rankLabel);
   const search=ui.search.value.trim().toLowerCase();
   const visible=data.features.filter(({properties:p})=>
     (!ui.state.value || p.state===ui.state.value) &&
     (!search || p.name.toLowerCase().includes(search)) &&
+    (anyRank || (p.rank && p.rank<=rankLimit)) &&
     (scope==='near' ? p.minutes != null : scope==='top' ? p.minutes != null && p.rank : p.rank)
   ).sort(sort);
   const ranked=visible.filter(f=>f.properties.rank).length;
@@ -733,6 +740,8 @@ function render(fit=true){
 }
 ui.search.addEventListener('input',()=>render(false));
 ui.state.addEventListener('change',()=>render());
+ui['max-rank'].addEventListener('input',()=>render(false));
+ui['max-rank'].addEventListener('change',()=>render());
 ui.scope.addEventListener('change',()=>render());
 render();
 </script>
