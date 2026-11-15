@@ -8,7 +8,6 @@ import { buildPromptSchedule } from "../../../nyc-budget/prompt-schedule";
 
 import { columns, isColumnLayoutKey, readColumnShares } from "../../../nyc-budget/column-widths";
 
-import { budgetAuthorized } from "../../../nyc-budget/budget-auth";
 import { dispatchProductionPrompt } from "../../../nyc-budget/production-prompts";
 
 export const maxDuration = 120;
@@ -17,9 +16,7 @@ export const runtime = "nodejs";
 function deny(request: Request, write = false) {
   const host = request.headers.get("host") ?? "";
   const production = process.env.VERCEL_ENV === "production";
-  if (production) {
-    if (!budgetAuthorized(request.headers)) return new Response(null, { status: 404 });
-  } else if (process.env.NODE_ENV !== "development" || !/^(localhost|127\.0\.0\.1)(:\d+)?$/.test(host)) {
+  if (!production && (process.env.NODE_ENV !== "development" || !/^(localhost|127\.0\.0\.1)(:\d+)?$/.test(host))) {
     return new Response(null, { status: 404 });
   }
   if (write && request.headers.get("origin") !== `${production ? "https" : "http"}://${host}`) {

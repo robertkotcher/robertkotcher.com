@@ -6,13 +6,7 @@ export function matchesSecret(actual: string | null, expected: string | undefine
   return timingSafeEqual(digest(actual), digest(expected));
 }
 
-export const budgetLinkHeader = "x-budget-link";
-
 export function budgetLink() {
   const slug = process.env.NYC_BUDGET_SLUG;
   return slug && /^[a-zA-Z0-9_-]{24,}$/.test(slug) ? `/budget/${slug}` : undefined;
-}
-
-export function budgetAuthorized(headers: Headers) {
-  return matchesSecret(headers.get(budgetLinkHeader), budgetLink());
 }

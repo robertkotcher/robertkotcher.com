@@ -1,7 +1,4 @@
 import type { Metadata } from "next";
-import { headers } from "next/headers";
-import { notFound } from "next/navigation";
-import { budgetAuthorized, budgetLink } from "./budget-auth";
 import BudgetSheet from "./BudgetSheet";
 import { defaultPlan, type RetirementPlan } from "./retirement";
 import "./budget.css";
@@ -31,9 +28,6 @@ function initialPlan(): RetirementPlan {
   }
 }
 
-export default async function BudgetPage() {
-  const production = process.env.VERCEL_ENV === "production";
-  if (production && !budgetAuthorized(await headers())) notFound();
-  const endpoint = production ? `${budgetLink()}/prompts` : "/api/nyc-budget/prompts";
-  return <BudgetSheet initialPlan={initialPlan()} endpoint={endpoint} />;
+export default function BudgetPage() {
+  return <BudgetSheet initialPlan={initialPlan()} endpoint="/api/nyc-budget/prompts" />;
 }

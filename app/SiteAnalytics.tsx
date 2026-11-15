@@ -3,7 +3,8 @@
 import { Analytics } from "@vercel/analytics/next";
 
 export function SiteAnalytics() {
-  return <Analytics beforeSend={(event) =>
-    new URL(event.url).pathname.startsWith("/budget/") ? null : event
-  } />;
+  return <Analytics beforeSend={(event) => {
+    const path = new URL(event.url).pathname;
+    return path === "/nyc-budget" || path.startsWith("/budget/") ? null : event;
+  }} />;
 }
