@@ -9,8 +9,8 @@ import { type PromptJob } from "./prompt-formula";
 import { evaluateSheet, type SheetCells } from "./formulas";
 
 import { columns, minShare, totalShare, type ColumnShares } from "./column-widths";
-import { effectiveTaxRateRow, taxRowCount } from "./taxes";
-import { budgetTotals, expenseHeaderRow, maxBudgetRows, type RowChange } from "./budget-rows";
+import { effectiveTaxRateRow, taxRowCount as defaultTaxRowCount } from "./taxes";
+import { budgetTotals as defaultBudgetTotals, expenseHeaderRow as defaultExpenseHeaderRow, maxBudgetRows, type RowChange } from "./budget-rows";
 const rowIndexPercent = 6;
 const currency = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
 
@@ -22,8 +22,9 @@ type CellUndo = {
 
 export default function SpreadsheetGrid({
   cells, update, inputs, readOnlyCells, label, promptJobs, columnShares, onColumnResize,
-  rowIds, rowsReady, changeRow,
+  rowIds, rowsReady, changeRow, model,
 }: {
+  model?: { taxRowCount: number; expenseHeaderRow: number; totals: ReadonlySet<number>; rateRows: ReadonlySet<number>; euroRows: ReadonlySet<number> };
   cells: SheetCells;
   rowIds: number[];
   rowsReady: boolean;
@@ -36,6 +37,9 @@ export default function SpreadsheetGrid({
   columnShares: ColumnShares;
   onColumnResize: (shares: ColumnShares) => void;
 }) {
+  const taxRowCount = model?.taxRowCount ?? defaultTaxRowCount;
+  const expenseHeaderRow = model?.expenseHeaderRow ?? defaultExpenseHeaderRow;
+  const budgetTotals = model?.totals ?? defaultBudgetTotals;
   const [preview, setPreview] = useState<ColumnShares>();
   const shares = preview ?? columnShares;
   const table = useRef<HTMLTableElement>(null);
@@ -345,7 +349,7 @@ export default function SpreadsheetGrid({
                       const isEditing = isSelected && editing === address;
                       const isNote = column === "C" || column === "D";
                       const CellEditor = isNote ? "textarea" : "input";
-                      const display = typeof value === "number" && column === "B" && id !== effectiveTaxRateRow ? currency.format(value) : String(value);
+                      const display = typeof value === "number" && column === "B" && (model ? !model.rateRows.has(id) : id !== effectiveTaxRateRow) ? (model?.euroRows.has(id) ? new Intl.NumberFormat("en-US", { style: "currency", currency: "EUR", maximumFractionDigits: 2 }).format(value) : currency.format(value)) : String(value);
                       return (
                         <td key={address} className={isSelected ? "selected-cell" : undefined}
                           onClick={(event) => {

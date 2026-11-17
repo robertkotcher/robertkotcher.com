@@ -1,5 +1,6 @@
 "use client";
 
+import * as spain from "../spain-budget/model";
 import { useMemo, useState } from "react";
 import SpreadsheetGrid from "./SpreadsheetGrid";
 import { budgetDefaults, budgetLayoutKey, budgetRowIds, readRowChanges } from "./budget-rows";
@@ -13,12 +14,7 @@ const currency = new Intl.NumberFormat("en-US", {
   style: "currency", currency: "USD", maximumFractionDigits: 0,
 });
 const dollars = (value: number) => currency.format(value);
-const defaultSalary = 250_000;
-const minSalary = 220_000;
-const maxSalary = 320_000;
 const salaryStep = 10_000;
-const salaryNotches = Array.from({ length: (maxSalary - minSalary) / salaryStep + 1 },
-  (_, index) => minSalary + index * salaryStep);
 
 const planCells = [
   ["cash", "Starting savings"], ["stocks", "Starting stocks"], ["bonds", "Starting bonds"],
@@ -34,7 +30,12 @@ function planToCells(plan: RetirementPlan): SheetCells {
   ]));
 }
 
-export default function BudgetSheet({ initialPlan, endpoint }: { initialPlan: RetirementPlan; endpoint: string }) {
+export default function BudgetSheet({ initialPlan, endpoint, variant }: { initialPlan: RetirementPlan; endpoint: string; variant?: "spain" }) {
+  const isSpain = variant === "spain";
+  const defaultSalary = isSpain ? 180_000 : 250_000;
+  const minSalary = isSpain ? 80_000 : 220_000;
+  const maxSalary = isSpain ? 350_000 : 320_000;
+  const salaryNotches = Array.from({ length: (maxSalary - minSalary) / salaryStep + 1 }, (_, index) => minSalary + index * salaryStep);
   const prompts = usePromptCells(endpoint);
   const settings = prompts.valuesFor("settings");
   const gridSizing = {
@@ -52,9 +53,9 @@ export default function BudgetSheet({ initialPlan, endpoint }: { initialPlan: Re
   const layout = String(settings[budgetLayoutKey] ?? "");
   const { changes, rowIds } = useMemo(() => {
     const changes = readRowChanges(layout);
-    return { changes, rowIds: budgetRowIds(changes) };
-  }, [layout]);
-  const defaults = useMemo(() => budgetDefaults(changes, false), [changes]);
+    return { changes, rowIds: budgetRowIds(changes, isSpain ? spain.rowCount : undefined) };
+  }, [layout, isSpain]);
+  const defaults = useMemo(() => budgetDefaults(changes, false, isSpain ? spain.cells : undefined), [changes, isSpain]);
   const cells = { ...defaults };
   const jobs: typeof savedJobs = {};
   const readOnlyCells = new Set<string>();
@@ -62,7 +63,7 @@ export default function BudgetSheet({ initialPlan, endpoint }: { initialPlan: Re
     for (const column of columns) {
       const storageCell = column + id;
       const address = column + (index + 1);
-      if (calculatedTaxCells.has(storageCell)) readOnlyCells.add(address);
+      if (!isSpain && calculatedTaxCells.has(storageCell)) readOnlyCells.add(address);
       else if (Object.hasOwn(savedCells, storageCell)) cells[address] = savedCells[storageCell];
       else if (savedJobs[storageCell]) jobs[address] = savedJobs[storageCell];
     }
@@ -79,10 +80,10 @@ export default function BudgetSheet({ initialPlan, endpoint }: { initialPlan: Re
     <main className="budget-sheet" data-theme="light">
       <div className="budget-wrap">
         <header className="budget-header">
-          <h1 className="budget-title">NYC area cost of living</h1>
+          <h1 className="budget-title">{isSpain ? "Valencia cost of living" : "NYC area cost of living"}</h1>
           <div className="budget-header-controls">
             <div className="budget-setting">
-              <strong>Millburn, NJ</strong>
+              <strong>{isSpain ? "Valencia, Spain" : "Millburn, NJ"}</strong>
             </div>
             <div className="budget-setting">
               <span>Annual base salary</span>
@@ -146,7 +147,7 @@ export default function BudgetSheet({ initialPlan, endpoint }: { initialPlan: Re
               </div>
               {prompts.loadFailed && <p role="status">Couldn’t load the budget. Retrying…</p>}
             </>
-          ) : <SpreadsheetGrid {...gridSizing} label="Income, taxes, and expenses"
+          ) : <SpreadsheetGrid model={isSpain ? spain : undefined} {...gridSizing} label="Income, taxes, and expenses"
             cells={cells} readOnlyCells={readOnlyCells} promptJobs={jobs} rowIds={rowIds}
             rowsReady={prompts.loaded} changeRow={(change) => prompts.changeRow(change, changes.length)}
             inputs={{ SALARY: salary, RETIREMENT: contribution }}

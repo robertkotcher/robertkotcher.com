@@ -42,16 +42,16 @@ export function readRowChanges(value?: string): RowChange[] {
 }
 
 // Prompt cells and their runs use stable IDs while displayed row numbers shift.
-export function budgetRowIds(changes: RowChange[]): number[] {
-  const ids = Array.from({ length: budgetRowCount }, (_, index) => index + 1);
+export function budgetRowIds(changes: RowChange[], initialCount = budgetRowCount): number[] {
+  const ids = Array.from({ length: initialCount }, (_, index) => index + 1);
   changes.forEach(({ row, insert }, index) => {
-    if (insert) ids.splice(row - 1, 0, budgetRowCount + index + 1);
+    if (insert) ids.splice(row - 1, 0, initialCount + index + 1);
     else ids.splice(row - 1, 1);
   });
   return ids;
 }
 
-export function budgetDefaults(changes: RowChange[], brooklyn: boolean): SheetCells {
+export function budgetDefaults(changes: RowChange[], brooklyn: boolean, initialCells?: SheetCells): SheetCells {
   return changes.reduce((cells, { row, insert }) => Object.fromEntries(
     Object.entries(cells).flatMap(([address, value]) => {
       const index = Number(address.slice(1));
@@ -59,5 +59,5 @@ export function budgetDefaults(changes: RowChange[], brooklyn: boolean): SheetCe
       const next = index + (insert ? Number(index >= row) : -Number(index > row));
       return [[address[0] + next, shiftRowReferences(value, row, insert)]];
     }),
-  ), brooklyn ? { ...defaultBudgetCells, ...brooklynTaxCells } : defaultBudgetCells);
+  ), initialCells ?? (brooklyn ? { ...defaultBudgetCells, ...brooklynTaxCells } : defaultBudgetCells));
 }
