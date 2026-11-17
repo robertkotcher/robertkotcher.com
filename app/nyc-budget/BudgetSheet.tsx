@@ -1,5 +1,6 @@
 "use client";
 
+import { rowColorKey, isRowColor } from "./row-colors";
 import * as spain from "../spain-budget/model";
 import { useMemo, useState } from "react";
 import SpreadsheetGrid from "./SpreadsheetGrid";
@@ -39,6 +40,8 @@ export default function BudgetSheet({ initialPlan, endpoint, variant }: { initia
   const prompts = usePromptCells(endpoint);
   const settings = prompts.valuesFor("settings");
   const gridSizing = {
+    rowColors: Object.fromEntries(Object.entries(settings).filter(([key, value]) => key.startsWith("row-color:") && isRowColor(value))),
+    onRowColorChange: (id: number, color: string) => prompts.edit("settings", rowColorKey(id), color),
     columnShares: sheetColumnShares(settings, "cash-flow"),
     onColumnResize: (shares: ColumnShares) =>
       prompts.edit("settings", columnLayoutKey("cash-flow"), shares.join(",")),

@@ -323,3 +323,34 @@
   .budget-loading i { animation: budget-loading-pulse 1.4s ease-in-out infinite alternate; }
 }
 @keyframes budget-loading-pulse { to { opacity: .45; } }
+
+.cash-grid tbody tr[style*="--row-fill"] > td {
+  background: var(--row-fill);
+}
+.cash-grid tbody tr[style*="--row-fill"] > td :is(input, textarea, .prompt-result) {
+  background-color: transparent;
+}
+.budget-row-menu .row-color-options {
+  display: flex;
+  gap: 7px;
+  padding: 8px;
+  border-bottom: 1px solid #e8eaed;
+}
+.budget-row-menu .row-color-options button {
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  padding: 0;
+  border: 1px solid #bdc1c6;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 20px;
+  color: #5f6368;
+}
+.budget-row-menu .row-color-options button[aria-pressed="true"] {
+  outline: 2px solid #1a73e8;
+  outline-offset: 2px;
+}
+.budget-row-menu .row-color-options button:enabled:is(:hover, :focus-visible) {
+  filter: brightness(.94);
+}

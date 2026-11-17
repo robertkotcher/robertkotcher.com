@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import type { ScheduleSettings } from "./prompt-schedule";
@@ -11,6 +11,7 @@ import { evaluateSheet, type SheetCells } from "./formulas";
 import { columns, minShare, totalShare, type ColumnShares } from "./column-widths";
 import { effectiveTaxRateRow, taxRowCount as defaultTaxRowCount } from "./taxes";
 import { budgetTotals as defaultBudgetTotals, expenseHeaderRow as defaultExpenseHeaderRow, maxBudgetRows, type RowChange } from "./budget-rows";
+import { rowColors as colorOptions, rowColorKey } from "./row-colors";
 const rowIndexPercent = 6;
 const currency = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
 
@@ -22,8 +23,10 @@ type CellUndo = {
 
 export default function SpreadsheetGrid({
   cells, update, inputs, readOnlyCells, label, promptJobs, columnShares, onColumnResize,
-  rowIds, rowsReady, changeRow, model,
+  rowIds, rowsReady, changeRow, model, rowColors, onRowColorChange,
 }: {
+  rowColors: Record<string, string>;
+  onRowColorChange: (id: number, color: string) => void;
   model?: { taxRowCount: number; expenseHeaderRow: number; totals: ReadonlySet<number>; rateRows: ReadonlySet<number>; euroRows: ReadonlySet<number> };
   cells: SheetCells;
   rowIds: number[];
@@ -309,7 +312,7 @@ export default function SpreadsheetGrid({
               return (
                 <Fragment key={id}>
                   {hasTaxDetails && row === (taxesExpanded ? firstTaxDetail : taxSummary) && taxToggle}
-                  <tr className={id === 1 || id === expenseHeaderRow ? "sheet-title-row" : budgetTotals.has(id) ? "subtotal" : undefined}>
+                  <tr style={{ "--row-fill": rowColors[rowColorKey(id)] || undefined } as CSSProperties} className={id === 1 || id === expenseHeaderRow ? "sheet-title-row" : budgetTotals.has(id) ? "subtotal" : undefined}>
                     <th scope="row" className={selected.slice(1) === String(row) ? "selected-header" : ""}>
                       <div className="budget-row-heading">
                         <button type="button" className="budget-row-options" aria-label={`Options for row ${row}`}
@@ -319,11 +322,25 @@ export default function SpreadsheetGrid({
                             const menu = document.getElementById(menuId);
                             if (menu) {
                               menu.style.left = `${bounds.left}px`;
-                              menu.style.top = `${Math.min(bounds.bottom, window.innerHeight - 116)}px`;
+                              menu.style.top = `${Math.min(bounds.bottom, window.innerHeight - 170)}px`;
                             }
                           }}>⋯</button>
                         <span>{row}</span>
                         <div id={menuId} className="budget-row-menu" popover="auto">
+                          <div className="row-color-options" role="group" aria-label="Row color">
+                            {colorOptions.map((color) => (
+                              <button key={color.name} type="button" aria-label={color.name}
+                                title={color.name}
+                                aria-pressed={(rowColors[rowColorKey(id)] ?? "") === color.value}
+                                style={{ backgroundColor: color.value || "#f1f3f4" }}
+                                onClick={(event) => {
+                                  onRowColorChange(id, color.value);
+                                  event.currentTarget.closest<HTMLElement>("[popover]")?.hidePopover();
+                                }}>
+                                {color.value === "" ? "↺" : ""}
+                              </button>
+                            ))}
+                          </div>
                           <button type="button" disabled={rowCount >= maxBudgetRows}
                             onClick={(event) => void saveRowChange({ row, insert: true }, event.currentTarget.parentElement!)}>
                             Insert row above

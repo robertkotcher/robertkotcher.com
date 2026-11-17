@@ -1,3 +1,4 @@
+import { isRowColor, isRowColorKey } from "../../../nyc-budget/row-colors";
 import type { PoolClient } from "pg";
 import { after, NextResponse } from "next/server";
 import { promptDb } from "../../../nyc-budget/prompt-db";
@@ -138,14 +139,16 @@ export async function PUT(request: Request) {
   try {
     const body = await request.json();
     ({ sheet, cell, formula, revision } = body);
+    const isColor = sheet === "settings" && formula === null && isRowColorKey(cell);
     const isSalary = sheet === "settings" && cell === "salary" && formula === null;
     const isColumnWidth = sheet === "settings" && formula === null && isColumnLayoutKey(cell);
-    if (!isSalary && !isColumnWidth && (!["budget", "retirement"].includes(sheet) || !(sheet === "budget" ? /^[A-D][1-9]\d{0,2}$/ : /^[A-D](?:[1-9]|[1-4]\d|5[0-8])$/).test(cell))) {
+    if (!isColor && !isSalary && !isColumnWidth && (!["budget", "retirement"].includes(sheet) || !(sheet === "budget" ? /^[A-D][1-9]\d{0,2}$/ : /^[A-D](?:[1-9]|[1-4]\d|5[0-8])$/).test(cell))) {
       throw new Error("Invalid sheet or cell.");
     }
     if (formula !== null && (typeof formula !== "string" || formula.length > 4096)) throw new Error("Invalid formula.");
     value = formula === null ? body.value ?? "" : null;
     if (value !== null && (typeof value !== "string" || value.length > 4096)) throw new Error("Invalid cell value.");
+    if (isColor && !isRowColor(value)) throw new Error("Invalid row color.");
     if (isSalary && (value === null || !value || !Number.isFinite(Number(value)) || Number(value) < 0)) {
       throw new Error("Enter a valid salary.");
     }

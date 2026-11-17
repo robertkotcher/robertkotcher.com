@@ -1,3 +1,4 @@
+import { isRowColor, isRowColorKey } from "../../../nyc-budget/row-colors";
 import { NextResponse } from "next/server";
 import { promptDb } from "../../../nyc-budget/prompt-db";
 import { shiftRowReferences } from "../../../nyc-budget/formulas";
@@ -50,6 +51,8 @@ async function storage(request: Request, write: boolean) {
         if (sheet === "settings") {
           if (cell === "salary") {
             if (!value || !Number.isFinite(Number(value)) || Number(value) < 80000 || Number(value) > 350000) throw new Error("Salary must be between $80,000 and $350,000.");
+          } else if (isRowColorKey(cell)) {
+            if (!isRowColor(value)) throw new Error("Invalid row color.");
           } else if (!isColumnLayoutKey(cell) || !readColumnShares(value)) throw new Error("Invalid setting.");
         } else if (sheet !== "budget" || typeof cell !== "string" || !/^[A-D][1-9]\d{0,2}$/.test(cell)) throw new Error("Invalid cell.");
         let address = cell;

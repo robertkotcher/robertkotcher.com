@@ -1,5 +1,6 @@
 "use client";
 
+import { isRowColorKey } from "./row-colors";
 import { useEffect, useRef, useState } from "react";
 import type { ScheduleSettings } from "./prompt-schedule";
 import { isPromptFormula, type PromptJob } from "./prompt-formula";
@@ -87,7 +88,7 @@ export function usePromptCells(endpoint: string) {
     const existing = records[key];
     if (schedule === undefined && formula === (existing?.formula ?? null) && (formula || existing?.cell_value === value) && pending.current === 0) return;
 
-    if (sheet === "settings" && isColumnWidthKey(cell)) {
+    if (sheet === "settings" && (isColumnWidthKey(cell) || isRowColorKey(cell))) {
       setRecords((previous) => ({ ...previous, [key]: { sheet, cell, formula: null, cell_value: value } }));
     }
 
@@ -105,7 +106,7 @@ export function usePromptCells(endpoint: string) {
       }
       const result = await response.json();
       if (!response.ok) throw new Error(result.error ?? "Could not save the cell.");
-      if (sheet !== "settings" || !isColumnWidthKey(cell)) setRecords((previous) => ({ ...previous, [key]: result }));
+      if (sheet !== "settings" || !(isColumnWidthKey(cell) || isRowColorKey(cell))) setRecords((previous) => ({ ...previous, [key]: result }));
       if (formula || existing?.formula) {
         setToast({ text: `${cell} · Prompt ${formula === null ? "deleted" : existing?.formula ? "updated" : "created"}.`, error: false });
       }
