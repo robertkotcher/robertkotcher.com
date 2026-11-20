@@ -212,22 +212,15 @@
   <a class="home-link" href="/">← Robert Kotcher</a>
   <h1>How I write and review code with AI</h1>
   <div class="lede">
-    <p>As I've used AI to write more of my code, I've noticed that things tend to go wrong in a few recurring ways:</p>
-    <ul>
-      <li><strong>Missing context.</strong> Claude lacks the designs, requirements, or background it needs to get the change right.</li>
-      <li><strong>Unverified work.</strong> It stops before the job is finished because it cannot check whether the result actually works.</li>
-      <li><strong>Overstepping boundaries.</strong> It takes an action it should not, such as reading a file it was told to leave alone.</li>
-      <li><strong>Wasted effort.</strong> It takes a roundabout approach or spends time on work that does not move the task forward.</li>
-    </ul>
-    <p>At Solo, the code started growing faster than I could read it. I could no longer rely on knowing every line to catch these problems, so I needed a more deliberate way to write and review changes. That left me with two jobs as the human:</p>
+    <p>One thing has bothered me more than anything else since AI started writing most of my code. I used to read every line of code that shipped, but at Solo the code grew faster than I could read it, and eventually I couldn't keep every part of the system in my head. Once reading everything stopped being possible, I had to figure out what my job actually is. I landed on two things:</p>
     <ol>
-      <li><strong>Stay the authority.</strong> I decide what the product should do and whether a change is good enough to ship.</li>
+      <li><strong>Stay the authority.</strong> People still decide what the product should do and whether a change is good enough to ship.</li>
       <li><strong>Stay responsible.</strong> I own every change that ships, so I need real evidence that it works, from checks I trust.</li>
     </ol>
-    <p>The two workflows below are how I try to make those failures less likely. They establish the spec with the right people, define what the agent is allowed to do, and require it to check its work before handing me a pull request. They share a review engine so both newly written code and existing changes get the same checks.</p>
+    <p>Both commands are built around those two jobs. They settle the spec with the right people first, then hand me each pull request with verified findings and proof that every acceptance criterion works. The diagram shows each command's phases and the shared library functions they use.</p>
   </div>
 
-  <p class="pre-diagram">These are the two Claude Code commands I use to ship work at Solo. <code>/solo_build</code> takes a ticket I own from spec to pull request, and <code>/solo_review</code> gets an existing pull request ready for my review. The diagram shows their phases and the shared library functions they use.</p>
+  <p class="pre-diagram">These are the two Claude Code commands I use to ship work at Solo. <code>/solo_build</code> takes a ticket I own from spec to pull request, and <code>/solo_review</code> gets any existing pull request ready for my review.</p>
 
   <div class="legend" aria-label="Legend">
     <span><svg width="18" height="18" aria-hidden="true"><circle cx="9" cy="9" r="7" style="fill:var(--phase);stroke:var(--phase-stroke);stroke-width:2"/></svg>workflow phase</span>
