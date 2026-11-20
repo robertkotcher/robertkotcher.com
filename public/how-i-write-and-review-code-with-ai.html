@@ -103,6 +103,8 @@
   .notes section { display: grid; gap: 6px; align-content: start; }
   .notes-title { margin: 20px 0 0; font-size: 1.15rem; font-weight: 600; text-wrap: balance; }
   .notes h3 { margin: 0; font-size: 1rem; font-weight: 600; text-wrap: balance; }
+  .notes ul { margin: 0; padding-left: 20px; line-height: 1.6; }
+  .notes li + li { margin-top: 6px; }
   .notes p { margin: 0; line-height: 1.6; }
   .notes a { color: var(--shared); text-underline-offset: 3px; }
   .notes a:hover { text-decoration-thickness: 2px; }
@@ -440,6 +442,16 @@
     <section>
       <h3>Human effort up front, so less breaks later</h3>
       <p>Most of the human effort goes in before any code exists, when answering "what should happen here?" is cheap. That spec becomes the contract every criterion is proven against, so ambiguity turns into a question on the ticket rather than a bug in review or production. By the time a person opens the PR, the AI has already found the bugs it can and shown the evidence, so the human review can focus on judgment instead of hunting for mistakes.</p>
+    </section>
+    <section>
+      <h3>Where things go wrong most often now</h3>
+      <p>The problems I run into most often with Claude fall into four patterns:</p>
+      <ul>
+        <li><strong>Missing context.</strong> It lacks the designs, requirements, or background needed to get the change right.</li>
+        <li><strong>Unverified work.</strong> It stops before the job is finished because it cannot check whether the result actually works.</li>
+        <li><strong>Overstepping boundaries.</strong> It does something it should not, such as reading a file it was told to leave alone.</li>
+        <li><strong>Wasted effort.</strong> It takes a roundabout approach or spends too much time on work that does not move the task forward.</li>
+      </ul>
     </section>
   </div>
   <p class="stamp"><time datetime="2026-11-13">November 13, 2026</time></p>
