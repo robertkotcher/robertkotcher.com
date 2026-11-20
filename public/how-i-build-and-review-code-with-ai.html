@@ -1,0 +1,595 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>html{color-scheme:light dark} body{margin:0;font-size:14px} img{max-width:100%} [hidden]{display:none!important}</style>
+<title>Solo Command Map</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  /* Layout: one wide engineering diagram, two phase rows around a shared-library band; phase names open a code modal. */
+  :root {
+    --bg: #f5f6f8;
+    --fg: #1b2230;
+    --muted: #5b6474;
+    --line: #7d8697;
+    --node-stroke: #c7ccd6;
+    --phase: #ffffff;
+    --phase-stroke: #3f4a5c;
+    --band: #e9f2f4;
+    --shared: #2c7a8a;
+    --shared-fill: #f7fbfc;
+    --build: #fbf2e4;
+    --build-stroke: #b07d27;
+    --human: #d42f3c;
+    --human-soft: #ff9aa2;
+    --eval: #b26b00;
+    --ok: #037f4c;
+    --code-bg: #fbfcfd;
+    --code-gutter: #9aa2b0;
+    --hl-keyword: #8a3ffc;
+    --hl-string: #0f7b55;
+    --hl-comment: #7b8494;
+    --hl-number: #b15b00;
+    --hl-title: #1f5fbf;
+    --hl-attr: #9b2f6b;
+    --font-sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #10141b; --fg: #e5e9f0; --muted: #9aa3b3; --line: #77819a; --node-stroke: #343d4b;
+      --phase: #1a2029; --phase-stroke: #b9c2d0; --band: #10242a; --shared: #56b8c9; --shared-fill: #142a31;
+      --build: #2a2216; --build-stroke: #d6a24a; --human: #ff5c68; --human-soft: #b3202c; --eval: #f0b24a; --ok: #3fcf89;
+      --code-bg: #0c1016; --code-gutter: #5d6677; --hl-keyword: #c49bff; --hl-string: #6fd3a4; --hl-comment: #7f8899;
+      --hl-number: #f0a35e; --hl-title: #7fb2ff; --hl-attr: #f08fc0; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #10141b; --fg: #e5e9f0; --muted: #9aa3b3; --line: #77819a; --node-stroke: #343d4b;
+    --phase: #1a2029; --phase-stroke: #b9c2d0; --band: #10242a; --shared: #56b8c9; --shared-fill: #142a31;
+    --build: #2a2216; --build-stroke: #d6a24a; --human: #ff5c68; --human-soft: #b3202c; --eval: #f0b24a; --ok: #3fcf89;
+    --code-bg: #0c1016; --code-gutter: #5d6677; --hl-keyword: #c49bff; --hl-string: #6fd3a4; --hl-comment: #7f8899;
+    --hl-number: #f0a35e; --hl-title: #7fb2ff; --hl-attr: #f08fc0; color-scheme: dark;
+  }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 28px 40px;
+  }
+  main { max-width: 1040px; margin: 0 auto; display: grid; gap: 16px; }
+  h1 { font-size: 1.35rem; font-weight: 600; margin: 0; text-wrap: balance; }
+  .lede { margin: 0 0 12px; color: var(--muted); line-height: 1.6; display: grid; gap: 10px; }
+  .lede p { margin: 0; }
+  .pre-diagram { margin: 8px 0 0; line-height: 1.6; }
+  .lede ol { margin: 0; padding-left: 1.4em; display: grid; gap: 6px; }
+  .lede li { padding-left: 4px; }
+  .lede strong { color: var(--fg); font-weight: 600; }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: 0.85rem; color: var(--muted); align-items: center; }
+  .legend span { display: inline-flex; align-items: center; gap: 8px; }
+  .legend svg { flex: none; }
+  .scroll { position: relative; overflow: hidden; border: 1px solid var(--node-stroke); border-radius: 10px; background: var(--bg); }
+  .expand {
+    position: fixed; z-index: 17;
+    top: calc(env(safe-area-inset-top, 0px) + 26px); right: max(26px, calc(env(safe-area-inset-right, 0px) + 26px));
+    width: 36px; height: 36px; display: inline-grid; place-items: center; padding: 0;
+    border-radius: 50%; border: 1px solid var(--node-stroke); background: var(--phase); color: var(--fg); cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
+  }
+  .expand:hover { border-color: var(--fg); }
+  .expand:focus-visible { outline: 2px solid var(--shared); outline-offset: 2px; }
+  .expand svg { width: 16px; height: 16px; }
+  .backdrop { position: fixed; inset: 0; z-index: 14; background: rgba(0, 0, 0, 0.82); }
+  .scroll.expanded {
+    position: fixed; z-index: 15; overflow: auto;
+    top: calc(env(safe-area-inset-top, 0px) + 16px); bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
+    left: max(16px, env(safe-area-inset-left, 0px)); right: max(16px, env(safe-area-inset-right, 0px));
+    border-radius: 12px; padding: 56px 24px 24px; box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+  }
+  body.diagram-open { overflow: hidden; }
+  .scroll:not(.expanded) { cursor: pointer; }
+  .scroll:not(.expanded) svg.map { pointer-events: none; transition: opacity 140ms ease; }
+  .scroll:not(.expanded):hover svg.map { opacity: 0.6; }
+  .scroll:not(.expanded):focus-visible { outline: 2px solid var(--shared); outline-offset: 3px; }
+  @media (prefers-reduced-motion: reduce) { .scroll svg.map { transition: none; } }
+  code { font-family: var(--font-mono); font-size: 0.92em; }
+  .notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 22px 32px; margin-top: 2px; }
+  .notes section { min-width: 0; }
+  .notes section { display: grid; gap: 6px; align-content: start; }
+  .notes-title { margin: 20px 0 0; font-size: 1.15rem; font-weight: 600; text-wrap: balance; }
+  .notes h3 { margin: 0; font-size: 1rem; font-weight: 600; text-wrap: balance; }
+  .notes p { margin: 0; line-height: 1.6; }
+  .notes a { color: var(--shared); text-underline-offset: 3px; }
+  .notes a:hover { text-decoration-thickness: 2px; }
+  .stamp { margin: 14px 0 0; color: var(--muted); font-size: 0.78rem; font-variant-numeric: tabular-nums; }
+  svg.map { display: block; width: 100%; height: auto; }
+  .scroll.expanded svg.map { min-width: 1100px; max-width: 1600px; margin: 0 auto; }
+
+  /* SVG classes (outside the svg; colors from tokens so both themes read) */
+  .phase { fill: var(--phase); stroke: var(--phase-stroke); stroke-width: 2; }
+  .phase-build { fill: var(--build); stroke: var(--build-stroke); stroke-width: 2; }
+  .node-shared { fill: var(--shared-fill); stroke: var(--shared); stroke-width: 1.2; }
+  .band { fill: var(--band); stroke: none; }
+  .engine { fill: none; stroke: var(--shared); stroke-width: 1.6; }
+  .pn { fill: var(--fg); font-family: var(--font-sans); font-size: 14px; font-weight: 600; }
+  .ps { fill: var(--muted); font-family: var(--font-sans); font-size: 11.5px; }
+  .fn { fill: var(--fg); font-family: var(--font-mono); font-size: 12.5px; font-weight: 600; }
+  .cn { fill: var(--fg); font-family: var(--font-mono); font-size: 12px; font-weight: 600; }
+  .cd { fill: var(--muted); font-family: var(--font-sans); font-size: 11.5px; }
+  .node-agent { fill: var(--phase); stroke: var(--shared); stroke-width: 1.2; }
+  .round { fill: var(--shared-fill); stroke: var(--shared); stroke-width: 1.2; stroke-dasharray: 6 4; }
+  .round-t { fill: var(--shared); font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; }
+  .fs { fill: var(--muted); font-family: var(--font-mono); font-size: 10.5px; }
+  .s { fill: var(--muted); font-family: var(--font-sans); font-size: 11px; }
+  .head { fill: var(--fg); font-family: var(--font-mono); font-size: 14px; font-weight: 600; }
+  .band-t { fill: var(--shared); font-family: var(--font-mono); font-size: 12.5px; font-weight: 600; }
+  .band-s { fill: var(--muted); font-family: var(--font-sans); font-size: 11.5px; }
+  .flow { fill: none; stroke: var(--line); stroke-width: 1.6; }
+  .back { fill: none; stroke: var(--line); stroke-width: 1.3; }
+  .call { fill: none; stroke: var(--shared); stroke-width: 1.4; stroke-dasharray: 3 4; }
+  .inner { fill: none; stroke: var(--shared); stroke-width: 1.3; }
+  .human { fill: var(--human); stroke: none; }
+  .phase-end { fill: var(--phase); stroke: var(--ok); stroke-width: 2.4; }
+  .tip { cursor: help; }
+  .eval-ring { fill: var(--bg); stroke: var(--eval); stroke-width: 2.2; }
+  .eval-dot { fill: var(--eval); }
+  .eval:hover .eval-ring, .eval:focus-visible .eval-ring { stroke-width: 3.2; }
+  .eval:focus { outline: none; }
+  .legend .tip { border-bottom: 1px dotted var(--line); }
+  .legend .tip:focus-visible { outline: 2px solid var(--eval); outline-offset: 3px; border-radius: 4px; }
+  .tip:hover, .tip:focus-visible { stroke: var(--human); stroke-width: 3; stroke-linejoin: round; }
+  .tip:focus { outline: none; }
+  .tooltip {
+    position: fixed; z-index: 20; max-width: 320px; padding: 9px 12px; border-radius: 8px;
+    background: var(--fg); color: var(--bg); font-size: 0.82rem; line-height: 1.45;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22); pointer-events: none;
+  }
+  .tooltip b { color: var(--human-soft); font-weight: 600; }
+  .human-t { fill: var(--human); font-family: var(--font-sans); font-size: 11px; font-weight: 600; }
+  .ok-t { fill: var(--ok); font-family: var(--font-sans); font-size: 13px; font-weight: 600; }
+  .policy { fill: var(--shared); font-family: var(--font-sans); font-size: 11px; font-weight: 600; }
+  .m-line { fill: var(--line); }
+  .m-shared { fill: var(--shared); }
+  [data-phase] { cursor: pointer; }
+  .fn-unit { transition: opacity 120ms ease; }
+  svg.map.focusing .fn-unit:not(.used) { opacity: 0.18; }
+  svg.map.focusing .fn-unit.used .node-shared, svg.map.focusing .fn-unit.used .node-agent, svg.map.focusing .fn-unit.used .engine { stroke-width: 2.2; }
+  svg.map.focusing .pn[data-phase]:not(.active) { opacity: 0.55; }
+  @media (prefers-reduced-motion: reduce) { .fn-unit { transition: none; } }
+  text[data-phase] { text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 4px; text-decoration-color: var(--line); }
+  [data-phase]:hover.pn, [data-phase]:focus-visible.pn { fill: var(--shared); }
+  [data-phase]:focus { outline: none; }
+  [data-phase]:focus-visible { outline: 2px solid var(--shared); outline-offset: 3px; }
+
+  /* code modal */
+  dialog.code {
+    width: min(1100px, calc(100vw - 32px));
+    max-height: calc(100vh - 48px);
+    padding: 0;
+    border: 1px solid var(--node-stroke);
+    border-radius: 12px;
+    background: var(--bg);
+    color: var(--fg);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+  }
+  dialog.code::backdrop { background: rgba(10, 14, 20, 0.55); }
+  .code-wrap { display: grid; grid-template-rows: auto 1fr; max-height: calc(100vh - 48px); }
+  .code-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 14px 18px; border-bottom: 1px solid var(--node-stroke); }
+  .code-head h2 { margin: 0; font-size: 1.05rem; font-weight: 600; }
+  .code-head p { margin: 4px 0 0; color: var(--muted); font-family: var(--font-mono); font-size: 0.8rem; }
+  .close { flex: none; font: inherit; font-size: 0.85rem; padding: 6px 12px; border-radius: 6px; border: 1px solid var(--node-stroke); background: var(--phase); color: var(--fg); cursor: pointer; }
+  .close:hover { border-color: var(--shared); color: var(--shared); }
+  .close:focus-visible { outline: 2px solid var(--shared); outline-offset: 2px; }
+  .code-body { overflow: auto; background: var(--code-bg); min-height: 0; }
+  .code-grid { display: grid; grid-template-columns: auto 1fr; min-width: max-content; }
+  .code-grid pre { margin: 0; padding: 14px 0; font-family: var(--font-mono); font-size: 12.5px; line-height: 1.6; tab-size: 2; }
+  .gutter { color: var(--code-gutter); text-align: right; padding-inline: 14px 12px !important; user-select: none; border-right: 1px solid var(--node-stroke); font-variant-numeric: tabular-nums; }
+  .src { padding-inline: 16px 24px !important; color: var(--fg); }
+  .hljs-keyword, .hljs-built_in, .hljs-literal { color: var(--hl-keyword); }
+  .hljs-string, .hljs-regexp, .hljs-template-tag { color: var(--hl-string); }
+  .hljs-subst { color: var(--fg); }
+  .hljs-comment { color: var(--hl-comment); font-style: italic; }
+  .hljs-number { color: var(--hl-number); }
+  .hljs-title, .hljs-title.function_ { color: var(--hl-title); }
+  .hljs-attr, .hljs-property, .hljs-params { color: var(--hl-attr); }
+  @media (prefers-reduced-motion: no-preference) { dialog.code[open] { animation: pop 140ms ease-out; } }
+  @keyframes pop { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+
+
+<main>
+  <h1>How I build and review code with AI</h1>
+  <div class="lede">
+    <p>One thing has bothered me more than anything else since AI started writing most of my code. I used to read every line of code that shipped, but at Solo the code grew faster than I could read it, and eventually I couldn't keep every part of the system in my head. Once reading everything stopped being possible, I had to figure out what my job actually is. I landed on two things:</p>
+    <ol>
+      <li><strong>Stay the authority.</strong> People still decide what the product should do and whether a change is good enough to ship.</li>
+      <li><strong>Stay responsible.</strong> I own every change that ships, so I need real evidence that it works, from checks I trust.</li>
+    </ol>
+    <p>Both commands are built around those two jobs. They settle the spec with the right people first, then hand me each pull request with verified findings and proof that every acceptance criterion works. The diagram shows each command's phases and the shared library functions they use.</p>
+  </div>
+
+  <p class="pre-diagram">These are the two Claude Code commands I use to ship work at Solo. <code>/solo_build</code> takes a ticket I own from spec to pull request, and <code>/solo_review</code> gets any existing pull request ready for my review.</p>
+
+  <div class="legend" aria-label="Legend">
+    <span><svg width="18" height="18" aria-hidden="true"><circle cx="9" cy="9" r="7" style="fill:var(--phase);stroke:var(--phase-stroke);stroke-width:2"/></svg>workflow phase</span>
+    <span><svg width="18" height="18" aria-hidden="true"><circle cx="9" cy="9" r="7" style="fill:var(--build);stroke:var(--build-stroke);stroke-width:2"/></svg>phase that writes code (only /solo_build)</span>
+    <span><svg width="34" height="10" aria-hidden="true"><line x1="1" y1="5" x2="33" y2="5" style="stroke:var(--shared);stroke-width:1.4;stroke-dasharray:3 4"/></svg>calls the review engine</span>
+    <span><svg width="14" height="14" aria-hidden="true"><rect x="3" y="3" width="8" height="8" transform="rotate(45 7 7)" style="fill:var(--human)"/></svg>a person acts (hover for who)</span>
+    <span class="tip" tabindex="0" role="note" data-tip="Start evals with the agents marked like this: each makes a call the rest of the flow trusts, so a quiet regression in a prompt or model shows up as bad PRs, not as errors. Build each eval from real cases with a known right answer, drawn from past tickets and PRs, including planted bugs and convincing-but-wrong findings. Run it on every prompt or model change and track the scores over time, so each change is measured instead of guessed." aria-label="Evals to build first: Start evals with the agents marked like this: each makes a call the rest of the flow trusts, so a quiet regression in a prompt or model shows up as bad PRs, not as errors. Build each eval from real cases with a known right answer, drawn from past tickets and PRs, including planted bugs and convincing-but-wrong findings. Run it on every prompt or model change and track the scores over time, so each change is measured instead of guessed."><svg width="16" height="16" aria-hidden="true"><circle cx="8" cy="8" r="6" style="fill:var(--bg);stroke:var(--eval);stroke-width:2.2"/><circle cx="8" cy="8" r="2.4" style="fill:var(--eval)"/></svg>evals to build first</span>
+  </div>
+
+  <div class="scroll" id="diagram" tabindex="0" role="button" aria-label="Expand the diagram to full page" aria-expanded="false">
+    <button class="expand" id="expand" type="button" aria-label="Close the diagram" hidden>
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
+    <svg class="map" viewBox="0 0 1460 901" role="img" aria-label="Two rows of workflow phases around the shared library. /solo_review: Resolve, Clarify Specs, AI Review, then In Review. /solo_build: Fetch Tickets, Build Specs, Implement, Open PRs, AI Review, then In Review. On the left, the shared functions resolveTicket, mondayPeople, specLoad, and advanceSpec. In the middle, reviewPr, the shared review engine both AI Review phases call. Hover a phase name to dim the functions it does not use.">
+      <defs>
+        <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" class="m-line"/></marker>
+        <marker id="arr-s" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" class="m-shared"/></marker>
+      </defs>
+      <text class="head" x="20" y="26" text-anchor="start">/solo_review &lt;PR or ticket URL&gt;</text>
+      <line class="flow" x1="40" y1="170" x2="96" y2="170" marker-end="url(#arr)"/>
+      <circle class="phase" cx="120" cy="170" r="22" data-phase="review-resolve" data-uses="resolveTicket"/>
+      <text class="pn" x="120" y="53" text-anchor="middle" data-phase="review-resolve" data-uses="resolveTicket" tabindex="0" role="button" aria-label="Show code for Resolve">Resolve</text>
+      <text class="ps" x="120" y="71" text-anchor="middle">Finds the PR and ticket, then</text>
+      <text class="ps" x="120" y="85" text-anchor="middle">checks the review column, the</text>
+      <text class="ps" x="120" y="99" text-anchor="middle">PR link, and the Owner,</text>
+      <text class="ps" x="120" y="113" text-anchor="middle">asking you only if one is</text>
+      <text class="ps" x="120" y="127" text-anchor="middle">unclear.</text>
+      
+      <circle class="phase" cx="360" cy="170" r="22" data-phase="review-clarify" data-uses="mondayPeople specLoad advanceSpec"/>
+      <text class="pn" x="360" y="83" text-anchor="middle" data-phase="review-clarify" data-uses="mondayPeople specLoad advanceSpec" tabindex="0" role="button" aria-label="Show code for Clarify Specs">Clarify Specs</text>
+      <text class="ps" x="360" y="101" text-anchor="middle">Adds you as Reviewer and</text>
+      <text class="ps" x="360" y="115" text-anchor="middle">settles the spec the PR will</text>
+      <text class="ps" x="360" y="129" text-anchor="middle">be judged against.</text>
+      <polygon class="human tip" data-for="review-clarify" data-tip="The ticket's Owner(s) and Reporter(s), or its creator if there is no Reporter, answer product questions in a comment on the monday ticket." tabindex="0" role="img" aria-label="People in Clarify Specs: The ticket's Owner(s) and Reporter(s), or its creator if there is no Reporter, answer product questions in a comment on the monday ticket." points="0,0"/>
+      <circle class="phase" cx="1010" cy="170" r="22" data-phase="review-review" data-uses="engine"/>
+      <text class="pn" x="1010" y="68" text-anchor="middle" data-phase="review-review" data-uses="engine" tabindex="0" role="button" aria-label="Show code for AI Review">AI Review</text>
+      <text class="ps" x="1010" y="86" text-anchor="middle">Runs the shared review engine</text>
+      <text class="ps" x="1010" y="100" text-anchor="middle">and moves Robert review</text>
+      <text class="ps" x="1010" y="114" text-anchor="middle">status to In Review only on</text>
+      <text class="ps" x="1010" y="128" text-anchor="middle">AI acceptance.</text>
+      
+      <circle class="phase-end" cx="1290" cy="170" r="22"/>
+      <text class="ok-t" x="1290" y="83" text-anchor="middle" data-end="review-end">In Review</text>
+      <text class="ps" x="1290" y="101" text-anchor="middle">A person reviews the PR; the</text>
+      <text class="ps" x="1290" y="115" text-anchor="middle">AI never moves the ticket out</text>
+      <text class="ps" x="1290" y="129" text-anchor="middle">of In Review.</text>
+      <polygon class="human tip" data-for="review-end" data-tip="Robert does the final review and alone sets Accepted. If the PR changes, he sets AI review loop and reruns /solo_review." tabindex="0" role="img" aria-label="People at In Review: Robert does the final review and alone sets Accepted. If the PR changes, he sets AI review loop and reruns /solo_review." points="0,0"/>
+      <line class="flow" x1="142" y1="170" x2="336" y2="170" marker-end="url(#arr)"/>
+      <line class="flow" x1="382" y1="170" x2="986" y2="170" marker-end="url(#arr)"/>
+      <line class="flow" x1="1032" y1="170" x2="1266" y2="170" marker-end="url(#arr)"/>
+      <text class="s" x="1150" y="162" text-anchor="middle">AI acceptance</text>
+      <polyline class="back" points="1290,192 1290,222 1028,222 1028,191" marker-end="url(#arr)"/>
+      <text class="s" x="1159" y="238" text-anchor="middle">If the PR changes, set AI review loop and rerun /solo_review.</text>
+      <rect class="band" x="20" y="260" width="1430" height="437" rx="12"/>
+      <text class="band-t" x="40" y="284" text-anchor="start">.claude/workflows/lib/solo_core.js</text>
+      <g class="fn-unit" data-fn="resolveTicket">
+      <rect class="node-shared" x="40" y="304" width="260" height="76" rx="8"/>
+      <text class="cn" x="52" y="324">resolveTicket</text>
+      <text class="cd" x="52" y="341">Reads one monday ticket: its people,</text>
+      <text class="cd" x="52" y="356">every status column, the spec link</text>
+      <text class="cd" x="52" y="371">and status, and the PR links.</text>
+      </g>
+      <g class="fn-unit" data-fn="mondayPeople">
+      <rect class="node-shared" x="40" y="392" width="260" height="76" rx="8"/>
+      <text class="cn" x="52" y="412">mondayPeople</text>
+      <text class="cd" x="52" y="429">Adds you as Reviewer and a missing</text>
+      <text class="cd" x="52" y="444">Owner without removing anyone</text>
+      <text class="cd" x="52" y="459">already there.</text>
+      </g>
+      <g class="fn-unit" data-fn="specLoad">
+      <rect class="node-shared" x="40" y="480" width="260" height="76" rx="8"/>
+      <text class="cn" x="52" y="500">specLoad</text>
+      <text class="cd" x="52" y="517">Reads the current spec text from the</text>
+      <text class="cd" x="52" y="532">ticket&#x27;s Claude Doc, or from an</text>
+      <text class="cd" x="52" y="547">older spec file.</text>
+      </g>
+      <g class="fn-unit" data-fn="advanceSpec">
+      <rect class="node-shared" x="40" y="568" width="260" height="91" rx="8"/>
+      <text class="cn" x="52" y="588">advanceSpec</text>
+      <text class="cd" x="52" y="605">Moves the spec one step: drafts or</text>
+      <text class="cd" x="52" y="620">updates it, checks it for gaps, asks</text>
+      <text class="cd" x="52" y="635">product questions on the ticket, and</text>
+      <text class="cd" x="52" y="650">saves the Claude Doc.</text>
+      <g class="eval tip" data-tip="Build evals first: every later step is judged against the spec this produces. Use past tickets whose gaps you already know. Check that it asks about the real gaps, asks only product questions in plain language, and never fills a gap with its own assumption." tabindex="0" role="img" aria-label="Evals to build first: Build evals first: every later step is judged against the spec this produces. Use past tickets whose gaps you already know. Check that it asks about the real gaps, asks only product questions in plain language, and never fills a gap with its own assumption."><circle cx="286" cy="582" r="7" class="eval-ring"/><circle cx="286" cy="582" r="2.6" class="eval-dot"/></g>
+      </g>
+      <g class="fn-unit" data-fn="engine">
+      <rect class="engine" x="320" y="280" width="1120" height="397" rx="12"/>
+      <text class="band-t" x="338" y="304" text-anchor="start">reviewPr · the shared review engine</text>
+      <rect class="round" x="654" y="324" width="450" height="335" rx="10"/>
+      <text class="round-t" x="670" y="344" text-anchor="start">reviewRound · these run in parallel</text>
+      <rect class="node-agent" x="670" y="356" width="214" height="61" rx="8"/>
+      <text class="cn" x="682" y="376">reviewer · correctness</text>
+      <text class="cd" x="682" y="393">Finds bugs and regressions</text>
+      <text class="cd" x="682" y="408">the PR adds.</text>
+      <rect class="node-agent" x="670" y="427" width="214" height="61" rx="8"/>
+      <text class="cn" x="682" y="447">reviewer · safety</text>
+      <text class="cd" x="682" y="464">Checks security, access,</text>
+      <text class="cd" x="682" y="479">money, and data handling.</text>
+      <rect class="node-agent" x="670" y="498" width="214" height="61" rx="8"/>
+      <text class="cn" x="682" y="518">reviewer · criteria</text>
+      <text class="cd" x="682" y="535">Checks each acceptance</text>
+      <text class="cd" x="682" y="550">criterion on every surface.</text>
+      <rect class="node-agent" x="670" y="569" width="214" height="76" rx="8"/>
+      <text class="cn" x="682" y="589">proveCriteria</text>
+      <text class="cd" x="682" y="606">Runs the app or tests to</text>
+      <text class="cd" x="682" y="621">prove each criterion, with</text>
+      <text class="cd" x="682" y="636">videos for UI.</text>
+      <g class="eval tip" data-tip="Build evals first: its pass is what AI acceptance rests on. Use PRs with known-good and known-broken behavior for each criterion. Check that it never reports pass on broken code or invents evidence, and that it marks setup failures as blocked rather than fail." tabindex="0" role="img" aria-label="Evals to build first: Build evals first: its pass is what AI acceptance rests on. Use PRs with known-good and known-broken behavior for each criterion. Check that it never reports pass on broken code or invents evidence, and that it marks setup failures as blocked rather than fail."><circle cx="870" cy="583" r="7" class="eval-ring"/><circle cx="870" cy="583" r="2.6" class="eval-dot"/></g>
+      <rect class="node-shared" x="338" y="453.5" width="140" height="76" rx="8"/>
+      <text class="cn" x="350" y="473.5">resolvePr</text>
+      <text class="cd" x="350" y="490.5">Gets the PR&#x27;s</text>
+      <text class="cd" x="350" y="505.5">current head and</text>
+      <text class="cd" x="350" y="520.5">base commits.</text>
+      <rect class="node-shared" x="494" y="453.5" width="140" height="76" rx="8"/>
+      <text class="cn" x="506" y="473.5">githubPrior</text>
+      <text class="cd" x="506" y="490.5">Reads this PR&#x27;s</text>
+      <text class="cd" x="506" y="505.5">last AI report and</text>
+      <text class="cd" x="506" y="520.5">acceptance.</text>
+      <rect class="node-agent" x="918" y="445.5" width="170" height="76" rx="8"/>
+      <text class="cn" x="930" y="465.5">verifyFinding</text>
+      <text class="cd" x="930" y="482.5">Tries to disprove each</text>
+      <text class="cd" x="930" y="497.5">finding and keeps only</text>
+      <text class="cd" x="930" y="512.5">the real ones.</text>
+      <g class="eval tip" data-tip="Build evals first: this decides what reaches people. Use a labeled set of real findings from past PRs, both true bugs and plausible false ones. Measure how often it keeps the real bugs and drops the false ones; a slip either way means wasted review time or a missed bug." tabindex="0" role="img" aria-label="Evals to build first: Build evals first: this decides what reaches people. Use a labeled set of real findings from past PRs, both true bugs and plausible false ones. Measure how often it keeps the real bugs and drops the false ones; a slip either way means wasted review time or a missed bug."><circle cx="1074" cy="459.5" r="7" class="eval-ring"/><circle cx="1074" cy="459.5" r="2.6" class="eval-dot"/></g>
+      <rect class="node-shared" x="1150" y="324" width="256" height="61" rx="8"/>
+      <text class="cn" x="1162" y="344">checkCi</text>
+      <text class="cd" x="1162" y="361">Checks that the required CI checks</text>
+      <text class="cd" x="1162" y="376">pass.</text>
+      <rect class="node-shared" x="1150" y="399" width="256" height="61" rx="8"/>
+      <text class="cn" x="1162" y="419">specLoad</text>
+      <text class="cd" x="1162" y="436">Re-reads the spec and stops if it</text>
+      <text class="cd" x="1162" y="451">changed during the review.</text>
+      <rect class="node-shared" x="1150" y="474" width="256" height="76" rx="8"/>
+      <text class="cn" x="1162" y="494">githubPublish</text>
+      <text class="cd" x="1162" y="511">Posts the findings, criteria proof,</text>
+      <text class="cd" x="1162" y="526">report, and AI acceptance as PR</text>
+      <text class="cd" x="1162" y="541">comments.</text>
+      <rect class="node-shared" x="1150" y="564" width="256" height="61" rx="8"/>
+      <text class="cn" x="1162" y="584">mondayRecord</text>
+      <text class="cd" x="1162" y="601">Sets the ticket status that the</text>
+      <text class="cd" x="1162" y="616">calling command asked for.</text>
+      <line class="inner" x1="478" y1="491.5" x2="492" y2="491.5" marker-end="url(#arr-s)"/>
+      <line class="inner" x1="634" y1="491.5" x2="668" y2="386.5" marker-end="url(#arr-s)"/>
+      <line class="inner" x1="634" y1="491.5" x2="668" y2="457.5" marker-end="url(#arr-s)"/>
+      <line class="inner" x1="634" y1="491.5" x2="668" y2="528.5" marker-end="url(#arr-s)"/>
+      <line class="inner" x1="634" y1="491.5" x2="668" y2="607.0" marker-end="url(#arr-s)"/>
+      <line class="inner" x1="884" y1="386.5" x2="909.6" y2="470.5" marker-end="url(#arr-s)"/>
+      <line class="inner" x1="884" y1="457.5" x2="909.6" y2="484.7" marker-end="url(#arr-s)"/>
+      <line class="inner" x1="884" y1="528.5" x2="909.6" y2="498.9" marker-end="url(#arr-s)"/>
+      <line class="inner" x1="884" y1="607.0" x2="909.6" y2="514.6" marker-end="url(#arr-s)"/>
+      <line class="inner" x1="1088" y1="491.5" x2="1148" y2="354.5" marker-end="url(#arr-s)"/>
+      <line class="inner" x1="1424" y1="328" x2="1424" y2="621" marker-end="url(#arr-s)"/>
+      </g>
+      <text class="head" x="20" y="727" text-anchor="start">/solo_build &lt;ticket URL&gt;</text>
+      <line class="flow" x1="40" y1="767" x2="96" y2="767" marker-end="url(#arr)"/>
+      <circle class="phase" cx="120" cy="767" r="22" data-phase="build-fetch" data-uses="resolveTicket"/>
+      <text class="pn" x="120" y="813" text-anchor="middle" data-phase="build-fetch" data-uses="resolveTicket" tabindex="0" role="button" aria-label="Show code for Fetch Tickets">Fetch Tickets</text>
+      <text class="ps" x="120" y="831" text-anchor="middle">Continues only if you own the</text>
+      <text class="ps" x="120" y="845" text-anchor="middle">ticket and its Status is To</text>
+      <text class="ps" x="120" y="859" text-anchor="middle">do, In Progress, Needs</text>
+      <text class="ps" x="120" y="873" text-anchor="middle">Requirements, or AI Review.</text>
+      
+      <circle class="phase" cx="360" cy="767" r="22" data-phase="build-specs" data-uses="specLoad advanceSpec"/>
+      <text class="pn" x="360" y="813" text-anchor="middle" data-phase="build-specs" data-uses="specLoad advanceSpec" tabindex="0" role="button" aria-label="Show code for Build Specs">Build Specs</text>
+      <text class="ps" x="360" y="831" text-anchor="middle">Reads the spec and drafts or</text>
+      <text class="ps" x="360" y="845" text-anchor="middle">updates it until it has no</text>
+      <text class="ps" x="360" y="859" text-anchor="middle">open product questions.</text>
+      <polygon class="human tip" data-for="build-specs" data-tip="The ticket's Reporter(s), or its creator if there is no Reporter, answer product questions in a comment on the monday ticket." tabindex="0" role="img" aria-label="People in Build Specs: The ticket's Reporter(s), or its creator if there is no Reporter, answer product questions in a comment on the monday ticket." points="0,0"/>
+      <circle class="phase-build" cx="580" cy="767" r="22" data-phase="build-implement" data-uses=""/>
+      <text class="pn" x="580" y="813" text-anchor="middle" data-phase="build-implement" data-uses="" tabindex="0" role="button" aria-label="Show code for Implement">Implement</text>
+      <text class="ps" x="580" y="831" text-anchor="middle">Writes the code on a codex</text>
+      <text class="ps" x="580" y="845" text-anchor="middle">branch in its own worktree.</text>
+      
+      <circle class="phase-build" cx="790" cy="767" r="22" data-phase="build-openpr" data-uses=""/>
+      <text class="pn" x="790" y="813" text-anchor="middle" data-phase="build-openpr" data-uses="" tabindex="0" role="button" aria-label="Show code for Open PRs">Open PRs</text>
+      <text class="ps" x="790" y="831" text-anchor="middle">Pushes the branch and opens a</text>
+      <text class="ps" x="790" y="845" text-anchor="middle">PR with the criteria</text>
+      <text class="ps" x="790" y="859" text-anchor="middle">checklist.</text>
+      
+      <circle class="phase" cx="1010" cy="767" r="22" data-phase="build-review" data-uses="engine"/>
+      <text class="pn" x="1010" y="813" text-anchor="middle" data-phase="build-review" data-uses="engine" tabindex="0" role="button" aria-label="Show code for AI Review">AI Review</text>
+      <text class="ps" x="1010" y="831" text-anchor="middle">Runs the shared review engine</text>
+      <text class="ps" x="1010" y="845" text-anchor="middle">and moves Status to In Review</text>
+      <text class="ps" x="1010" y="859" text-anchor="middle">only on AI acceptance.</text>
+      
+      <circle class="phase-end" cx="1290" cy="767" r="22"/>
+      <text class="ok-t" x="1290" y="813" text-anchor="middle" data-end="build-end">In Review</text>
+      <text class="ps" x="1290" y="831" text-anchor="middle">A person reviews the code;</text>
+      <text class="ps" x="1290" y="845" text-anchor="middle">the AI never moves the ticket</text>
+      <text class="ps" x="1290" y="859" text-anchor="middle">out of In Review.</text>
+      <polygon class="human tip" data-for="build-end" data-tip="A person reviews the code. If the PR changes, Robert sets AI Review and reruns /solo_build." tabindex="0" role="img" aria-label="People at In Review: A person reviews the code. If the PR changes, Robert sets AI Review and reruns /solo_build." points="0,0"/>
+      <line class="flow" x1="142" y1="767" x2="336" y2="767" marker-end="url(#arr)"/>
+      <line class="flow" x1="382" y1="767" x2="556" y2="767" marker-end="url(#arr)"/>
+      <line class="flow" x1="602" y1="767" x2="766" y2="767" marker-end="url(#arr)"/>
+      <line class="flow" x1="812" y1="767" x2="986" y2="767" marker-end="url(#arr)"/>
+      <line class="flow" x1="1032" y1="767" x2="1266" y2="767" marker-end="url(#arr)"/>
+      <text class="s" x="1150" y="759" text-anchor="middle">AI acceptance</text>
+      <polyline class="back" points="1290,745 1290,715 1028,715 1028,746" marker-end="url(#arr)"/>
+      <text class="s" x="1159" y="707" text-anchor="middle">If the PR changes, set AI Review and rerun /solo_build.</text>
+      <line class="call" x1="1010" y1="192" x2="1010" y2="278" marker-end="url(#arr-s)"/>
+      <line class="call" x1="1010" y1="745" x2="1010" y2="679" marker-end="url(#arr-s)"/>
+    </svg>
+  </div>
+
+  <h2 class="notes-title">The principles behind it</h2>
+  <div class="notes">
+    <section>
+      <h3>Agents have to prove their work</h3>
+      <p>Anthropic's <a href="https://www.anthropic.com/engineering/claude-code-best-practices" target="_blank" rel="noopener">Best practices for Claude Code</a> makes a point that shaped this whole setup: Claude does its best work when it has a way to check its own work, and an unchecked "done" tells you very little. The review engine is built on that idea. Three reviewers read the PR in fresh contexts, a separate agent tries to disprove every finding before anyone sees it, each acceptance criterion is proven by actually running the app or tests with the evidence attached, and AI acceptance is tied to the exact commit it checked.</p>
+    </section>
+    <section>
+      <h3>Two entry points, one standard</h3>
+      <p>The two flows differ only in who writes the code: <code>/solo_build</code> writes it from a ticket, and <code>/solo_review</code> takes a PR someone already wrote. Everything around that is the same: both settle the spec first, both judge the PR against it with the same engine, and both stop at In Review. Code gets held to the same bar whether a person or an agent wrote it.</p>
+    </section>
+    <section>
+      <h3>Where people fit</h3>
+      <p>People still decide what the product should do and whether the result is good enough; agents do the reading, running, and checking in between. So the agents only ask people product questions, in plain language, on the ticket where the Owner and Reporter already work. They never approve, merge, or move a ticket out of In Review: a person makes those calls, with the findings and proof in front of them.</p>
+    </section>
+    <section>
+      <h3>Human effort up front, so less breaks later</h3>
+      <p>Most of the human effort goes in before any code exists, when answering "what should happen here?" is cheap. That spec becomes the contract every criterion is proven against, so ambiguity turns into a question on the ticket rather than a bug in review or production. By the time a person opens the PR, the AI has already found the bugs it can and shown the evidence, so the human review can focus on judgment instead of hunting for mistakes.</p>
+    </section>
+  </div>
+  <p class="stamp"><time datetime="2026-11-13">November 13, 2026</time></p>
+</main>
+
+<dialog class="code" id="code-dialog" aria-labelledby="code-title">
+  <div class="code-wrap">
+    <div class="code-head">
+      <div>
+        <h2 id="code-title">Phase</h2>
+        <p id="code-where"></p>
+      </div>
+      <button class="close" id="code-close" type="button">Close</button>
+    </div>
+    <div class="code-body">
+      <div class="code-grid"><pre class="gutter" id="code-gutter" aria-hidden="true"></pre><pre class="src"><code id="code-src" class="language-javascript"></code></pre></div>
+    </div>
+  </div>
+</dialog>
+
+<div class="backdrop" id="backdrop" hidden></div>
+<div class="tooltip" id="tooltip" role="tooltip" hidden></div>
+
+<script type="application/json" id="phase-code">{"review-resolve": {"title": "/solo_review \u00b7 Resolve", "where": ".claude/workflows/solo_review.js \u00b7 lines 45\u2013179", "code": "function parseInput(url) {\n  const u = String(url || '').trim()\n  const gh = u.match(/^https?:\\/\\/github\\.com\\/([^/]+)\\/([^/]+)\\/pull\\/(\\d+)/)\n  if (gh) return { kind: 'pr', url: `https://github.com/${gh[1]}/${gh[2]}/pull/${gh[3]}`, repo: `${gh[1]}/${gh[2]}`, number: Number(gh[3]) }\n  const mo = u.match(/monday\\.com\\/boards\\/(\\d+)(?:\\/views\\/\\d+)?\\/pulses\\/(\\d+)/)\n  if (mo) return { kind: 'ticket', url: u, board_id: mo[1], item_id: mo[2] }\n  return null\n}\n\n// Pure: turns what the resolve agent found into either run args or the questions the runner must answer.\nfunction decide(input, found, answers) {\n  const questions = []\n  const ans = answers || {}\n  let prUrl = input.kind === 'pr' ? input.url : null\n  if (!prUrl) {\n    const open = (found.pr_candidates || []).filter(p => /open/i.test(p.state))\n    if (ans.pr_url) prUrl = ans.pr_url\n    else if (open.length === 1) prUrl = open[0].url\n    else questions.push({ key: 'pr_url', question: open.length ? `Which open PR should be reviewed for this ticket?` : 'No open PR was found for this ticket. Which PR should be reviewed?', options: open.map(p => ({ label: p.url, description: p.title || p.head_ref || '' })) })\n  }\n  let ticket = found.ticket && found.ticket.id ? found.ticket : null\n  if (input.kind === 'pr' && !ticket) {\n    const c = found.ticket_candidates || []\n    if (ans.ticket_id) ticket = { id: ans.ticket_id, needs_reload: true }\n    else questions.push({ key: 'ticket_id', question: c.length ? 'Which monday ticket does this PR belong to?' : 'No monday ticket references this PR. Which ticket is it for (paste its URL)?', options: c.map(t => ({ label: t.id, description: t.name || t.url || '' })) })\n  }\n  if (ticket && prUrl && found.relationship && !found.relationship.verified && !ans.relationship_confirmed) {\n    questions.push({ key: 'relationship_confirmed', question: `I couldn't confirm that ${prUrl} implements ticket ${ticket.id} (${(found.relationship && found.relationship.evidence) || 'no link found'}). Review it against this ticket anyway?`, options: [{ label: 'Yes', description: 'Treat them as related' }, { label: 'No', description: 'Stop' }] })\n  }\n  const statusCols = (ticket && ticket.status_columns) || []\n  const want = ['ai review loop', 'in review', 'accepted']\n  const queueCols = statusCols.filter(c => want.every(w => (c.labels || []).some(l => l.trim().toLowerCase() === w)))\n  let queue = null\n  if (ticket && !ticket.needs_reload) {\n    if (queueCols.length !== 1) {\n      return { ready: false, blocked: `Expected exactly one status column on board ${ticket.board_id} with the labels \"AI review loop\", \"In Review\", and \"Accepted\"; found ${queueCols.length}. Configure it in monday (this command doesn't create or change columns).`, questions }\n    }\n    const col = queueCols[0]\n    const label = w => col.labels.find(l => l.trim().toLowerCase() === w)\n    queue = { column_id: col.id, loop_label: label('ai review loop'), review_label: label('in review'), accepted_label: label('accepted'), current_label: col.current_label || '' }\n    if (queue.current_label === queue.review_label) {\n      return { ready: false, blocked: `The ticket is \"${queue.review_label}\", which is Robert's: /solo_review never moves it out. If the PR changed, set \"${col.title || 'the review status'}\" to \"${queue.loop_label}\" and rerun.`, questions: [] }\n    }\n    if (queue.current_label === queue.accepted_label && !ans.reopen_accepted) {\n      questions.push({ key: 'reopen_accepted', question: `This ticket is already \"${queue.accepted_label}\". Reopen it in \"${queue.loop_label}\" and review again?`, options: [{ label: 'Yes', description: 'Reopen and review' }, { label: 'No', description: 'Leave it Accepted' }] })\n    }\n    if (!(ticket.owners || []).length && !ans.owner_id) {\n      questions.push({ key: 'owner_id', question: 'This ticket has no Owner. Whom should I assign as Owner (name or monday user)?', options: [] })\n    }\n  }\n  if (!found.robert || !found.robert.id) return { ready: false, blocked: 'Could not resolve robert@solosuit.com in monday users.', questions }\n  if (questions.length || !ticket || ticket.needs_reload || !prUrl) return { ready: false, questions, partial: { pr_url: prUrl, ticket_id: ticket && ticket.id } }\n  const reviewerIds = (ticket.reviewers || []).map(r => String(r.id))\n  return {\n    ready: true,\n    run_args: {\n      pr_url: prUrl,\n      ticket: {\n        id: ticket.id,\n        name: ticket.name,\n        url: ticket.url,\n        description: ticket.description,\n        board_id: ticket.board_id,\n        owners: ticket.owners || [],\n        reporters: ticket.reporters || [],\n        creator: ticket.creator,\n        spec_doc_url: ticket.spec_doc_url || '',\n      },\n      queue,\n      columns: { spec_link_column_id: (ticket.columns || {}).spec_link || '', owner_column_id: (ticket.columns || {}).owner || '', reviewer_column_id: (ticket.columns || {}).reviewer || '' },\n      assign_owner_id: (ticket.owners || []).length ? '' : String(ans.owner_id || ''),\n      add_reviewer_id: reviewerIds.includes(String(found.robert.id)) ? '' : String(found.robert.id),\n      reopen_accepted: !!ans.reopen_accepted,\n    },\n  }\n}\n\nif (A.mode === 'resolve') {\n  phase('Resolve')\n  const input = parseInput(A.input_url)\n  if (!input) return { ready: false, blocked: `Not a GitHub PR URL or a monday ticket URL: ${A.input_url}`, questions: [] }\n  const answers = A.answers || {}\n\n  // From a PR URL: which ticket is it for? (review-only)\n  let pr = null\n  let candidates = []\n  if (input.kind === 'pr') {\n    const f = await agent(\n      `Find the monday.com ticket for GitHub PR ${input.url}. Read-only: change nothing anywhere.\n1. \\`gh pr view ${input.url} --json url,state,title,body,headRefName\\` \u2192 pr {url, state, title, head_ref}.\n2. ticket_candidates: monday items this PR names (an item id or monday URL in its title, body, or a codex/<item id>-* branch name),\n   plus items whose \"PR link\" column points to this PR (search with the monday tools). Each as {id, name, url, board_id}.\nReturn error only if a tool is unavailable.`,\n      { schema: PR_TICKET_SCHEMA, label: 'pr-ticket', phase: 'Resolve', effort: 'low' }\n    )\n    if (!f) return { ready: false, blocked: 'finding the PR\\'s ticket failed; rerun /solo_review', questions: [] }\n    if (f.error) return { ready: false, blocked: f.error, questions: [] }\n    pr = f.pr || { url: input.url, state: '' }\n    const seen = new Set()\n    candidates = (f.ticket_candidates || []).filter(t => !seen.has(String(t.id)) && seen.add(String(t.id)))\n  }\n\n  // Which ticket to read: the URL itself, the runner's answer, or the PR's single candidate.\n  let item = input.kind === 'ticket' ? { id: input.item_id, board_id: input.board_id } : null\n  if (!item && answers.ticket_id) {\n    const parsed = parseInput(answers.ticket_id)\n    item = parsed && parsed.kind === 'ticket' ? { id: parsed.item_id, board_id: parsed.board_id } : { id: String(answers.ticket_id), board_id: (candidates[0] || {}).board_id || '' }\n  }\n  if (!item && candidates.length === 1) item = { id: String(candidates[0].id), board_id: candidates[0].board_id }\n\n  let found = { ticket_candidates: candidates, pr_candidates: [], relationship: { verified: false } }\n  if (item) {\n    // The shared resolveTicket reads the ticket; the checks in decide() are /solo_review's own.\n    const r = await core('ticket.resolve', { item_id: item.id, board_id: item.board_id, label: 'resolve' }, 'Resolve')\n    if (!r || !r.ok || !r.ticket) return { ready: false, blocked: `could not read ticket ${item.id}: ${(r && r.error) || 'no result'}`, questions: [] }\n    const T0 = r.ticket\n    const prUrl = input.kind === 'pr' ? input.url : answers.pr_url || null\n    const known = new Set([...(T0.known_pr_urls || []), ...(T0.pr_candidates || []).map(c => c.url)])\n    const verified =\n      !prUrl ||\n      known.has(prUrl) ||\n      !!(pr && pr.head_ref && pr.head_ref.startsWith(`codex/${T0.id}-`)) ||\n      (input.kind === 'pr' && candidates.some(c => String(c.id) === String(T0.id)))\n    found = {\n      robert: r.robert,\n      pr_candidates: T0.pr_candidates || [],\n      ticket_candidates: candidates,\n      relationship: { verified, evidence: verified ? 'the PR and ticket reference each other' : 'neither the ticket nor the PR references the other' },\n      ticket: { ...T0, board_id: T0.board_id || item.board_id, spec_doc_url: T0.spec && T0.spec.source === 'doc' ? T0.spec.doc_url : '' },\n    }\n  } else {\n    found.robert = { id: 'unknown', name: 'unknown' } // nothing to check yet; decide() asks which ticket first\n  }\n  return { input, ...decide(input, found, answers) }\n}", "start": 45, "breaks": {}}, "review-clarify": {"title": "/solo_review \u00b7 Clarify Specs", "where": ".claude/workflows/solo_review.js \u00b7 lines 215\u2013264", "code": "// Owner (assigned by the runner when missing) and Robert as Reviewer, keeping everyone already there.\nconst C = A.columns || {}\nif (A.assign_owner_id && C.owner_column_id) {\n  const r = await core('monday.people', { item_id: T.id, board_id: T.board_id, column_id: C.owner_column_id, add_ids: [A.assign_owner_id], label: T.name }, 'Clarify Specs')\n  if (r && r.error) notes.push(`owner: ${r.error}`)\n}\nif (A.add_reviewer_id && C.reviewer_column_id) {\n  const r = await core('monday.people', { item_id: T.id, board_id: T.board_id, column_id: C.reviewer_column_id, add_ids: [A.add_reviewer_id], label: T.name }, 'Clarify Specs')\n  if (r && r.error) notes.push(`reviewer: ${r.error}`)\n}\n\n// ------------------------------------------------------------------ Spec\nphase('Clarify Specs')\nlet specMarkdown = ''\nif (T.spec_doc_url) {\n  const loaded = await core('spec.load', { spec_doc_url: T.spec_doc_url, label: T.name }, 'Clarify Specs')\n  if (!loaded || !loaded.ok) return { outcome: 'blocked', reason: `could not read the spec doc ${T.spec_doc_url}: ${(loaded && loaded.error) || 'no result'}` }\n  specMarkdown = loaded.spec_markdown\n}\nconst reporters = T.reporters || []\nconst owners = (T.owners || []).length ? T.owners : A.assign_owner_id ? [{ id: A.assign_owner_id, name: 'the new Owner' }] : []\nconst mentions = people([...owners, ...(reporters.length ? reporters : T.creator ? [T.creator] : [])])\nconst specTicket = {\n  ...T,\n  status: queueLabel,\n  spec_markdown: specMarkdown || undefined,\n  spec_status: specMarkdown ? line(specMarkdown, 'Spec status') || 'ready' : 'none',\n  questions_update_id: (q => (q && q !== 'none' ? q : undefined))(line(specMarkdown, 'Questions comment')),\n}\nconst adv = await core(\n  'spec.advance',\n  {\n    ticket: specTicket,\n    policy: {\n      status: null, // the review queue stays in AI review loop while clarifying; never engineering's Needs Requirements\n      mentions,\n      mention_note: reporters.length ? 'Owner(s) and Reporter(s)' : 'Owner(s) and the item creator: the ticket has no Reporter',\n      draft_note:\n        \"The PR already exists, but its implementation is NOT the product requirements: derive behavior from the ticket, its discussion, and how Solo works today. Where the PR's behavior isn't backed by the ticket, ask.\",\n    },\n  },\n  'Clarify Specs'\n)\nif (!adv) return { outcome: 'blocked', reason: 'the spec step failed; rerun /solo_review' }\nconst specDocUrl = (adv.sync && adv.sync.doc_url) || T.spec_doc_url || null\nif (adv.specStatus !== 'ready' || !adv.markdown) {\n  if (queueLabel !== Q.loop_label) await setQueue(Q.loop_label)\n  return { outcome: 'clarifying_spec', spec_status: adv.specStatus, spec_note: adv.note || '', spec_doc_url: specDocUrl, spec_doc_created: !!(adv.sync && adv.sync.doc_created), queue: queueLabel, notes }\n}\nspecMarkdown = adv.markdown", "start": 215, "breaks": {}}, "review-review": {"title": "/solo_review \u00b7 AI Review", "where": ".claude/workflows/solo_review.js \u00b7 lines 266\u2013284", "code": "// ------------------------------------------------------------------ Review + Publish (shared engine)\nphase('AI Review')\nconst res = await core(\n  'review.pr',\n  {\n    ticket: { id: T.id, name: T.name, description: T.description, board_id: T.board_id },\n    pr_url: A.pr_url,\n    spec_markdown: specMarkdown,\n    spec_doc_url: specDocUrl,\n    notes,\n    source: '/solo_review',\n    // The review queue: AI review loop while reviewing, In Review on AI acceptance, never out of In Review (Robert's from there;\n    // he sets AI review loop again to ask for another pass). Accepted is Robert's alone.\n    policy: { status: { column_id: Q.column_id, reviewing_label: Q.loop_label, accepted_label: Q.review_label, current: queueLabel, sticky_accepted: true } },\n  },\n  'AI Review'\n)\nif (!res) return { outcome: 'blocked', reason: 'the shared review engine did not return; rerun /solo_review', queue: queueLabel, notes }\nreturn { ...res, queue: res.status, spec_doc_created: !!(adv.sync && adv.sync.doc_created) }", "start": 266, "breaks": {}}, "build-fetch": {"title": "/solo_build \u00b7 Fetch Tickets", "where": ".claude/workflows/solo_build.js \u00b7 lines 74\u2013124", "code": "// Step 1: Read the ONE ticket passed in (args.ticket_url), including its current spec doc.\n// In Review is a human's: /solo_build moves tickets INTO it (on AI acceptance) but never out. To get another AI pass after\n// changing the PR, the human sets the ticket back to AI Review.\nconst WORKABLE = ['To do', 'In Progress', 'Needs Requirements', AI_REVIEW]\nconst ticketUrl = String((args && args.ticket_url) || '').trim()\nconst urlMatch = ticketUrl.match(/monday\\.com\\/boards\\/(\\d+)(?:\\/views\\/\\d+)?\\/pulses\\/(\\d+)/)\nif (!urlMatch) return { error: `Pass the monday ticket URL: /solo_build <https://solosuit.monday.com/boards/${BOARD_ID}/pulses/<id>>. Got: ${ticketUrl || '(nothing)'}` }\nif (urlMatch[1] !== BOARD_ID) return { error: `That ticket is on board ${urlMatch[1]}; /solo_build works on Engineering Sprints (${BOARD_ID}) only.` }\nconst TICKET_ID = urlMatch[2]\n\nphase('Fetch Tickets')\n// The shared resolveTicket reads the ticket; the rules below are /solo_build's own.\nconst resolved = await core('ticket.resolve', { item_id: TICKET_ID, board_id: BOARD_ID, label: 'fetch' }, 'Fetch Tickets')\nif (!resolved || !resolved.ok || !resolved.ticket) {\n  const reason = (resolved && resolved.error) || 'resolveTicket returned nothing'\n  log(`Could not read ticket ${TICKET_ID}: ${reason}`)\n  return { error: `Could not read monday ticket ${TICKET_ID}: ${reason}. Sign in with /mcp and retry.` }\n}\nconst R = resolved.ticket\nconst statusOf = id => ((R.status_columns || []).find(c => c.id === id) || {}).current_label || ''\nconst found = {\n  id: R.id,\n  name: R.name,\n  url: R.url,\n  group: R.group,\n  description: R.description,\n  status: statusOf('task_status'),\n  reporters: R.reporters || [],\n  creator: R.creator,\n  known_pr_urls: R.known_pr_urls || [],\n  pr_link_url: R.pr_link_url || '',\n  spec_doc_url: R.spec.source === 'doc' ? R.spec.doc_url : '',\n  legacy_file: R.spec.source === 'file',\n  spec_status: R.spec.status || 'none',\n  questions_update_id: R.spec.questions_update_id || undefined,\n}\n// Rule 1: only tickets Robert owns (being Reviewer or Reporter doesn't count).\nconst ownerIsRobert = !!(resolved.robert && (R.owners || []).some(o => String(o.id) === String(resolved.robert.id)))\nif (!ownerIsRobert) {\n  return { skipped: { id: found.id, name: found.name, status: found.status, reason: 'Robert is not the Owner. /solo_build only works on tickets Robert owns; use /solo_review for review-only tickets.' } }\n}\n// Rule 2: only workable statuses; In Review belongs to the human reviewer.\nif (!WORKABLE.includes(found.status)) {\n  const reason =\n    found.status === IN_REVIEW\n      ? `It is ${IN_REVIEW}, which belongs to the human reviewer: /solo_build never moves a ticket out of ${IN_REVIEW}. After changing the PR, set the Status to ${AI_REVIEW} and rerun to get a fresh AI review before it goes back to ${IN_REVIEW}.`\n      : `Its Status is \"${found.status}\". /solo_build works only on ${WORKABLE.join(', ')}.`\n  return { skipped: { id: found.id, name: found.name, status: found.status, reason } }\n}\nconst tickets = [found]\nlog(`Working on ${found.name} (${found.status}).`)", "start": 74, "breaks": {}}, "build-specs": {"title": "/solo_build \u00b7 Build Specs", "where": ".claude/workflows/solo_build.js \u00b7 lines 126\u2013145, 249\u2013264", "code": "// Step 2: Iterate each ticket's spec until it has no open product questions, and make the ticket reflect it (shared\n// library: draft or fold in replies -> independent review -> bounded technical revisions -> product questions in a ticket\n// comment -> write the spec doc). This workflow's policy: ready -> In Progress, draft -> Needs Requirements; questions\n// mention the Reporter(s), or the item's creator when there is none.\nfunction advanceSpec(ticket) {\n  const reporters = ticket.reporters || []\n  const mentions = reporters.length ? reporters : ticket.creator ? [ticket.creator] : []\n  return core(\n    'spec.advance',\n    {\n      ticket,\n      policy: {\n        status: { column_id: 'task_status', ready_label: 'In Progress', draft_label: 'Needs Requirements', current: ticket.status },\n        mentions,\n        mention_note: reporters.length ? '' : 'the item creator: the ticket has no Reporter',\n      },\n    },\n    'Build Specs'\n  )\n}\n\nphase('Build Specs')\nconst results = await pipeline(\n  tickets,\n  // A ticket in AI Review skips spec sync (which would reset it to In Progress) and goes straight to a fresh AI review.\n  ticket =>\n    withSpecText(ticket).then(\n      t => (t.status === AI_REVIEW ? { ticket: t, aiReviewOnly: true, specStatus: t.spec_status, markdown: t.spec_markdown, note: 'resuming AI review' } : advanceSpec(t)),\n      e => ({ ticket, specStatus: ticket.spec_status, note: e.message })\n    ),\n  s => (s && !s.aiReviewOnly && s.specStatus === 'ready' && s.markdown ? implement(s).then(impl => ({ ...s, impl })) : s),\n  s => (s && s.impl && s.impl.outcome === 'implemented' && s.impl.branch ? openPr(s.impl).then(pr => ({ ...s, pr })) : s),\n  s => {\n    const target = s && reviewTarget(s)\n    return target ? aiReview(s, target).then(review => ({ ...s, review })) : s\n  }\n)", "start": 126, "breaks": {"20": 249}}, "build-implement": {"title": "/solo_build \u00b7 Implement", "where": ".claude/workflows/solo_build.js \u00b7 lines 147\u2013178", "code": "// Step 3: A ready spec with no PR gets built. The ticket's own PR link/updates and gh are the\n// \"PR exists\" check; an existing codex/<id>-* branch with no PR is resumed, not rebuilt.\nfunction implement(s) {\n  const t = s.ticket\n  return agent(\n    `Implement monday.com ticket ${t.id} (\"${t.name}\") from its ready spec, as an initial draft on a local branch.\n\nSpec (just read from the ticket's spec-${t.id}.md):\n<<<SPEC\n${s.markdown}\nSPEC>>>\n\n1. PR check. Known PR URLs from the ticket: ${(t.known_pr_urls || []).join(', ') || 'none'}. Also run\n   \\`gh pr list --state open --search \"${t.id}\"\\` in this repo and in ${CONSUMER_REPO}. If \\`gh\\` is not installed, return outcome\n   \"blocked\" with notes \"gh CLI not installed\". If any of those PRs is open (or merged and the spec says nothing remains):\n   if the \"PR link\" column (${PR_LINK_COLUMN_ID}) is empty or points elsewhere, set it via change_item_column_values to\n   {\"url\": \"<pr url>\", \"text\": \"PR #<number>\"} and set pr_link_updated true. Then return outcome \"skipped_open_pr\" with pr_url. Stop.\n2. Pick the repo. Rails work happens in this worktree. If the spec's work is in Solo Consumer, use ${CONSUMER_REPO} instead: add a\n   worktree for it in your scratchpad (\\`git -C ${CONSUMER_REPO} worktree add ...\\`) and never touch its main checkout.\n   If the work spans both, do the Rails part here and return \"blocked\" with the Consumer part in notes.\n   Return repo_path (the repo's main checkout path, e.g. ${CONSUMER_REPO} or this repo's root).\n3. Branch. \\`git fetch origin\\`. If a branch matching \"codex/${t.id}-*\" exists, check it out and continue from it (finish what remains).\n   Otherwise create \\`codex/${t.id}-<short-slug>\\` from origin/main.\n4. Implement against the acceptance criteria following AGENTS.md (hit every surface, focused RSpec for backend changes, migrations with\n   db/structure.sql, no real provider side effects, no production access). If the spec is ambiguous or wrong in a way that changes\n   the work, commit what is safe and return \"blocked\" with the question in notes.\n5. Verify with the smallest proof: the specs/tests you touched and lint on changed files.\n6. Commit on the branch. Do NOT push, open a PR, post to Slack, or change the ticket (step 1's PR link is the only allowed write).\n7. Return outcome \"implemented\", the branch, each acceptance criterion as done / partial / not_done, test results, and anything left open.`,\n    { schema: IMPLEMENT_SCHEMA, isolation: 'worktree', label: `implement:${t.name.slice(0, 25)}`, phase: 'Implement' }\n  ).then(r => (r ? { id: t.id, name: t.name, ...r } : { id: t.id, name: t.name, outcome: 'failed' }))\n}", "start": 147, "breaks": {}}, "build-openpr": {"title": "/solo_build \u00b7 Open PRs", "where": ".claude/workflows/solo_build.js \u00b7 lines 180\u2013203", "code": "function openPr(impl) {\n  const checklist = (impl.criteria || []).map(c => `- [${c.state === 'done' ? 'x' : ' '}] ${c.criterion}`).join('\\n')\n  const repo = impl.repo_path || 'this repository'\n  return agent(\n    `Open a pull request for local branch ${impl.branch} in ${repo} (monday.com ticket ${impl.id}, \"${impl.name}\") and attach it to the ticket.\n\n1. If an open PR already exists for this branch (\\`gh pr list --state open --head ${impl.branch}\\` in ${repo}), skip to step 5 with outcome \"already_open\".\n2. Find the worktree that has the branch checked out (\\`git -C ${repo} worktree list\\`). If none does, add a temporary one in your scratchpad\n   and remove it when done. Never check the branch out in the main checkout.\n3. In that worktree: \\`git fetch origin main\\` and \\`git rebase origin/main\\`. On conflict, \\`git rebase --abort\\` and return \"failed\" with\n   the conflicting files in notes. If the rebase changed anything, re-run the tests the branch touched.\n4. \\`git push -u origin ${impl.branch}\\`, then \\`gh pr create --base main --head ${impl.branch}\\` as a real (not draft) PR:\n   - Title: plain-language summary following recent merged PR titles (\\`gh pr list --state merged --limit 10\\`).\n   - Body, exactly this shape: 1-2 sentences describing the change (from \\`git log origin/main..HEAD\\` and the diff), a blank line,\n     this checklist verbatim:\n${checklist}\n     a blank line, then: \ud83e\udd16 Generated with [Claude Code](https://claude.com/claude-code)\n   - Never comment \"@codex review\". Do not merge.\n5. Load monday.com change_item_column_values. If item ${impl.id}'s \"PR link\" column (${PR_LINK_COLUMN_ID}) is empty or points elsewhere,\n   set it to {\"url\": \"<pr url>\", \"text\": \"PR #<number>\"} and set pr_link_updated true. Make no other monday.com changes.\n6. Return the outcome and pr_url.`,\n    { schema: PR_SCHEMA, label: `pr:${impl.name.slice(0, 25)}`, phase: 'Open PRs' }\n  ).then(r => (r ? { id: impl.id, name: impl.name, ...r } : { id: impl.id, name: impl.name, outcome: 'failed' }))\n}", "start": 180, "breaks": {}}, "build-review": {"title": "/solo_build \u00b7 AI Review", "where": ".claude/workflows/solo_build.js \u00b7 lines 205\u2013247", "code": "// Step 5: AI review of the ticket's open PR with the SAME engine as /solo_review: report-only (no fixer, no PR-description\n// edits), verified findings and proof as PR comments, AI acceptance bound to head/base/spec, stale-acceptance and head-race\n// handling, idempotent reruns. Engineering policy: Status -> AI Review while reviewing, In Review on AI acceptance, and never\n// out of In Review (a human sets AI Review again to ask for another pass).\nfunction aiReview(s, target) {\n  const t = s.ticket\n  const current = (s.sync && s.sync.status_set_to) || t.status\n  if (current === IN_REVIEW) return Promise.resolve({ outcome: 'skipped', reason: `${IN_REVIEW} belongs to the human reviewer` })\n  return core(\n    'review.pr',\n    {\n      ticket: { id: t.id, name: t.name, description: t.description, board_id: BOARD_ID },\n      pr_url: target.pr_url,\n      candidates: t.known_pr_urls || [],\n      spec_markdown: s.markdown,\n      spec_doc_url: (s.sync && s.sync.doc_url) || t.spec_doc_url || null,\n      source: '/solo_build',\n      // sticky_accepted: the engine may move a ticket INTO In Review but never out of it.\n      policy: { status: { column_id: 'task_status', reviewing_label: AI_REVIEW, accepted_label: IN_REVIEW, current, sticky_accepted: true } },\n    },\n    'AI Review'\n  ).then(r => r || { outcome: 'review_failed', reason: 'the shared review engine did not return' })\n}\n\n// Which PR (if any) this ticket's pass ended with.\nfunction reviewTarget(s) {\n  if (s.aiReviewOnly) return { pr_url: s.ticket.pr_link_url || null }\n  if (s.pr && (s.pr.outcome === 'opened' || s.pr.outcome === 'already_open') && s.pr.pr_url) return { pr_url: s.pr.pr_url }\n  if (s.impl && s.impl.outcome === 'skipped_open_pr' && s.impl.pr_url) return { pr_url: s.impl.pr_url }\n  return null\n}\n\n// The spec text is read with the shared specLoad only when there is a spec to continue from.\nasync function withSpecText(ticket) {\n  if (ticket.spec_status === 'none') return ticket\n  const loaded = await core(\n    'spec.load',\n    ticket.spec_doc_url ? { spec_doc_url: ticket.spec_doc_url, label: ticket.name } : { legacy_item_id: ticket.id, legacy_column_id: LEGACY_FILE_COLUMN_ID, label: ticket.name },\n    'Build Specs'\n  )\n  if (!loaded || !loaded.ok) throw new Error(`could not read the spec: ${(loaded && loaded.error) || 'no result'}`)\n  return { ...ticket, spec_markdown: loaded.spec_markdown }\n}", "start": 205, "breaks": {}}}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>
+  (function () {
+    var data = {};
+    try { data = JSON.parse(document.getElementById('phase-code').textContent); } catch (e) { data = {}; }
+    var dialog = document.getElementById('code-dialog');
+    var title = document.getElementById('code-title');
+    var where = document.getElementById('code-where');
+    var gutter = document.getElementById('code-gutter');
+    var src = document.getElementById('code-src');
+
+    function open(key) {
+      var entry = data[key];
+      if (!entry) return;
+      title.textContent = entry.title;
+      where.textContent = entry.where;
+      var text = entry.code;
+      var lines = text.split('\n');
+      var nums = [];
+      var n = entry.start;
+      for (var i = 0; i < lines.length; i++) {
+        nums.push(entry.breaks && entry.breaks[i] ? '⋮' : String(n));
+        n = entry.breaks && entry.breaks[i] ? entry.breaks[i] : n + 1;
+      }
+      gutter.textContent = nums.join('\n');
+      if (window.hljs) src.innerHTML = window.hljs.highlight(text, { language: 'javascript', ignoreIllegals: true }).value;
+      else src.textContent = text;
+      if (typeof dialog.showModal === 'function') dialog.showModal();
+      else dialog.setAttribute('open', '');
+      dialog.querySelector('.code-body').scrollTop = 0;
+    }
+    function close() {
+      if (typeof dialog.close === 'function') dialog.close();
+      else dialog.removeAttribute('open');
+    }
+
+    document.querySelectorAll('[data-phase]').forEach(function (el) {
+      el.addEventListener('click', function () { open(el.getAttribute('data-phase')); });
+      el.addEventListener('keydown', function (ev) {
+        if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); open(el.getAttribute('data-phase')); }
+      });
+    });
+    document.getElementById('code-close').addEventListener('click', close);
+
+    // Hovering or focusing a phase dims every shared function that phase doesn't use; the review engine dims as one unit.
+    var map = document.querySelector('svg.map');
+    function focusPhase(el) {
+      var uses = (el.getAttribute('data-uses') || '').split(' ').filter(Boolean);
+      var key = el.getAttribute('data-phase');
+      map.classList.add('focusing');
+      map.querySelectorAll('.fn-unit').forEach(function (u) { u.classList.toggle('used', uses.indexOf(u.getAttribute('data-fn')) >= 0); });
+      map.querySelectorAll('.pn[data-phase]').forEach(function (p) { p.classList.toggle('active', p.getAttribute('data-phase') === key); });
+    }
+    function clearFocus() {
+      map.classList.remove('focusing');
+      map.querySelectorAll('.used, .active').forEach(function (n) { n.classList.remove('used'); n.classList.remove('active'); });
+    }
+    map.querySelectorAll('[data-phase][data-uses]').forEach(function (el) {
+      el.addEventListener('mouseenter', function () { focusPhase(el); });
+      el.addEventListener('mouseleave', clearFocus);
+      el.addEventListener('focus', function () { focusPhase(el); });
+      el.addEventListener('blur', clearFocus);
+    });
+
+    // Red diamonds sit just left of their phase name and explain, on hover or focus, which people are involved.
+    function placeDiamonds() {
+      document.querySelectorAll('.tip[data-for]').forEach(function (d) {
+        var key = d.getAttribute('data-for');
+        var label = document.querySelector('text.pn[data-phase="' + key + '"]') || document.querySelector('text[data-end="' + key + '"]');
+        if (!label) return;
+        var b;
+        try { b = label.getBBox(); } catch (e) { return; }
+        var cx = b.x - 12, cy = b.y + b.height / 2 + 1, r = 7;
+        d.setAttribute('points', [cx, cy - r, cx + r, cy, cx, cy + r, cx - r, cy].join(' '));
+      });
+    }
+    placeDiamonds();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(placeDiamonds);
+
+    // The mini diagram is one big button: click (or Enter) expands it to fill the page; Close or Esc shrinks it back.
+    var frame = document.getElementById('diagram');
+    var closeBtn = document.getElementById('expand');
+    function setExpanded(on) {
+      frame.classList.toggle('expanded', on);
+      document.body.classList.toggle('diagram-open', on);
+      frame.setAttribute('aria-expanded', on ? 'true' : 'false');
+      if (on) { frame.removeAttribute('role'); frame.setAttribute('aria-label', 'Diagram'); }
+      else { frame.setAttribute('role', 'button'); frame.setAttribute('aria-label', 'Expand the diagram to full page'); }
+      closeBtn.hidden = !on;
+      document.getElementById('backdrop').hidden = !on;
+      if (typeof hideTip === 'function') hideTip();
+      requestAnimationFrame(placeDiamonds);
+      if (on) closeBtn.focus(); else frame.focus();
+    }
+    frame.addEventListener('click', function () { if (!frame.classList.contains('expanded')) setExpanded(true); });
+    frame.addEventListener('keydown', function (ev) {
+      if (!frame.classList.contains('expanded') && (ev.key === 'Enter' || ev.key === ' ')) { ev.preventDefault(); setExpanded(true); }
+    });
+    closeBtn.addEventListener('click', function (ev) { ev.stopPropagation(); setExpanded(false); });
+    document.getElementById('backdrop').addEventListener('click', function () { setExpanded(false); });
+    document.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Escape' && frame.classList.contains('expanded') && !dialog.open) setExpanded(false);
+    });
+
+    var tooltip = document.getElementById('tooltip');
+    function showTip(el) {
+      tooltip.textContent = el.getAttribute('data-tip');
+      tooltip.hidden = false;
+      var r = el.getBoundingClientRect();
+      var tw = tooltip.offsetWidth, th = tooltip.offsetHeight;
+      var left = Math.min(Math.max(8, r.left + r.width / 2 - tw / 2), window.innerWidth - tw - 8);
+      var top = r.top - th - 10;
+      if (top < 8) top = r.bottom + 10;
+      tooltip.style.left = left + 'px';
+      tooltip.style.top = top + 'px';
+    }
+    function hideTip() { tooltip.hidden = true; }
+    document.querySelectorAll('.tip').forEach(function (el) {
+      el.addEventListener('mouseenter', function () { showTip(el); });
+      el.addEventListener('mouseleave', hideTip);
+      el.addEventListener('focus', function () { showTip(el); });
+      el.addEventListener('blur', hideTip);
+      el.addEventListener('click', function () { showTip(el); });
+    });
+    document.querySelector('.scroll').addEventListener('scroll', hideTip);
+    window.addEventListener('scroll', hideTip, { passive: true });
+    dialog.addEventListener('click', function (ev) { if (ev.target === dialog) close(); });
+  })();
+</script>
+
+</body>
+</html>

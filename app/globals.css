@@ -451,3 +451,14 @@ a:focus-visible { border-radius: 2px; outline: 3px solid #86a6ef; outline-offset
 
 .availability-banner a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
 .availability-banner a:hover { text-decoration-thickness: 2px; }
+
+@media screen {
+  .resume-header { flex-wrap: wrap; }
+}
+@media screen {
+  .header-person { flex: 1 1 100%; display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 26px; row-gap: 0; }
+  .header-person .identity { grid-column: 2; grid-row: 1; }
+  .header-person .header-portrait { display: block; align-self: center; transform: none; }
+}
+
+@media screen and (max-width: 760px) { .header-person { column-gap: 14px; } }

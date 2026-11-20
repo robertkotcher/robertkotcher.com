@@ -86,6 +86,7 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
             </a>
             {!printable && <a href={pdfUrl} target="_blank" rel="noreferrer" aria-label="Open résumé PDF in a new tab" title="Open PDF"><FileDown aria-hidden="true" size={24} strokeWidth={1.8} /></a>}
           </nav>}
+
         </header>
 
 
@@ -107,7 +108,11 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
             </section>
 
             <section>
-              <h2>Personal projects</h2>
+              <h2>Projects</h2>
+
+              {!printable && <div className="compact-item">
+                <p><a href="/how-i-build-and-review-code-with-ai.html">How I build and review code with AI</a></p>
+              </div>}
 
               <div className="compact-item" data-background="engineering product growth">
                 <p><a href="https://inflightsimulator.com" target="_blank" rel="noreferrer">InFlightSimulator.com</a> lets you explore the world as an airline passenger. It reached 60,000 users within the first week of release.</p>
