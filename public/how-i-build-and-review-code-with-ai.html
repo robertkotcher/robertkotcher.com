@@ -199,12 +199,15 @@
   .hljs-attr, .hljs-property, .hljs-params { color: var(--hl-attr); }
   @media (prefers-reduced-motion: no-preference) { dialog.code[open] { animation: pop 140ms ease-out; } }
   @keyframes pop { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  .home-link { display: inline-block; margin-bottom: 20px; color: var(--muted); font: 14px var(--font-sans); text-decoration: none; }
+  .home-link:hover { color: var(--fg); text-decoration: underline; }
 </style>
 </head>
 <body>
 
 
 <main>
+  <a class="home-link" href="/">← Robert Kotcher</a>
   <h1>How I build and review code with AI</h1>
   <div class="lede">
     <p>One thing has bothered me more than anything else since AI started writing most of my code. I used to read every line of code that shipped, but at Solo the code grew faster than I could read it, and eventually I couldn't keep every part of the system in my head. Once reading everything stopped being possible, I had to figure out what my job actually is. I landed on two things:</p>
