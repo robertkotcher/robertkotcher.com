@@ -111,7 +111,7 @@ export default function Resume({ printable = false }: { printable?: boolean }) {
               <h2>Projects</h2>
 
               {!printable && <div className="compact-item">
-                <p><a href="/how-i-build-and-review-code-with-ai.html">How I build and review code with AI</a></p>
+                <p><a href="/how-i-write-and-review-code-with-ai.html">How I write and review code with AI</a></p>
               </div>}
 
               <div className="compact-item" data-background="engineering product growth">
