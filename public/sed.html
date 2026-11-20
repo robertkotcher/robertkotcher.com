@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CS Theory - A proof that Sed is turing complete — Robert Kotcher</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; color: #202124; background: #fff; font: 16px/1.65 system-ui, sans-serif; }
+    .container { max-width: 880px; margin: 0 auto; padding: 40px 24px 64px; }
+    h1 { font-size: clamp(1.65rem, 4vw, 2.2rem); line-height: 1.25; }
+    h4 { margin: 2rem 0 .6rem; font-size: 1.2rem; }
+    a { color: #185abc; overflow-wrap: anywhere; }
+    pre { overflow-x: auto; padding: 16px; background: #f5f6f7; border-radius: 4px; font: 13px/1.65 ui-monospace, SFMono-Regular, Menlo, monospace; }
+    li { margin: .6rem 0; }
+    ol, ul { padding-left: 24px; }
+    .add-space-25 { height: 25px; }
+    :target { scroll-margin-top: 24px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <h1>CS Theory - A proof that Sed is turing complete</h1>
+
+    <pre>
+    author Robert Kotcher
+    originally posted 7-13-13
+    </pre>
+
+    <h4>Motivation</h4>
+
+    <p>
+    For those of you unfamiliar, Sed is Unix utility for parsing text streams. I can't quite say for sure what drove me to write a proof that Sed is turing complete. Before writing this post, I had never even used Sed more than a handful of times before. I ran across the following post on the Internet 
+    <a href="http://www.catonmat.net/blog/proof-that-sed-is-turing-complete/">http://www.catonmat.net/blog/proof-that-sed-is-turing-complete/</a>, but wondered if there was maybe a different way to show that Sed is turing-complete. A short google search later, I was on the wikipedia page for <a href="http://en.wikipedia.org/wiki/Turing_completeness">turing completeness</a>.
+
+    <div class="add-space-25"></div>
+
+    Anyway, if you'd like to skip all of the theory and go straight to the proof, you can <a href="#proof">jump</a> right to it. Otherwise, read on! (obviously). Oh yeah, and if you just want to see something cool that you can do with Sed, go <a href="#fib">here</a>.
+    </p>
+
+    <h4>Turing Machines</h4>
+
+    <p>Ok, so I'm going to copy a line (but just one) from wikipedia: "In computability theory, a system of data-manipulation rules (such as a computer's instruction set, a programming language, or a cellular automaton) is said to be Turing complete or computationally universal if it can be used to simulate any single-taped Turing machine", i.e. it has rules, branching, and some type form of memory. In theory we have infinite memory, but it's obvious that this isn't possible in real life. Therefore, a turing machine is theoretical machine, but is the basis for modern computing.</p>
+
+    <div class="add-space-25"></div>
+
+    <p>
+    If we could implement a turing machine with a system (without the infinite memory, of course), then we can say that our system is <i>turing complete</i>. We would have to devise a set of syntactic rules for manipulating memory.  But there's another important concept that is important for us to indirectly know that devising such a machine is possible.
+    </p>
+
+    <div class="add-space-25"></div>
+
+    Two machines A and B are <i>turing equivalent</i> if A can implement B and B can implement A.
+
+    <h4>Recursive functions</h4>
+
+    It turns out there's a class of recursive functions whose elements are precisely computable by a turing-complete system, called <i>&mu;-recursive functions</i>. A &mu;-recursive function is similar, but more demanding than primitive-recursive functions. Let me quickly explain each of these classes of functions:
+
+    <ol>
+      <li><strong>Primitive-recursive functions</strong>: The set of primitive-recursive functions can defined by the following axioms:
+
+      <ol>
+        <li><u>Constant function</u>: A 0-ary (function with 0 arguments) function is primitive-recursive.</li>
+        <li><u>Successor function</u>: The 1-ary function S(n) computes and returns n+1. For a bit of fun, here's a successor function written in Sed:</li>
+
+        <pre>
+# Computes S(n), where n (decimal) is represented by a
+# string of n 1s.
+~%echo '111' | sed -e 's/1*/&1/'
+1111
+          </pre>
+
+        <li><u>Projection function</u>: For 0 &le; i &le; n-1, projection function P<sub>i</sub>(a<sub>0</sub>, a<sub>1</sub>, ..., a<sub>n-1</sub>) returns the i<sup>th</sup> argument passed to P.</li>
+
+      </ol>
+
+      <p>We can build any primitive-recursive function using these axioms. The reason why implementing a primitive-recursive function is insufficient in proving that a system is turing-complete (i.e. why primitive-recursive functions aren't turing complete), is that primitive recursive functions must always halt.<p>
+
+      <p>If we refer to the three axioms, this makes sense. With primitive-recursive functions, we must eventually be able to represent a function as some finite composition of these axioms, all of which are equivalent to a constant.</p>
+
+      </li>
+
+      <li><strong>&mu;-recursive functions</strong>: The set of all &mu;-recursive functions is a strict superset of the set of primitive recursive functions. What is the distinguishing factor, then?
+
+      <p>Basically, we need to be able to write a function that can compute a <i>minimization operator</i>. The minimization operator finds the smallest argument to a function that causes that function to return 0. Because such an argument may not exist, it requires that the system attempting to compute it have the ability to not halt, provided it has unlimited memory.</p>
+
+      As an aside, there is a special class of functions known as the Ackermann functions whos members are computable functions (&mu;-recursive) that are not primitive recursive. <a href="http://planetmath.org/ackermannfunctionisnotprimitiverecursive">Here</a> is a proof that the Ackerman functions are not primitive recursive. Maybe I'll summarize it here later.<p>
+
+      <i id="proof">Proof that Sed is turing complete</i>. A system that is capable of implementing a minimization operator is turing complete. Here is the minimization operator written using a Sed script:
+
+      <pre>
+      1  #!/bin/sh 
+      2 
+      3  echo "" | /bin/sed -nEe '
+      4 
+      5  # initialize registers
+      6  s/$/eax1ecx/;
+      7 
+      8  b mu
+      9 
+      10 b
+      11 :mu
+      12   s/eax1*ecx1*/&1/
+      13   /eax1ecx1*/t hallo
+      14   b leave
+      15 
+      16 b
+      17 :hallo
+      18   s/eax1ecx1*/eaxecx11/
+      19   b mu
+      20 
+      21 b
+      22 :leave
+      23   q;
+      24 
+      25 '
+      </pre>
+
+      &#888;
+
+      <p>And that's it. Sed is turing complete. The next bit will explain what's going on here.</p>
+
+      <p>It's important to understand that Sed's control flow is very different than that of your typical turing-complete language. Let me defend that statement. Labels (:<i>label</i>) do not explicitly return to the command following their invocation. Also, variables do not exist - we need to define our own variable space using Sed's hold buffer.
+
+      <ul>
+        <li><strong>Line 3</strong>: I'm running sed with -E modern regex and -n explicity silencing output</li>
+        <li><strong>Line 6</strong>: Sed has something called a <i>hold buffer</i>. This is a special piece of memory that I'm using to store register values. I used x86 naming conventions. %eax will contain return values and %ecx will increment and be passed as an argument to :hallo, the function whose output we are minimizing.</li>
+        <li><strong>Line 11</strong>: :mu increments %ecx and calls :hallo if %eax &ne; 0.</li>
+        <li><strong>Line 17</strong>: :hallo can do whatever we'd like - it's behavior is irrelevant to proving turing-completeness.</li>
+
+        </li>
+
+      </ol>
+
+
+
+
+      <h4 id="fib">Fibonacci Numbers</h4>
+
+      For fun, here is a sed script that computes the n<sup>th</sup> Fibonacci number:
+
+
+      <pre>
+      1 #!/usr/bin/sed -nf
+      2 #Fib in sed
+      3 
+      4 binit
+      5 
+      6 b
+      7 :init
+      8   h;
+      9   s/\(1{0,1}\)/\1/; t base
+      10   x;
+      11   s/\(1*\)11$/(\1\,\11)/
+      12   x;
+      13   b split
+      14 
+      15 b
+      16 :split
+      17   x; s/\(1*\)11/(\1\,\11)/; t split
+      18   x; 
+      19   b reduce
+      20   
+      21 b 
+      22 :base
+      23 p;
+      24 
+      25 b
+      26 :reduce
+      27   x;
+      28   s/\((\,1)\)/[1]/; x; t reduce
+      29   s/\((1\,\))/[1]/; x; t reduce
+      30   s/(\(1*\)\,\[\(1*\)\])/[\1\2]/; x; t reduce
+      31   s/(\[\(1*\)\]\,\(1*\))/[\1\2]/; x; t reduce
+      32   x;
+      33   b total
+      34   
+      35 b
+      36 :total
+      37   x;
+      38   s/\[//g
+      39   s/\]//g
+      40   s/(//g
+      41   s/)//g
+      42   s/\,//g
+      43   p;
+      </pre>
+
+      <div class="add-space-25"></div>
+
+      <p>I figured I'd just write down what I did - at the very least for my own record.</p>
+
+      <div class="add-space-25"></div>
+
+      <p><i>fib(n) = fib(n-1) + fib(n-2)</i> It's pretty famous, and a simple implementation usually involves recursion. Because labels in Sed do not return control in the same way that most languages do, I computed fib(n) using a bit of a different model.</p>
+
+      <div class="add-space-25"></div>
+      In my model, I use a string of characters to represent a pending fibonacci calculation. In this representation:
+      <ul>
+        <li>(a,b) = (fib(a),fib(b)), unless a or b is equal to 1 or 0. In this case, (a,b) represents itself.</li>
+        <li>[a] represents the return value of fib(a)
+      </ul>
+
+      <div class="add-space-25"></div>
+      Using this model, we can compute fib(n) in the following way:
+
+      <ol>
+        <li>Map 1{n} to its tree representation if n &ne; 1 or n &ne; 0. Otherwise, return n. (Below are a few examples of a <i>fibonacci tree</i> representations)
+        <pre>
+        fib_tree("11") = "(1,)"
+        fib_tree("111") = fib_tree(fib_tree("11"),"1") = "((1,),1)"
+        fib_tree("1111") = fib_tree("111","11") = ...
+        You get the idea
+        </pre>
+        </li>
+
+        <li>Reduce the final fib tree by first replacing all leaves, that is (1,) (,1) with [1]. Then remove the following characters: "1{}[]". This will be fib(n)
+        <pre>
+        reduce("((1,),1)") = reduce("([1],1)" = 11
+        </pre>
+        </li>
+         <ol>
+
+        <div class="add-space-25"></div>
+
+        Here's sample output from fib(5), annotated with a few comments :)
+
+        <pre>
+        /* Map phase */
+        (11111)
+        (111,1111)
+        ((1,11),1111)
+        (111,1111)
+        ((1,(,1)),1111)
+        ((1,11),1111)
+        ((1,(,1)),(11,111))
+        ((1,(,1)),1111)
+        ((1,(,1)),((,1),111))
+        ((1,(,1)),(11,111))
+        ((1,(,1)),((,1),(1,11)))
+        ((1,(,1)),((,1),111))
+        ((1,(,1)),((,1),(1,(,1))))
+        ((1,(,1)),((,1),(1,11)))
+        ((1,(,1)),((,1),(1,(,1))))
+
+        /* Reduce phase */
+        ((1,(,1)),((,1),(1,(,1))))
+        ((1,[1]),((,1),(1,(,1))))
+        ((1,[1]),([1],(1,(,1))))
+        ((1,[1]),([1],(1,[1])))
+        ([11],([1],(1,[1])))
+        ([11],([1],[11]))
+        
+        /* Parse out [\(\[,] */
+        11111
+
+        The 5th fibonacci number is 5.
+        </pre>
+
+        <div class="add-space-25"></div>
+    </div>
+
+
+
+
+  </body>
+</html>
